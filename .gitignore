@@ -1,6 +1,7 @@
 # Gradle files
 .gradle/
 build/
+*/build/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -32,3 +33,22 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# NDK
+obj/
+
+# macOS
+.DS_Store
+
+# Signing files
+release/
+*.pepk
+
+# Lint
+lint-results*.xml
+lint-results*.html
+
+# Gradle daemon
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
