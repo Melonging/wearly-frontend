@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityMainBinding
+import ddwu.com.mobile.wearly_frontend.ui.fragment.ClosetCardFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,5 +23,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        //ClosetCardFragment연결
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main, ClosetCardFragment())
+            .commit()
     }
 }
