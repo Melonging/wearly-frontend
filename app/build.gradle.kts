@@ -33,21 +33,12 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-<<<<<<< HEAD
-    //viewBinding
-    buildFeatures {
-        viewBinding = true
-=======
-
     viewBinding{
         enable=true
->>>>>>> 675c41e70625676b644f8ab488023362e5410094
     }
 }
 
 dependencies {
-    // Glide
-    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -58,4 +49,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+
+    // Splash Screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }
