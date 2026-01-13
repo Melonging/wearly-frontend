@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login.ui.SignupActivity">
+    
+    <ImageButton
+        android:id="@+id/signup_back_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="30dp"
+
+        android:src="@drawable/btn_arrow_back_tmp"
+        android:scaleType="centerInside"
+        android:background="@android:color/transparent"
+
+
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/signup_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="가입하기"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+
+
+        app:layout_constraintTop_toTopOf="@id/signup_back_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/signup_back_btn"/>
+
+
+    <LinearLayout
+        android:id="@+id/signup_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        android:orientation="vertical"
+
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+
+        android:layout_marginTop="15dp"
+
+        app:layout_constraintTop_toBottomOf="@id/signup_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/signup_login_layout">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="이메일"
+        android:textColor="@color/black"/>
+
+
+    <EditText
+        android:id="@+id/signup_id_ed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/bg_login_edittext"
+
+        android:hint="example@email.com"
+        android:textSize="15sp"
+
+        android:padding="15dp"
+
+        android:layout_marginTop="10dp" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="비밀번호"
+        android:textColor="@color/black"
+
+        android:layout_marginTop="15dp" />
+
+
+    <EditText
+        android:id="@+id/signup_pw_ed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/bg_login_edittext"
+
+        android:hint="8자 이상 입력해주세요"
+        android:textSize="15sp"
+
+        android:padding="15dp"
+
+        android:layout_marginTop="10dp"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="비밀번호 재입력"
+        android:textColor="@color/black"
+
+        android:layout_marginTop="15dp" />
+
+
+    <EditText
+        android:id="@+id/signup_pw_check_ed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/bg_login_edittext"
+
+        android:hint="8자 이상 입력해주세요"
+        android:textSize="15sp"
+
+        android:padding="15dp"
+
+        android:layout_marginTop="10dp"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="이름"
+        android:textColor="@color/black"
+
+        android:layout_marginTop="15dp" />
+
+
+    <EditText
+        android:id="@+id/signup_name_ed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/bg_login_edittext"
+
+        android:hint="홍길동"
+        android:textSize="15sp"
+
+        android:padding="15dp"
+
+        android:layout_marginTop="10dp"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="휴대폰 번호"
+        android:textColor="@color/black"
+
+        android:layout_marginTop="15dp" />
+
+
+    <EditText
+        android:id="@+id/signup_phno_ed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/bg_login_edittext"
+
+        android:hint="010-1234-5678"
+        android:textSize="15sp"
+
+        android:padding="15dp"
+
+        android:layout_marginTop="10dp"/>
+
+
+    <android.widget.Button
+        android:id="@+id/signup_submit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/bg_login_submit_btn"
+
+        android:text="회원가입"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+
+        android:padding="15dp"
+
+        android:layout_marginTop="40dp"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/signup_login_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="50dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" >
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="계정이 있으신가요?"
+            android:textSize="13sp" />
+
+
+        <TextView
+            android:id="@+id/signup_login_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="로그인"
+            android:textColor="@color/logo_color"
+            android:textSize="13sp"
+            android:textStyle=""
+
+            android:layout_marginStart="10dp" />
+
+    </LinearLayout>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
