@@ -6,8 +6,9 @@
     // 로고 컬러
     <color name="logo_color">#241B56</color>
 
-    // 로그인 입력창 테두리
-    <color name="edit_text_box">#E5E5EC</color>
+    <color name="box_gray">#E5E5EC</color>
+
+    <color name="text_gray">#767676</color>
 
     <color name="error_red">#DC0000</color>
 </resources>

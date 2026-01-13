@@ -61,7 +61,7 @@
 
             android:background="@drawable/bg_login_edittext"
 
-            android:hint="아이디를 입력해주세요"
+            android:hint="example@email.com"
             android:textSize="15sp"
 
             android:padding="15dp"
@@ -123,17 +123,17 @@
 
 
             <TextView
-                android:id="@+id/login_find_id_tv"
+                android:id="@+id/login_find_email_tv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
 
-                android:text="아이디 찾기" />
+                android:text="이메일 찾기" />
             
             
             <View
                 android:layout_width="2dp"
                 android:layout_height="match_parent"
-                android:background="@color/edit_text_box"
+                android:background="@color/box_gray"
 
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
@@ -142,11 +142,11 @@
 
 
             <TextView
-                android:id="@+id/login_find_pw_tv"
+                android:id="@+id/login_reset_pw_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:text="비밀번호 찾기" />
+                android:text="비밀번호 재설정" />
 
         </LinearLayout>
 
@@ -164,7 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="2dp"
 
-                android:background="@color/edit_text_box"
+                android:background="@color/box_gray"
 
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"/>
@@ -184,7 +184,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="2dp"
 
-                android:background="@color/edit_text_box"
+                android:background="@color/box_gray"
 
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"/>
