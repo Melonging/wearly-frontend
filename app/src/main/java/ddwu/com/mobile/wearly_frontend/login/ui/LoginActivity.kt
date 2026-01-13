@@ -42,16 +42,45 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+        // (디자인) 로그인 화면 "회원가입" 밑줄
+        binding.loginSignupTv.paintFlags = binding.loginSignupTv.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
 
+
+
+
+
+
+        // 클릭리스너
+
+        // 로그인 -> 홈 화면
         binding.loginSubmitBtn.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
+        // 회원가입
+        binding.loginSignupTv.setOnClickListener {
+            val intent = Intent(this, SignupActivity::class.java)
+            startActivity(intent)
+        }
+
+        // 이메일 찾기
+        binding.loginFindEmailTv.setOnClickListener {
+            val intent = Intent(this, FindEmailActivity::class.java)
+            startActivity(intent)
+        }
+
+        // 비밀번호 재설정
+        binding.loginResetPwTv.setOnClickListener {
+            val intent = Intent(this, ResetPwActivity::class.java)
+            startActivity(intent)
+        }
 
 
-        // (디자인) 로그인 화면 "회원가입" 밑줄
-        binding.loginSignupTv.paintFlags = binding.loginSignupTv.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+
+
+
+
     }
 }
