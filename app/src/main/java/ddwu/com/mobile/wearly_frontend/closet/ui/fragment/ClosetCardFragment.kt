@@ -1,4 +1,4 @@
-package ddwu.com.mobile.wearly_frontend.ui.fragment
+package ddwu.com.mobile.wearly_frontend.closet.ui.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import ddwu.com.mobile.wearly_frontend.data.CodiRecord
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentClosetCardBinding
-import ddwu.com.mobile.wearly_frontend.ui.adapter.CodiRecordAdapter
+import ddwu.com.mobile.wearly_frontend.closet.ui.adapter.CodiRecordAdapter
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
