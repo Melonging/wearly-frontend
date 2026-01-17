@@ -1,16 +1,15 @@
 package ddwu.com.mobile.wearly_frontend
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityMainBinding
-import ddwu.com.mobile.wearly_frontend.ui.fragment.ClosetCardFragment
+import ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment
 
 class MainActivity : AppCompatActivity() {
 
-     lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
