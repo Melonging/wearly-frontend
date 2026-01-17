@@ -1,11 +1,17 @@
 package ddwu.com.mobile.wearly_frontend
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import ddwu.com.mobile.wearly_frontend.databinding.ActivityMainBinding
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment
+import ddwu.com.mobile.wearly_frontend.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,9 +29,22 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        //ClosetCardFragment연결
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main, ClosetCardFragment())
-            .commit()
+        // Toolbar
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        // Nav
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host) as NavHostFragment
+
+        val navController = navHostFragment.navController
+
+        binding.bottomNav.setupWithNavController(navController)
+
+
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu)
+        return true
     }
 }
