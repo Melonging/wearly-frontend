@@ -2,13 +2,4 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
-    // 로고 컬러
-    <color name="logo_color">#241B56</color>
-
-    <color name="box_gray">#E5E5EC</color>
-
-    <color name="text_gray">#767676</color>
-
-    <color name="error_red">#DC0000</color>
 </resources>

@@ -1,43 +1,33 @@
 package ddwu.com.mobile.wearly_frontend
 
 import android.os.Bundle
-import android.view.Menu
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
-import ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityMainBinding
-
+import ddwu.com.mobile.wearly_frontend.ui.fragment.ClosetCardFragment
 
 class MainActivity : AppCompatActivity() {
-
     lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Toolbar
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        // Nav
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host) as NavHostFragment
-
-        val navController = navHostFragment.navController
+        //ClosetCardFragment연결
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main, ClosetCardFragment())
+            .commit()
 
         binding.bottomNav.setupWithNavController(navController)
 
