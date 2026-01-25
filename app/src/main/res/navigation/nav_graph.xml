@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/closetFragment"
-        android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.upload.ui.fragment.UploadFragment"
         android:label="옷장"/>
 
     <fragment
