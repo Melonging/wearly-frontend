@@ -1,4 +1,4 @@
-package ddwu.com.mobile.wearly_frontend.closet.ui.adapter
+package ddwu.com.mobile.wearly_frontend.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
