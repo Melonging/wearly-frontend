@@ -29,5 +29,14 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.main, ClosetCardFragment())
             .commit()
 
+        binding.bottomNav.setupWithNavController(navController)
+
+
+        
+
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu)
+        return true
     }
 }
