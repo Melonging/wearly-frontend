@@ -12,21 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Wearly_frontend">
         <activity
-            android:name=".login.ui.ResetPwActivity"
-            android:exported="false" />
-        <activity
-            android:name=".login.ui.FindEmailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".login.ui.SignupActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
-            android:exported="true" />
-        <activity
-            android:name=".login.ui.LoginActivity"
-            android:exported="true"
-            android:theme="@style/Theme.App.Starting">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

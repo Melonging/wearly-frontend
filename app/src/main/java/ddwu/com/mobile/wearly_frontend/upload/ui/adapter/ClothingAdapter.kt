@@ -50,10 +50,10 @@ class ClothingAdapter(val context: Context, val list: ArrayList<SlotItem>)
         fun onItemClick(v: View, position: Int)
     }
 
-    //lateinit var itemClickListener: OnItemClickListener
+    lateinit var itemClickListener: OnItemClickListener
 
     fun setItemClickListener(itemClickListener: OnItemClickListener) {
-      //  this.itemClickListener = itemClickListener
+        this.itemClickListener = itemClickListener
     }
 
     inner class ItemViewHolder(val itemBinding: ItemListUploadBinding) : RecyclerView.ViewHolder(itemBinding.root) {
