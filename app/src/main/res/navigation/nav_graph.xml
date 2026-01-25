@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/homeFragment"
+    android:id="@+id/nav_graph"
+    >
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
+        android:label="홈"/>
+
+    <!-- 아직 아래 프래그먼트 미구현 -->
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
+        android:label="코디 달력"/>
+
+    <fragment
+        android:id="@+id/closetFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
+        android:label="옷장"/>
+
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
+        android:label="카테고리"/>
+
+</navigation>
