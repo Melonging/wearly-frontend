@@ -5,13 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import ddwu.com.mobile.wearly_frontend.data.CodiRecord
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentClosetCardBinding
-import ddwu.com.mobile.wearly_frontend.closet.ui.adapter.CodiRecordAdapter
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,27 +39,44 @@ class ClosetCardFragment : Fragment() {
     ): View? {
         binding = FragmentClosetCardBinding.inflate(inflater, container, false)
 
-        // 오늘 날짜 가져오기 및 리스트 생성
-        val codiList = mutableListOf<CodiRecord>()
-        val sdf = SimpleDateFormat("MM/dd (E)", Locale.KOREAN)
-        val calendar = Calendar.getInstance()
-
-        // 오늘부터 7일간의 날짜를 리스트에 담기
-        for (i in 0 until 7) {
-            val dateStr = sdf.format(calendar.time)
-            codiList.add(CodiRecord(dateStr))
-            calendar.add(Calendar.DAY_OF_YEAR, 1)
+        // Setup icon click listeners
+        binding.addIconIv.setOnClickListener {
+            val dialog = PlusClosetDialogFragment().apply {
+                currentType = PlusClosetDialogFragment.WardrobeType.CLOSET
+                currentName = "옷장1"
+                listener = object : PlusClosetDialogFragment.OnWardrobeEditedListener {
+                    override fun onWardrobeEdited(
+                        type: PlusClosetDialogFragment.WardrobeType,
+                        name: String
+                    ) {
+                        // TODO: 편집 결과 반영
+                    }
+                }
+            }
+            dialog.show(childFragmentManager, "PlusWardrobeDialog")
         }
 
-        //리사이클러뷰 연결
-        val recyclerView = binding.codiRecordRecyclerview
-        recyclerView.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.adapter = CodiRecordAdapter(codiList)
+        binding.moreOptionsIv.setOnClickListener {
 
-        //더보기 누르면 페이지 이동
-        binding.viewMoreTv.setOnClickListener {
-            // 페이지 이동 로직 구현
+            val dialog = EditClosetDialogFragment().apply {
+                currentType = EditClosetDialogFragment.WardrobeType.CLOSET
+                currentName = "옷장1"
+                listener = object : EditClosetDialogFragment.OnWardrobeEditedListener {
+                    override fun onWardrobeEdited(
+                        type: EditClosetDialogFragment.WardrobeType,
+                        name: String
+                    ) {
+                        // TODO: 편집 결과 반영
+                    }
+                }
+            }
+            dialog.show(childFragmentManager, "EditWardrobeDialog")
+        }
+
+        binding.viewLayoutIv.setOnClickListener {
+            // 아이콘 ic_closet_view_card로 아이콘 변경
+            //리스트뷰 형태의 fragement로 변경
+
         }
 
         return binding.root
@@ -90,3 +102,4 @@ class ClosetCardFragment : Fragment() {
             }
     }
 }
+
