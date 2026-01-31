@@ -1,10 +1,17 @@
 package ddwu.com.mobile.wearly_frontend.upload.ui.fragment
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.GridLayoutManager
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentUploadBinding
@@ -27,6 +34,14 @@ class UploadFragment : Fragment() {
     lateinit var binding: FragmentUploadBinding
 
     private val items = ArrayList<SlotItem>()
+
+    val loadingActivityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val resultText = result.data?.getStringExtra("resultText")
+                resultText?.let { showResultDialog(it) }
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,11 +67,30 @@ class UploadFragment : Fragment() {
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.itemRV.layoutManager = layoutManager
 
-        val adapter = ClothingAdapter(requireContext(), items)
+        val adapter = ClothingAdapter(this, items)
         binding.itemRV.adapter = adapter
-
     }
 
+    fun showResultDialog(resultText: String) {
+        val dialog = AlertDialog.Builder(requireContext())
+            .setMessage(resultText)
+            .setCancelable(true)
+            .create()
+
+        dialog.show()
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (dialog.isShowing) dialog.dismiss()
+        }, 1500)
+    }
+
+    // Camera 사진 결과 처리
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 102 && resultCode == Activity.RESULT_OK) {
+            val lastItem = items[0]
+            val uri = Uri.parse(data?.data.toString())
+        }
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of
