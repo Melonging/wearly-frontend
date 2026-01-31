@@ -7,15 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.ItemListUploadBinding
 import ddwu.com.mobile.wearly_frontend.upload.data.SlotItem
 import ddwu.com.mobile.wearly_frontend.upload.network.CameraManager
 import ddwu.com.mobile.wearly_frontend.upload.ui.LoadingActivity
 import ddwu.com.mobile.wearly_frontend.upload.ui.fragment.UploadFragment
 
-class ClothingAdapter(val fragment: Fragment, val list: ArrayList<SlotItem>)
+class ClothingAdapter(private val list: ArrayList<SlotItem>,
+                      private val onAddClick: () -> Unit)
     : RecyclerView.Adapter<ClothingAdapter.ItemViewHolder>() {
     override fun getItemCount(): Int = list.size
 
@@ -23,7 +22,7 @@ class ClothingAdapter(val fragment: Fragment, val list: ArrayList<SlotItem>)
         parent: ViewGroup,
         viewType: Int
     ): ClothingAdapter.ItemViewHolder {
-        val itemBinding = ItemListUploadBinding.inflate(LayoutInflater.from(fragment.requireContext()), parent, false)
+        val itemBinding = ItemListUploadBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ItemViewHolder(itemBinding)
     }
 
@@ -33,12 +32,7 @@ class ClothingAdapter(val fragment: Fragment, val list: ArrayList<SlotItem>)
                 holder.itemBinding.btnAddClothing.visibility = View.VISIBLE
                 holder.itemBinding.clothingIv.visibility = View.GONE
                 holder.itemBinding.btnAddClothing.setOnClickListener {
-                    val cameraManager = CameraManager(fragment)
-                    cameraManager.callback = { uri ->
-                        val intent = Intent(fragment.requireContext(), LoadingActivity::class.java)
-                        intent.putExtra("photoUri", uri.toString())
-                        (fragment as? UploadFragment)?.loadingActivityLauncher?.launch(intent)                    }
-                    cameraManager.checkCameraPermission()
+                    onAddClick()
                 }
             }
             is SlotItem.Image -> {
