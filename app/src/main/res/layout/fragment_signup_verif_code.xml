@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:id="@+id/find_email_vc_layout"
+        android:id="@+id/signup_vc_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
 
@@ -16,24 +16,22 @@
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent" >
 
 
         <TextView
-            android:id="@+id/find_email_vc_tv1"
+            android:id="@+id/signup_vc_tv1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:text="문자로 전송된"
+            android:text="이메일로 전송된"
             android:textColor="@color/black"
             android:textSize="18sp" />
 
 
         <TextView
-            android:id="@+id/find_email_vc_tv2"
+            android:id="@+id/signup_vc_tv2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -53,7 +51,7 @@
 
 
         <EditText
-            android:id="@+id/find_email_vc_ed"
+            android:id="@+id/signup_vc_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
@@ -68,7 +66,7 @@
 
 
         <LinearLayout
-            android:id="@+id/find_email_vc_retry_layout"
+            android:id="@+id/signup_vc_retry_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -85,7 +83,7 @@
 
 
             <TextView
-                android:id="@+id/find_email_vc_retry_tv"
+                android:id="@+id/signup_vc_retry_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -99,7 +97,7 @@
 
 
         <LinearLayout
-            android:id="@+id/find_email_vc_time_layout"
+            android:id="@+id/signup_vc_time_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -116,7 +114,7 @@
 
 
             <TextView
-                android:id="@+id/find_email_vc_time_tv"
+                android:id="@+id/signup_vc_time_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -130,7 +128,7 @@
 
 
         <android.widget.Button
-            android:id="@+id/find_email_vc_submit_btn"
+            android:id="@+id/signup_vc_submit_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
@@ -138,7 +136,7 @@
 
             android:background="@drawable/bg_login_submit_btn"
             android:padding="15dp"
-            android:text="다음"
+            android:text="완료"
 
             android:textColor="@color/white"
 
