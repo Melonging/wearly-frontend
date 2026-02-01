@@ -1,38 +1,61 @@
 package ddwu.com.mobile.wearly_frontend.upload.ui.fragment
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentUploadBinding
 import ddwu.com.mobile.wearly_frontend.upload.data.SlotItem
+import ddwu.com.mobile.wearly_frontend.upload.network.FileUtil
+import ddwu.com.mobile.wearly_frontend.upload.ui.LoadingActivity
 import ddwu.com.mobile.wearly_frontend.upload.ui.adapter.ClothingAdapter
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [UploadFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class UploadFragment : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
 
     // binding
     lateinit var binding: FragmentUploadBinding
-
     private val items = ArrayList<SlotItem>()
+    private var currentPhotoUri: Uri? = null
+
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                currentPhotoUri?.let { uri ->
+                    openLoading(uri)
+                }
+            }
+        }
+    val loadingActivityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val resultText = result.data?.getStringExtra("resultText")
+                resultText?.let { showResultDialog(it) }
+            }
+        }
+
+    private val cameraPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if(isGranted){
+                openCameraInternal()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
         }
     }
 
@@ -52,9 +75,53 @@ class UploadFragment : Fragment() {
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.itemRV.layoutManager = layoutManager
 
-        val adapter = ClothingAdapter(requireContext(), items)
+        val adapter = ClothingAdapter( items){
+            openCamera()
+        }
         binding.itemRV.adapter = adapter
+    }
 
+    private fun openCamera(){
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            openCameraInternal()
+        } else {
+            cameraPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+        }
+    }
+
+    private fun openCameraInternal(){
+        val photoFile = FileUtil.createNewFile(requireContext())
+        val uri = FileProvider.getUriForFile(
+            requireContext(),
+            "ddwu.com.mobile.wearly_frontend.fileprovider",
+            photoFile
+        )
+
+        currentPhotoUri = uri
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+        cameraLauncher.launch(intent)
+    }
+    fun showResultDialog(resultText: String) {
+        val dialog = AlertDialog.Builder(requireContext())
+            .setMessage(resultText)
+            .setCancelable(true)
+            .create()
+
+        dialog.show()
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (dialog.isShowing) dialog.dismiss()
+        }, 1500)
+    }
+
+    private fun openLoading(uri: Uri){
+        val intent = Intent(requireContext(), LoadingActivity::class.java)
+        intent.putExtra("photoUri", uri.toString())
+        loadingActivityLauncher.launch(intent)
     }
 
     companion object {
@@ -71,8 +138,6 @@ class UploadFragment : Fragment() {
         fun newInstance(param1: String, param2: String) =
             UploadFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
                 }
             }
     }
