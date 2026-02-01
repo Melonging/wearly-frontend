@@ -11,4 +11,7 @@
     <color name="text_gray">#767676</color>
 
     <color name="error_red">#DC0000</color>
+
+    // 배경 컬러
+    <color name="background_color">#F8F8FA</color>
 </resources>
