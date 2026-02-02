@@ -45,10 +45,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:background="@drawable/bg_login_edittext"
+            android:background="@drawable/bg_login_edittext_selector"
 
             android:hint="8자 이상 입력해주세요"
             android:textSize="15sp"
+            android:inputType="textPassword"
 
             android:padding="15dp"
 
@@ -70,10 +71,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:background="@drawable/bg_login_edittext"
+            android:background="@drawable/bg_login_edittext_selector"
 
             android:hint="8자 이상 입력해주세요"
             android:textSize="15sp"
+            android:inputType="textPassword"
 
             android:padding="15dp"
 
