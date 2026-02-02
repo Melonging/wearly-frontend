@@ -35,6 +35,9 @@
             android:name=".upload.ui.LoadingActivity"
             android:exported="false" />
         <activity
+            android:name=".closet.ui.ClothesListActivity"
+            android:exported="false" />
+        <activity
             android:name=".login.ui.ResetPwActivity"
             android:exported="false" />
         <activity
