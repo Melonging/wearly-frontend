@@ -65,4 +65,10 @@
             app:nullable="true" />
     </fragment>
 
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.setting.ui.SettingFragment"
+        android:label="설정" />
+
+
 </navigation>
