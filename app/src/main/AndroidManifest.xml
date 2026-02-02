@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Wearly_frontend">
         <activity
+            android:name=".closet.ui.ClothesListActivity"
+            android:exported="false" />
+        <activity
             android:name=".login.ui.ResetPwActivity"
             android:exported="false" />
         <activity
