@@ -153,11 +153,6 @@
                 android:layout_marginBottom="16dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- 간격 -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
         <!-- 완료 버튼 -->
         <Button
             android:id="@+id/confirm_btn"
@@ -166,7 +161,7 @@
             android:text="완료"
             android:textSize="15sp"
             android:textColor="#FFFFFF"
-            android:background = "@drawable/bg_login_submit_btn" />
+            android:backgroundTint = "@color/logo_color" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
