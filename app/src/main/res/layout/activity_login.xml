@@ -8,15 +8,11 @@
     tools:context=".login.ui.LoginActivity">
 
 
-    <TextView
+    <ImageView
         android:id="@+id/login_wearly_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:text="Wearly"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:textColor="@color/logo_color"
+        android:src="@drawable/wearly_typo"
 
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
@@ -55,11 +51,11 @@
 
 
         <EditText
-            android:id="@+id/login_id_ed"
+            android:id="@+id/login_id_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:background="@drawable/bg_login_edittext"
+            android:background="@drawable/bg_login_edittext_selector"
 
             android:hint="example@email.com"
             android:textSize="15sp"
@@ -67,6 +63,20 @@
             android:padding="15dp"
 
             android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/login_id_wrong_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="에러"
+            android:textSize="10sp"
+            android:textColor="@color/error_red"
+
+            android:layout_marginTop="5dp"
+
+            android:visibility="gone"/>
+
 
 
         <TextView
@@ -80,14 +90,15 @@
 
 
         <EditText
-            android:id="@+id/login_pw_ed"
+            android:id="@+id/login_pw_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:background="@drawable/bg_login_edittext"
+            android:background="@drawable/bg_login_edittext_selector"
 
             android:hint="비밀번호를 입력해주세요"
             android:textSize="15sp"
+            android:inputType="textPassword"
 
             android:padding="15dp"
 
@@ -201,7 +212,7 @@
             android:orientation="horizontal"
             android:gravity="center"
 
-            android:background="@drawable/bg_login_edittext"
+            android:background="@drawable/bg_login_edittext_selector"
 
             android:padding="2dp"
 
