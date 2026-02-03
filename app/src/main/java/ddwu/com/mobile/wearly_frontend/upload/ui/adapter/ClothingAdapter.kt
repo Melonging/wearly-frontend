@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ddwu.com.mobile.wearly_frontend.databinding.ItemListUploadBinding
 import ddwu.com.mobile.wearly_frontend.upload.data.SlotItem
 import ddwu.com.mobile.wearly_frontend.upload.network.CameraManager
@@ -14,7 +15,8 @@ import ddwu.com.mobile.wearly_frontend.upload.ui.LoadingActivity
 import ddwu.com.mobile.wearly_frontend.upload.ui.fragment.UploadFragment
 
 class ClothingAdapter(private val list: ArrayList<SlotItem>,
-                      private val onAddClick: () -> Unit)
+                      private val onAddClick: () -> Unit,
+                      private val onImageClick: (SlotItem.Image) -> Unit)
     : RecyclerView.Adapter<ClothingAdapter.ItemViewHolder>() {
     override fun getItemCount(): Int = list.size
 
@@ -38,6 +40,22 @@ class ClothingAdapter(private val list: ArrayList<SlotItem>,
             is SlotItem.Image -> {
                 holder.itemBinding.btnAddClothing.visibility = View.GONE
                 holder.itemBinding.clothingIv.visibility = View.VISIBLE
+
+                when {
+                    item.uri != null -> {
+                        Glide.with(holder.itemView)
+                            .load(item.uri)
+                            .centerCrop()
+                            .into(holder.itemBinding.clothingIv)
+                    }
+                    item.resId != null -> {
+                        holder.itemBinding.clothingIv.setImageResource(item.resId)
+                    }
+                }
+
+                holder.itemBinding.clothingIv.setOnClickListener {
+                    onImageClick(item)
+                }
             }
         }
     }

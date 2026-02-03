@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,10 +17,12 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentUploadBinding
 import ddwu.com.mobile.wearly_frontend.upload.data.SlotItem
+import ddwu.com.mobile.wearly_frontend.upload.data.entity.ClothingDetail
 import ddwu.com.mobile.wearly_frontend.upload.network.FileUtil
 import ddwu.com.mobile.wearly_frontend.upload.ui.LoadingActivity
 import ddwu.com.mobile.wearly_frontend.upload.ui.adapter.ClothingAdapter
@@ -29,6 +32,7 @@ class UploadFragment : Fragment() {
     lateinit var binding: FragmentUploadBinding
     private val items = ArrayList<SlotItem>()
     private var currentPhotoUri: Uri? = null
+    private lateinit var adapter: ClothingAdapter
 
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -43,6 +47,10 @@ class UploadFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val resultText = result.data?.getStringExtra("resultText")
                 resultText?.let { showResultDialog(it) }
+            }
+
+            currentPhotoUri?.let { uri ->
+                addPhotoToList(uri)
             }
         }
 
@@ -70,14 +78,47 @@ class UploadFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val type = arguments?.getString("containerType")
+        val id = arguments?.getInt("containerId")
+        val name = arguments?.getString("containerName")
+
+        Log.d("UploadFragment", "type: $type, id: $id, name: $name")
+
+        items.clear()
+        val dummyList = listOf(
+            R.drawable.cloth_01,
+            R.drawable.cloth_02,
+            R.drawable.cloth_03,
+        )
+
+        dummyList.forEach { items.add(SlotItem.Image(resId = it)) }
         items.add(SlotItem.Empty)
 
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.itemRV.layoutManager = layoutManager
 
-        val adapter = ClothingAdapter( items){
-            openCamera()
-        }
+        adapter = ClothingAdapter(
+            items,
+            onAddClick = { openCamera() },
+            onImageClick = { imageItem ->
+                val detail = ClothingDetail(
+                    uri = imageItem.uri?.toString(),
+                    resId = imageItem.resId,
+                    category = "아우터",
+                    recommendedTemp = 22,
+                    location = "행거1"
+                )
+
+                val bundle = Bundle().apply {
+                    putParcelable("detail", detail)
+                }
+
+                findNavController().navigate(
+                    R.id.action_uploadFragment_to_clothingDetailFragment,
+                    bundle
+                )
+            }
+        )
         binding.itemRV.adapter = adapter
     }
 
@@ -122,6 +163,22 @@ class UploadFragment : Fragment() {
         val intent = Intent(requireContext(), LoadingActivity::class.java)
         intent.putExtra("photoUri", uri.toString())
         loadingActivityLauncher.launch(intent)
+    }
+
+    private fun addPhotoToList(uri: Uri) {
+        val lastIndex = items.lastIndex
+        if (lastIndex >= 0 && items[lastIndex] is SlotItem.Empty) {
+            items.removeAt(lastIndex)
+        }
+
+        // 2) 이미지 아이템 추가 (String path에 uri.toString() 저장)
+        items.add(SlotItem.Image(uri))
+
+        // 3) Empty 다시 추가 (항상 마지막 칸에 +)
+        items.add(SlotItem.Empty)
+
+        // 4) 갱신
+        adapter.notifyDataSetChanged()
     }
 
     companion object {
