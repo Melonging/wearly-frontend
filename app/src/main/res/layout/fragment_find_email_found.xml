@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:background="@drawable/bg_login_edittext"
+            android:background="@drawable/bg_login_edittext_selector"
 
             android:text="example@email.com"
             android:textSize="15sp"

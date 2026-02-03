@@ -31,10 +31,10 @@ class FindEmailActivity : AppCompatActivity() {
 
         // 어댑터 설정
         findEmailAdapter = FindEmailAdapter(this)
-        binding.signupVp.adapter = findEmailAdapter
+        binding.findEmailVp.adapter = findEmailAdapter
 
         // 스와이프 기능 끄기
-        binding.signupVp.isUserInputEnabled = false
+        binding.findEmailVp.isUserInputEnabled = false
 
 
 
@@ -43,13 +43,13 @@ class FindEmailActivity : AppCompatActivity() {
 
         // 뒤로가기
         binding.findEmailBackBtn.setOnClickListener {
-            val currentPage = binding.signupVp.currentItem
+            val currentPage = binding.findEmailVp.currentItem
 
             if (currentPage == 0) {
                 finish()
             }
             else {
-                binding.signupVp.setCurrentItem(currentPage - 1, true)
+                binding.findEmailVp.setCurrentItem(currentPage - 1, true)
             }
         }
 
@@ -63,13 +63,13 @@ class FindEmailActivity : AppCompatActivity() {
      * @param[currentPage] 현재 페이지 수를 나타내는 변수
      */
     fun nextPage() {
-        val currentPage = binding.signupVp.currentItem
+        val currentPage = binding.findEmailVp.currentItem
 
         if (currentPage == 2) {
             finish()
         }
         else {
-            binding.signupVp.setCurrentItem(currentPage + 1, true)
+            binding.findEmailVp.setCurrentItem(currentPage + 1, true)
         }
     }
 }

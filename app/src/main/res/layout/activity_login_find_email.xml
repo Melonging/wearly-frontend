@@ -44,7 +44,7 @@
 
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/signup_vp"
+        android:id="@+id/find_email_vp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
 
