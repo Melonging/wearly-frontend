@@ -314,62 +314,23 @@
             android:id="@+id/more_options_iv"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_closet_more_vertical"
+            android:src="@drawable/ic_closet_more"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="4dp"/>
     </LinearLayout>
 
     <!-- Tabs -->
-    <HorizontalScrollView
-        android:id="@+id/closet_chip_scroll_hs"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_closet_chips"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
+        android:orientation="horizontal"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        app:layout_constraintTop_toBottomOf="@id/wardrobe_header_layout">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/tab_wardrobe1_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/bg_closet_chip_scroll_on"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="8dp"
-                android:text="옷장1"
-                android:textColor="#FFFFFF" />
-
-            <TextView
-                android:id="@+id/tab_drawer1_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/bg_closet_chip_scroll_off"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="8dp"
-                android:text="서랍장1"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/tab_shoerack1_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/bg_closet_chip_scroll_off"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="8dp"
-                android:text="신발장1"
-                android:textColor="@color/black" />
-
-        </LinearLayout>
-    </HorizontalScrollView>
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/wardrobe_header_layout"
+        tools:listitem="@layout/item_closet_chip_list" />
 
     <!-- 전체 배경 카드 -->
     <LinearLayout
@@ -378,7 +339,7 @@
         android:orientation="vertical"
         android:padding="10dp"
         android:background="@drawable/bg_closet_card_back"
-        app:layout_constraintTop_toBottomOf="@id/closet_chip_scroll_hs"
+        app:layout_constraintTop_toBottomOf="@id/rv_closet_chips"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
