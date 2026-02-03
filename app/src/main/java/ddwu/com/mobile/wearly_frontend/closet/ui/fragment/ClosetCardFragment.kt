@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import androidx.navigation.fragment.findNavController
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -111,20 +112,21 @@ class ClosetCardFragment : Fragment() {
         }
 
         //옷장 옷 목록 조회
+        // 빙기: uploadFragment로 넘어갑니다.
         binding.btnHanger1.setOnClickListener {
-
+            openContainer("HANGER", 1, "행거 1")
         }
 
         binding.btnHanger2.setOnClickListener {
-
+            openContainer("HANGER", 2, "행거 2")
         }
 
         binding.btnDrawer1.setOnClickListener {
-
+            openContainer("DRAWER", 1, "서랍 1")
         }
 
         binding.btnDrawer2.setOnClickListener {
-
+            openContainer("DRAWER", 2, "서랍 2")
         }
 
         return binding.root
@@ -179,6 +181,20 @@ class ClosetCardFragment : Fragment() {
             weekDates.add(dateString)
             calendar.add(Calendar.DAY_OF_MONTH, 1)
         }
+    }
+
+    // 빙기: navigate 함수 추가함
+    private fun openContainer(type: String, id: Int, name: String) {
+        val bundle = Bundle().apply {
+            putString("containerType", type)
+            putInt("containerId", id)
+            putString("containerName", name)
+        }
+
+        findNavController().navigate(
+            R.id.action_homeFragment_to_uploadFragment,
+            bundle
+        )
     }
 
     companion object{
