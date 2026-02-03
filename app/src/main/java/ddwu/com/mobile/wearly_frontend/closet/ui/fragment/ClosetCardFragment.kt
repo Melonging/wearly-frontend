@@ -1,7 +1,7 @@
 package ddwu.com.mobile.wearly_frontend.closet.ui.fragment
 
 import android.content.Context
-import android.content.Context.LAYOUT_INFLATER_SERVICE
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,33 +9,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.PopupMenu
 import android.widget.PopupWindow
-import androidx.core.content.ContextCompat.getSystemService
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import androidx.recyclerview.widget.LinearLayoutManager
 import ddwu.com.mobile.wearly_frontend.R
+import ddwu.com.mobile.wearly_frontend.closet.ui.adapter.ClosetChipListAdapter
+import ddwu.com.mobile.wearly_frontend.closet.data.ClosetItem
+import ddwu.com.mobile.wearly_frontend.closet.network.ClosetService
+import ddwu.com.mobile.wearly_frontend.closet.ui.ClothesListActivity
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentClosetCardBinding
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ClosetCardFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ClosetCardFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     lateinit var binding : FragmentClosetCardBinding
+    private lateinit var service: ClosetService
+    private lateinit var closetAdapter: ClosetChipListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +50,21 @@ class ClosetCardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentClosetCardBinding.inflate(inflater, container, false)
+
+        //리사이클러뷰 및 어댑터 초기화
+        setupRecyclerView()
+
+        //Retrofit 서비스 초기화
+        initRetrofit()
+
+        //홈화면 API 연결
+        fetchClosetList()
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         //이번 주 날짜 받아오기
         getWeekFullDates()
@@ -112,23 +127,90 @@ class ClosetCardFragment : Fragment() {
 
         //옷장 옷 목록 조회
         binding.btnHanger1.setOnClickListener {
+            val intent = Intent(requireContext(), ClothesListActivity::class.java).apply {
+                putExtra("CLOSET_NAME", "행거1")
+            }
 
+            startActivity(intent)
         }
 
         binding.btnHanger2.setOnClickListener {
+            val intent = Intent(requireContext(), ClothesListActivity::class.java).apply {
+                putExtra("CLOSET_NAME", "행거2")
+            }
 
+            startActivity(intent)
         }
 
         binding.btnDrawer1.setOnClickListener {
+            val intent = Intent(requireContext(), ClothesListActivity::class.java).apply {
+                putExtra("CLOSET_NAME", "서랍1")
+            }
 
+            startActivity(intent)
         }
 
         binding.btnDrawer2.setOnClickListener {
+            val intent = Intent(requireContext(), ClothesListActivity::class.java).apply {
+                putExtra("CLOSET_NAME", "서랍2")
+            }
 
+            startActivity(intent)
         }
 
-        return binding.root
+
     }
+    private fun setupRecyclerView() {
+        closetAdapter = ClosetChipListAdapter { selectedCloset ->
+            // 칩을 클릭했을 때 수행할 동작 (예: 상세 정보 불러오기)
+            //fetchClosetDetail(selectedCloset.closetId)
+            //Log.d("CLOSET_CLICK", "선택된 옷장 ID: ${selectedCloset.closetId}")
+        }
+
+        //리사이클러뷰 연결
+        binding.rvClosetChips.apply {
+            adapter = closetAdapter
+            // 가로 스크롤 설정
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+        }
+    }
+    private fun initRetrofit() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:8080")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        service = retrofit.create(ClosetService::class.java)
+    }
+
+    private fun fetchClosetList() {
+        //더미 데이터
+        val dummyClosets = listOf(
+            ClosetItem(closetId = 1, closetName = "옷장1"),
+            ClosetItem(closetId = 2, closetName = "서랍1"),
+            ClosetItem(closetId = 3, closetName = "서랍2")
+        )
+
+        // 어댑터에 데이터 전달
+        closetAdapter.submitList(dummyClosets)
+
+        /* 서버 연동 시 사용될 코드
+        val token = "actual_token_here"
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = service.getClosetList("Bearer $token")
+                // ... 생략
+            } catch (e: Exception) {
+                Log.e("API_TEST", "통신 실패: ${e.message}")
+            }
+        }
+        */
+    }
+
+    private fun fetchClosetDetail(){
+
+    }
+
 
     private fun formatDate(date: Date): String {
         val dayFormat = SimpleDateFormat("d", Locale.getDefault())
