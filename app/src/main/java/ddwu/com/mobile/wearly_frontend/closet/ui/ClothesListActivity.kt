@@ -35,7 +35,7 @@ class ClothesListActivity : AppCompatActivity() {
             //갤러리 열기 또는 사진 촬영
         }
 
-        val clothesList = arrayListOf<SlotItem>(
+        /*val clothesList = arrayListOf<SlotItem>(
             SlotItem.Empty,
             SlotItem.Image("https://example.com/cloth1.jpg"),
             SlotItem.Image("https://example.com/cloth2.jpg")
@@ -43,5 +43,7 @@ class ClothesListActivity : AppCompatActivity() {
 
         val adapter = ClothesInClosetAdapter(this, clothesList)
         binding.rvClothesInCloset.adapter = adapter
+        */
+
     }
 }

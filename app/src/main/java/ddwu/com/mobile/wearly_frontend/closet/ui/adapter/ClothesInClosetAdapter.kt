@@ -26,6 +26,7 @@ class ClothesInClosetAdapter(val context: Context, var list: MutableList<SlotIte
     override fun onBindViewHolder(holder: ClothesInClosetAdapter.ItemViewHolder, position: Int) {
         val item = list[position]
 
+        /*
         // item이 Image 타입일 때만
         if (item is SlotItem.Image) {
             Glide.with(context)
@@ -35,6 +36,9 @@ class ClothesInClosetAdapter(val context: Context, var list: MutableList<SlotIte
         } else if (item is SlotItem.Empty) {
             holder.binding.clothesIv.setImageResource(R.drawable.ic_launcher_background)
         }
+
+
+         */
     }
 
     // 데이터 갱신 기능 수정
