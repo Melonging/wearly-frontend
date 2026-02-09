@@ -28,8 +28,10 @@ class ClothesInClosetAdapter(val context: Context, var list: MutableList<SlotIte
 
         // item이 Image 타입일 때만
         if (item is SlotItem.Image) {
+            val model = item.uri ?: item.resId
+
             Glide.with(context)
-                .load(item.path)
+                .load(model)
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(holder.binding.clothesIv)
         } else if (item is SlotItem.Empty) {
