@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/closetFragment"
-        android:name="ddwu.com.mobile.wearly_frontend.upload.ui.fragment.UploadFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
         android:label="옷장"/>
 
     <fragment
@@ -33,7 +33,7 @@
 
     <fragment
         android:id="@+id/uploadFragment"
-        android:name="ddwu.com.mobile.wearly_frontend.upload.ui.fragment.UploadFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
         android:label="업로드">
 
         <argument

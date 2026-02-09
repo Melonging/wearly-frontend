@@ -11,3 +11,11 @@ data class ClothingDetail(
     val location: String
 ) : Parcelable
 
+/*
+data class ClothesDetailDto(
+    val clothes_image: String?,
+    val weather: String?,
+    val color: String?
+)
+ */
+
