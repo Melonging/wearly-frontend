@@ -4,9 +4,15 @@
 
     <!--Retrofit Permission-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- 인터넷 사용 권한 추가 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -15,6 +21,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Wearly_frontend">
+
+        <provider
+            android:authorities="ddwu.com.mobile.wearly_frontend.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths">
+            </meta-data>
+        </provider>
+        <activity
+            android:name=".upload.ui.LoadingActivity"
+            android:exported="false" />
         <activity
             android:name=".codidiary.ui.CodiDiaryWritingActivity" />
         <activity

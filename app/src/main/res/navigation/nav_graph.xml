@@ -8,7 +8,12 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
-        android:label="홈"/>
+        android:label="홈">
+        <action
+            android:id="@+id/action_homeFragment_to_uploadFragment"
+            app:destination="@id/uploadFragment"
+            app:enterAnim="@anim/slide_in_right"/>
+    </fragment>
 
     <!-- 아직 아래 프래그먼트 미구현 -->
     <fragment
@@ -18,12 +23,52 @@
 
     <fragment
         android:id="@+id/closetFragment"
-        android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.upload.ui.fragment.UploadFragment"
         android:label="옷장"/>
 
     <fragment
         android:id="@+id/categoryFragment"
         android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
         android:label="카테고리"/>
+
+    <fragment
+        android:id="@+id/uploadFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.upload.ui.fragment.UploadFragment"
+        android:label="업로드">
+
+        <argument
+            android:name="containerType"
+            app:argType="string" />
+
+        <argument
+            android:name="containerId"
+            app:argType="integer" />
+
+        <argument
+            android:name="containerName"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/action_uploadFragment_to_clothingDetailFragment"
+            app:destination="@id/clothingDetailFragment"
+            app:enterAnim="@anim/slide_in_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/clothingDetailFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.upload.ui.fragment.ClothingDetailFragment"
+        android:label="detail">
+
+        <argument
+            android:name="detail"
+            app:argType="ddwu.com.mobile.wearly_frontend.upload.data.entity.ClothingDetail"
+            app:nullable="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.setting.ui.SettingFragment"
+        android:label="설정" />
+
 
 </navigation>

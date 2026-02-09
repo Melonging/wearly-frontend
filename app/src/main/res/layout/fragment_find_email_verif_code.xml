@@ -59,7 +59,7 @@
 
             android:layout_marginTop="10dp"
 
-            android:background="@drawable/bg_login_edittext"
+            android:background="@drawable/bg_login_edittext_selector"
             android:hint="인증번호 6자리"
 
             android:padding="15dp"
