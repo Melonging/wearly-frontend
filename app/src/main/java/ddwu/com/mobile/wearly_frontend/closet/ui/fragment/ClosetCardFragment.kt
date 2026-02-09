@@ -1,6 +1,7 @@
 package ddwu.com.mobile.wearly_frontend.closet.ui.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -21,8 +22,8 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import android.content.Intent
 import androidx.navigation.fragment.findNavController
+
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -125,43 +126,24 @@ class ClosetCardFragment : Fragment() {
         }
 
         //옷장 옷 목록 조회
+        // 빙기: uploadFragment로 넘어갑니다.
         binding.btnHanger1.setOnClickListener {
-            val intent = Intent(requireContext(), ClothesListActivity::class.java).apply {
-                putExtra("CLOSET_NAME", "행거1")
-            }
-
-            startActivity(intent)
+            openContainer("HANGER", 1, "행거 1")
         }
 
         binding.btnHanger2.setOnClickListener {
-            val intent = Intent(requireContext(), ClothesListActivity::class.java).apply {
-                putExtra("CLOSET_NAME", "행거2")
-            }
-
-            startActivity(intent)
+            openContainer("HANGER", 2, "행거 2")
         }
 
         binding.btnDrawer1.setOnClickListener {
-            val intent = Intent(requireContext(), ClothesListActivity::class.java).apply {
-                putExtra("CLOSET_NAME", "서랍1")
-            }
-
-            startActivity(intent)
+            openContainer("DRAWER", 1, "서랍 1")
         }
 
         binding.btnDrawer2.setOnClickListener {
-            val intent = Intent(requireContext(), ClothesListActivity::class.java).apply {
-                putExtra("CLOSET_NAME", "서랍2")
-            }
-
-            startActivity(intent)
+            openContainer("DRAWER", 2, "서랍 2")
         }
 
-        binding.daySlotsLayout.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_homeFragment_to_codiDiaryFragment
-            )
-        }
+
     }
     private fun setupRecyclerView() {
         closetAdapter = ClosetChipListAdapter { selectedCloset ->
@@ -264,6 +246,20 @@ class ClosetCardFragment : Fragment() {
             weekDates.add(dateString)
             calendar.add(Calendar.DAY_OF_MONTH, 1)
         }
+    }
+
+    // 빙기: navigate 함수 추가함
+    private fun openContainer(type: String, id: Int, name: String) {
+        val bundle = Bundle().apply {
+            putString("containerType", type)
+            putInt("containerId", id)
+            putString("containerName", name)
+        }
+
+        findNavController().navigate(
+            R.id.action_homeFragment_to_uploadFragment,
+            bundle
+        )
     }
 
     companion object{

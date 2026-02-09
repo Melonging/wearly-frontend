@@ -87,23 +87,23 @@ class CodiDraryFragment : Fragment() {
 
 
         //카테고리분류 어댑터
-        val testClothes = listOf(
-            ClothingDetail(uri = null, resId = R.drawable.cloth_01, category = "아우터", recommendedTemp = 10, location = "옷장 A"),
-            ClothingDetail(uri = null, resId = R.drawable.cloth_02, category = "아우터", recommendedTemp = 20, location = "옷장 B"),
-            ClothingDetail(uri = null, resId = R.drawable.cloth_03, category = "아우터", recommendedTemp = 15, location = "옷장 A")
-        )
-
-        val clothingAdapter = CategoryClothingAdapter(testClothes)
-        binding.clothingGridRv.adapter = clothingAdapter
-
-        val categoryList = listOf("전체", "아우터", "상의", "바지", "치마", "속옷/홈웨어",
-            "가방", "모자", "신발", "주얼리", "패션 소품")
-
-        val gridAdapter = CategoryGridAdapter(categoryList, "전체") { selectedCategory ->
-            clothingAdapter.filterByCategory(selectedCategory)
-            binding.categoryExpandContainer.visibility = View.GONE
-        }
-        binding.categoryGridRv.adapter = gridAdapter
+//        val testClothes = listOf(
+//            ClothingDetail(uri = null, resId = R.drawable.cloth_01, category = "아우터", recommendedTemp = 10, location = "옷장 A"),
+//            ClothingDetail(uri = null, resId = R.drawable.cloth_02, category = "아우터", recommendedTemp = 20, location = "옷장 B"),
+//            ClothingDetail(uri = null, resId = R.drawable.cloth_03, category = "아우터", recommendedTemp = 15, location = "옷장 A")
+//        )
+//
+//        val clothingAdapter = CategoryClothingAdapter(testClothes)
+//        binding.clothingGridRv.adapter = clothingAdapter
+//
+//        val categoryList = listOf("전체", "아우터", "상의", "바지", "치마", "속옷/홈웨어",
+//            "가방", "모자", "신발", "주얼리", "패션 소품")
+//
+//        val gridAdapter = CategoryGridAdapter(categoryList, "전체") { selectedCategory ->
+//            clothingAdapter.filterByCategory(selectedCategory)
+//            binding.categoryExpandContainer.visibility = View.GONE
+//        }
+//        binding.categoryGridRv.adapter = gridAdapter
 
     }
 

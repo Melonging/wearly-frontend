@@ -5,17 +5,26 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.activity.enableEdgeToEdge
+import android.util.Log
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.activityViewModels
 import ddwu.com.mobile.wearly_frontend.MainActivity
+import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityLoginBinding
+import ddwu.com.mobile.wearly_frontend.login.data.AuthViewModel
+import kotlin.getValue
 
 class LoginActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityLoginBinding
+
+    private val sharedViewModel: AuthViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,16 +56,26 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-
-
-
-
         // 클릭리스너
 
         // 로그인 -> 홈 화면
         binding.loginSubmitBtn.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            val id = binding.loginIdEt.text.toString()
+            val pw = binding.loginPwEt.text.toString()
+
+            sharedViewModel.userId.value = id
+            sharedViewModel.userPassword.value = pw
+
+            sharedViewModel.requestLogin()
+
+            sharedViewModel.isLoginSuccess.observe(this) { isSuccess ->
+                if (isSuccess) {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+
+                    finish()
+                }
+            }
         }
 
         // 회원가입
