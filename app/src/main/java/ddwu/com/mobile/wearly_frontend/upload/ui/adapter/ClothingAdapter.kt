@@ -11,8 +11,6 @@ import com.bumptech.glide.Glide
 import ddwu.com.mobile.wearly_frontend.databinding.ItemListUploadBinding
 import ddwu.com.mobile.wearly_frontend.upload.data.SlotItem
 import ddwu.com.mobile.wearly_frontend.upload.network.CameraManager
-import ddwu.com.mobile.wearly_frontend.upload.ui.LoadingActivity
-import ddwu.com.mobile.wearly_frontend.upload.ui.fragment.UploadFragment
 
 class ClothingAdapter(private val list: ArrayList<SlotItem>,
                       private val onAddClick: () -> Unit,
@@ -29,33 +27,26 @@ class ClothingAdapter(private val list: ArrayList<SlotItem>,
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        when(val item = list[position]) {
-            is SlotItem.Empty -> {
-                holder.itemBinding.btnAddClothing.visibility = View.VISIBLE
-                holder.itemBinding.clothingIv.visibility = View.GONE
-                holder.itemBinding.btnAddClothing.setOnClickListener {
-                    onAddClick()
-                }
-            }
+        when (val item = list[position]) {
             is SlotItem.Image -> {
-                holder.itemBinding.btnAddClothing.visibility = View.GONE
                 holder.itemBinding.clothingIv.visibility = View.VISIBLE
 
-                when {
-                    item.uri != null -> {
-                        Glide.with(holder.itemView)
-                            .load(item.uri)
-                            .centerCrop()
-                            .into(holder.itemBinding.clothingIv)
-                    }
-                    item.resId != null -> {
-                        holder.itemBinding.clothingIv.setImageResource(item.resId)
-                    }
+                if (item.uri != null) {
+                    Glide.with(holder.itemView)
+                        .load(item.uri)
+                        .centerCrop()
+                        .into(holder.itemBinding.clothingIv)
+                } else if (item.resId != null) {
+                    holder.itemBinding.clothingIv.setImageResource(item.resId)
                 }
 
-                holder.itemBinding.clothingIv.setOnClickListener {
+                holder.itemBinding.root.setOnClickListener {
                     onImageClick(item)
                 }
+            }
+
+            is SlotItem.Empty -> {
+                holder.itemBinding.clothingIv.visibility = View.GONE
             }
         }
     }
