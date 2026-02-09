@@ -30,7 +30,7 @@ class UploadLoadingActivity : AppCompatActivity() {
     private lateinit var s2: StepItemBinding
     private lateinit var s3: StepItemBinding
 
-    private val ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImxvZ2luSWQiOiJ0ZXN0dXNlcjEiLCJ0eXBlIjoiYWNjZXNzIiwiaWF0IjoxNzcwNjY4NzI4LCJleHAiOjE3NzA2NzIzMjh9.AuhJdqW2qkNE-0-ghCQlmHD2o1YrDTD2G_u-hJFArUE"
+    private val ACCESS_TOKEN = ""
     private val icons = listOf(
         R.drawable.ic_remove,
         R.drawable.ic_make, // TODO: ic_analyze
