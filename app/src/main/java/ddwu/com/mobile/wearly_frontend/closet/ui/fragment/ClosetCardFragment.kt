@@ -1,7 +1,6 @@
 package ddwu.com.mobile.wearly_frontend.closet.ui.fragment
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,7 +14,6 @@ import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.closet.ui.adapter.ClosetChipListAdapter
 import ddwu.com.mobile.wearly_frontend.closet.data.ClosetItem
 import ddwu.com.mobile.wearly_frontend.closet.network.ClosetService
-import ddwu.com.mobile.wearly_frontend.closet.ui.ClothesListActivity
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentClosetCardBinding
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,7 +21,8 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-
+import android.content.Intent
+import androidx.navigation.fragment.findNavController
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -158,7 +157,11 @@ class ClosetCardFragment : Fragment() {
             startActivity(intent)
         }
 
-
+        binding.daySlotsLayout.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_homeFragment_to_codiDiaryFragment
+            )
+        }
     }
     private fun setupRecyclerView() {
         closetAdapter = ClosetChipListAdapter { selectedCloset ->
