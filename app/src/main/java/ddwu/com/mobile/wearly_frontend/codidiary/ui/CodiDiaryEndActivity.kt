@@ -24,8 +24,9 @@ class CodiDiaryEndActivity : AppCompatActivity() {
             insets
         }
 
-        //코디일기작성날짜 받아오기
-        //binding.dateTv.text = intent.getStringExtra("date")
+        //날짜
+        val dateText = intent.getStringExtra("formattedDate")
+        binding.dateTv.text = dateText
 
         binding.backArrowIv.setOnClickListener {
             finish()
