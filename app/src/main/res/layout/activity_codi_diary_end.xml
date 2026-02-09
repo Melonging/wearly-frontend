@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:text="2026년 1월 1일"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="21sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,6 +60,12 @@
                     app:cardBackgroundColor="#F2F2F7"
                     app:cardCornerRadius="28dp"
                     app:cardElevation="0dp">
+
+                    <ImageView
+                        android:id="@+id/resultImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop" />
 
                     <ImageView
                         android:id="@+id/detail_main_iv"
