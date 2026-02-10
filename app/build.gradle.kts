@@ -4,8 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
 }
 
-val baseUrlDev: String = project.findProperty("BASE_URL_DEV") as? String
-    ?: "http://192.168.45.53:4000/"
+val baseUrlDev: String = project.findProperty("BASE_URL_DEV") as String
+    
 
 val testToken = project.findProperty("TEST_TOKEN") as? String ?: ""
 
