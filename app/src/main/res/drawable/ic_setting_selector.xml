@@ -3,9 +3,9 @@
     <!-- 선택된 상태 -->
     <item
         android:state_checked="true"
-        android:drawable="@drawable/ic_home_closet_selected"/>
+        android:drawable="@drawable/ic_home_setting_selected"/>
 
     <!-- 선택 안 된 상태 -->
     <item
-        android:drawable="@drawable/ic_home_closet"/>
+        android:drawable="@drawable/ic_home_setting"/>
 </selector>
