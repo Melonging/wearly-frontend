@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:text="2026년 1월 1일"
                 android:textColor="#333333"
-                android:textSize="15sp" />
+                android:textSize="19sp" />
 
             <View
                 android:layout_width="1dp"
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:text="최고: 2° 최저: -10°"
                 android:textColor="#666666"
-                android:textSize="13sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <!-- Dates -->
@@ -222,6 +222,7 @@
 
         <!-- Empty slots (optional) -->
         <LinearLayout
+            android:id="@+id/day_slots_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -287,8 +288,8 @@
         android:orientation="horizontal"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:gravity="center_vertical"
         app:layout_constraintTop_toBottomOf="@id/calendar_layout">
 
@@ -337,7 +338,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:padding="25dp"
         android:background="@drawable/bg_closet_card_back"
         app:layout_constraintTop_toBottomOf="@id/rv_closet_chips"
         app:layout_constraintStart_toStartOf="parent"
@@ -347,7 +348,7 @@
         <LinearLayout
             android:id="@+id/hanger_row"
             android:layout_width="280dp"
-            android:layout_height="200dp"
+            android:layout_height="220dp"
             android:layout_gravity="center"
             android:orientation="horizontal">
 

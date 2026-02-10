@@ -12,7 +12,22 @@
         <action
             android:id="@+id/action_homeFragment_to_uploadFragment"
             app:destination="@id/uploadFragment"
+            app:enterAnim="@anim/slide_in_right" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_codiDiaryFragment"
+            app:destination="@id/codiDiaryFragment"
             app:enterAnim="@anim/slide_in_right"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/codiDiaryFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.codidiary.ui.fragment.CodiDraryFragment"
+        android:label="코디 다이어리">
+        <argument
+            android:name="selectedDate"
+            app:argType="string" />
     </fragment>
 
     <!-- 아직 아래 프래그먼트 미구현 -->
