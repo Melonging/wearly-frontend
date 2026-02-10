@@ -51,8 +51,9 @@
         </provider>
 
         <activity
-            android:name=".closet.ui.ClothesListActivity"
-            android:exported="false" />
+            android:name=".codidiary.ui.CodiDiaryWritingActivity" />
+        <activity
+            android:name=".codidiary.ui.CodiDiaryEndActivity" />
         <activity
             android:name=".login.ui.ResetPwActivity"
             android:exported="false" />
