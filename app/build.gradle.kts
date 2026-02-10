@@ -4,6 +4,11 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
 }
 
+val baseUrlDev: String = project.findProperty("BASE_URL_DEV") as? String
+    ?: "http://192.168.45.53:4000/"
+
+val testToken = project.findProperty("TEST_TOKEN") as? String ?: ""
+
 android {
     namespace = "ddwu.com.mobile.wearly_frontend"
     compileSdk = 36
@@ -16,6 +21,22 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildFeatures {
+            buildConfig = true
+        }
+
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            "\"$baseUrlDev\""
+        )
+
+        buildConfigField(
+            "String",
+            "TEST_TOKEN",
+            "\"$testToken\""
+        )
     }
 
     buildTypes {
@@ -25,6 +46,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+
         }
     }
     compileOptions {

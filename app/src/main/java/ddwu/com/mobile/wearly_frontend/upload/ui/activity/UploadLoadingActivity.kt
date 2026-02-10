@@ -33,8 +33,8 @@ class UploadLoadingActivity : AppCompatActivity() {
     private val ACCESS_TOKEN = ""
     private val icons = listOf(
         R.drawable.ic_remove,
-        R.drawable.ic_make, // TODO: ic_analyze
-        R.drawable.ic_make  // TODO: ic_category
+        R.drawable.ic_make,
+        R.drawable.ic_make
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +76,7 @@ class UploadLoadingActivity : AppCompatActivity() {
 
                 val startRes = api.startClothingUpload(
                     image = MultipartUtil.uriToMultipart(this@UploadLoadingActivity, photoUri),
-                    sectionId = MultipartUtil.textPart("1")   // 🔥 문자열이어야 함
+                    sectionId = MultipartUtil.textPart("1")
                 )
 
                 if (!startRes.success || startRes.data == null) {
@@ -124,7 +124,7 @@ class UploadLoadingActivity : AppCompatActivity() {
                     fallbackResult("시도 횟수 초과 → 임시")
                 }
             } catch (e: kotlinx.coroutines.TimeoutCancellationException) {
-                // ✅ 여기로 오면 "에러: timeout"이 아니라 폴백으로!
+
                 fallbackResult("시간 초과(35초) → 임시 분류")
             } catch (e: HttpException) {
             when (e.code()) {

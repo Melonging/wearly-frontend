@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarPin"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:background="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:title="PIN 설정"
+        app:titleCentered="true"
+        app:navigationIcon="@drawable/ic_back"
+        app:titleTextAppearance="@style/ToolbarTitleBold"
+        app:elevation="0dp"/>
+
+    <TextView
+        android:id="@+id/tvPinGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PIN을 설정해주세요"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#111111"
+        app:layout_constraintTop_toBottomOf="@id/toolbarPin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="70dp"/>
+
+    <LinearLayout
+        android:id="@+id/layoutPinDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/tvPinGuide"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="18dp">
+
+        <View style="@style/PinDot" android:id="@+id/dot1"/>
+        <View style="@style/PinDot" android:id="@+id/dot2"/>
+        <View style="@style/PinDot" android:id="@+id/dot3"/>
+        <View style="@style/PinDot" android:id="@+id/dot4"/>
+    </LinearLayout>
+
+    <!-- ✅ 키패드 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/keypad"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/layoutPinDots"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="36dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp">
+
+        <!-- Row1 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn1"
+            style="@style/PinKey"
+            android:text="1"
+            android:tag="1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn2"
+            android:layout_marginEnd="12dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn2"
+            style="@style/PinKey"
+            android:text="2"
+            android:tag="2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn1"
+            app:layout_constraintEnd_toStartOf="@id/btn3"
+            android:layout_marginEnd="12dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn3"
+            style="@style/PinKey"
+            android:text="3"
+            android:tag="3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn2"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- ✅ Row1 체인 -->
+        <!-- (체인은 id들 start/end 연결 + width 0dp면 자동으로 동일폭) -->
+
+        <!-- Row2 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn4"
+            style="@style/PinKey"
+            android:text="4"
+            android:tag="4"
+            app:layout_constraintTop_toBottomOf="@id/btn1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn5"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn5"
+            style="@style/PinKey"
+            android:text="5"
+            android:tag="5"
+            app:layout_constraintTop_toBottomOf="@id/btn2"
+            app:layout_constraintStart_toEndOf="@id/btn4"
+            app:layout_constraintEnd_toStartOf="@id/btn6"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn6"
+            style="@style/PinKey"
+            android:text="6"
+            android:tag="6"
+            app:layout_constraintTop_toBottomOf="@id/btn3"
+            app:layout_constraintStart_toEndOf="@id/btn5"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="14dp"/>
+
+        <!-- Row3 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn7"
+            style="@style/PinKey"
+            android:text="7"
+            android:tag="7"
+            app:layout_constraintTop_toBottomOf="@id/btn4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn8"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn8"
+            style="@style/PinKey"
+            android:text="8"
+            android:tag="8"
+            app:layout_constraintTop_toBottomOf="@id/btn5"
+            app:layout_constraintStart_toEndOf="@id/btn7"
+            app:layout_constraintEnd_toStartOf="@id/btn9"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn9"
+            style="@style/PinKey"
+            android:text="9"
+            android:tag="9"
+            app:layout_constraintTop_toBottomOf="@id/btn6"
+            app:layout_constraintStart_toEndOf="@id/btn8"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="14dp"/>
+
+        <!-- Row4: 빈칸 / 0 / X -->
+        <View
+            android:id="@+id/empty"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            app:layout_constraintTop_toBottomOf="@id/btn7"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn0"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn0"
+            style="@style/PinKey"
+            android:text="0"
+            android:tag="0"
+            app:layout_constraintTop_toBottomOf="@id/btn8"
+            app:layout_constraintStart_toEndOf="@id/empty"
+            app:layout_constraintEnd_toStartOf="@id/btnDelete"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDelete"
+            style="@style/PinKey"
+            android:text="X"
+            android:tag="delete"
+            app:layout_constraintTop_toBottomOf="@id/btn9"
+            app:layout_constraintStart_toEndOf="@id/btn0"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="14dp"/>
+
+        <!-- ✅ 핵심: 동일 폭 분배를 위한 width 0dp + start/end 연결 -->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

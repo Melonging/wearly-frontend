@@ -15,7 +15,6 @@ import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.closet.ui.adapter.ClosetChipListAdapter
 import ddwu.com.mobile.wearly_frontend.closet.data.ClosetItem
 import ddwu.com.mobile.wearly_frontend.closet.network.ClosetService
-import ddwu.com.mobile.wearly_frontend.closet.ui.ClothesListActivity
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentClosetCardBinding
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
