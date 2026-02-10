@@ -24,6 +24,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import androidx.navigation.fragment.findNavController
+import ddwu.com.mobile.wearly_frontend.upload.ui.activity.UploadActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -278,16 +279,12 @@ class ClosetCardFragment : Fragment() {
 
     // 빙기: navigate 함수 추가함
     private fun openContainer(type: String, id: Int, name: String) {
-        val bundle = Bundle().apply {
-            putString("containerType", type)
-            putInt("containerId", id)
-            putString("containerName", name)
+        val intent = Intent(requireContext(), UploadActivity::class.java).apply {
+            putExtra("containerType", type)
+            putExtra("containerId", id)
+            putExtra("containerName", name)
         }
-
-        findNavController().navigate(
-            R.id.action_homeFragment_to_uploadFragment,
-            bundle
-        )
+        startActivity(intent)
     }
 
     companion object{
