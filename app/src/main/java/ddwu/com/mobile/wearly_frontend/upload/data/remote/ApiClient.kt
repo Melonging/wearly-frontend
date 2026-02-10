@@ -6,10 +6,12 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import ddwu.com.mobile.wearly_frontend.BuildConfig
 
 object ApiClient {
-    var BASE_URL: String = "https://wearly-backend-cvbo.onrender.com/"
+    var BASE_URL: String = BuildConfig.BASE_URL
 
+    var TEST_TOKEN: String = BuildConfig.TEST_TOKEN
 
     fun createUploadApi(tokenProvider: () -> String): UploadApi {
 
@@ -18,7 +20,7 @@ object ApiClient {
         }
 
         val authInterceptor = Interceptor { chain ->
-            val token = tokenProvider().trim()
+            val token =  TEST_TOKEN  //tokenProvider().trim()
             val req = chain.request().newBuilder()
                 .addHeader("Authorization", "Bearer $token")
                 .build()

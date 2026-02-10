@@ -22,6 +22,12 @@
         android:theme="@style/Theme.Wearly_frontend"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".setting.ui.PinEnabledActivity"
+            android:exported="false" />
+        <activity
+            android:name=".setting.ui.PinActivity"
+            android:exported="false" />
+        <activity
             android:name=".upload.TestActivity"
             android:exported="false" />
         <activity

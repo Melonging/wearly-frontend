@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
@@ -44,6 +45,19 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNav.setupWithNavController(navController)
 
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.settingFragment -> {
+                    binding.toolbar.visibility = View.GONE
+                    binding.bottomNav.visibility = View.GONE
+                }
+                else -> {
+                    binding.toolbar.visibility = View.VISIBLE
+                    binding.bottomNav.visibility = View.VISIBLE
+                }
+            }
+        }
+
 
         binding.bottomNav.setOnItemReselectedListener { item ->
             when (item.itemId) {
@@ -62,6 +76,8 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    // 임시 코드, 없애야 함.
+    /*
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.btn_profile -> {
@@ -79,4 +95,6 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+     */
 }

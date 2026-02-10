@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="0dp"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10px">
 
     <!-- 숫자 / 체크 원 -->
     <com.google.android.material.card.MaterialCardView
