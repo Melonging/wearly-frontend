@@ -9,8 +9,8 @@ data class UploadStartData(val jobId: String, val status: String)
 
 data class ClothingStatusData(
     val jobId: String,
-    val status: String,          // "processing" | "completed" | "failed"
-    val result: ClothingResult? = null,     // 테스트용(완료 후 모델링)
+    val status: String,
+    val result: ClothingResult? = null,
     val error: String? = null
 )
 
