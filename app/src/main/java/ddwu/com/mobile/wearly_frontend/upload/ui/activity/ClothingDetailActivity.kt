@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityClothingDetailBinding
-import ddwu.com.mobile.wearly_frontend.upload.data.entity.ClothingDetail
+import ddwu.com.mobile.wearly_frontend.upload.data.model.ClothesDetailDto
 
 class ClothingDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityClothingDetailBinding
@@ -46,17 +44,22 @@ class ClothingDetailActivity : AppCompatActivity() {
         spType.setSelection(0)
 
 
-        val detail: ClothingDetail? =
+        val detail: ClothesDetailDto? =
             if (android.os.Build.VERSION.SDK_INT >= 33) {
-                intent.getParcelableExtra("detail", ClothingDetail::class.java)
+                intent.getParcelableExtra("detail", ClothesDetailDto::class.java)
             } else {
                 @Suppress("DEPRECATION")
                 intent.getParcelableExtra("detail")
             }
 
-        binding.ivCloth.setImageResource(detail?.resId ?: R.drawable.cloth_01)
-        binding.tvLocationHeader.text = detail?.location
-        binding.tvClosetLabel.text = detail?.category
+        if (detail?.image != null) {
+            Glide.with(this)
+                .load(detail.image)
+                .into(binding.ivCloth)
+        } else {
+            binding.ivCloth.setImageResource(R.drawable.cloth_01)
+        }
+
 
 
     }

@@ -5,11 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import ddwu.com.mobile.wearly_frontend.R
-import ddwu.com.mobile.wearly_frontend.category.ui.adapter.CategoryClothingAdapter
-import ddwu.com.mobile.wearly_frontend.category.ui.adapter.CategoryGridAdapter
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentCategoryBinding
-import ddwu.com.mobile.wearly_frontend.upload.data.entity.ClothingDetail
 
 class CategoryFragment : Fragment() {
 
