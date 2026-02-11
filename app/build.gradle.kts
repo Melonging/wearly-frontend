@@ -75,4 +75,7 @@ dependencies {
     // ViewModel 생명주기 관련 (필수)
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+
+    // 위치 서비스
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 }
