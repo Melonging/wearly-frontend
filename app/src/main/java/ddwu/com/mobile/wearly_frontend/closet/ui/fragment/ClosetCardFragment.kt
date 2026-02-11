@@ -24,6 +24,8 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import androidx.navigation.fragment.findNavController
+import ddwu.com.mobile.wearly_frontend.BuildConfig
+import ddwu.com.mobile.wearly_frontend.closet.data.SectionItem
 import ddwu.com.mobile.wearly_frontend.upload.ui.activity.UploadActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +43,8 @@ class ClosetCardFragment : Fragment() {
     lateinit var binding : FragmentClosetCardBinding
     private lateinit var service: ClosetService
     private lateinit var closetAdapter: ClosetChipListAdapter
+
+    private var selectedClosetId: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,12 +79,9 @@ class ClosetCardFragment : Fragment() {
 
         setupClosetListeners()
 
-        //옷장 옷 목록 조회
-        // 빙기: uploadFragment로 넘어갑니다.
-        binding.btnHanger1.setOnClickListener { openContainer("HANGER", 1, "행거 1") }
-        binding.btnHanger2.setOnClickListener { openContainer("HANGER", 2, "행거 2") }
-        binding.btnDrawer1.setOnClickListener { openContainer("DRAWER", 1, "서랍 1") }
-        binding.btnDrawer2.setOnClickListener { openContainer("DRAWER", 2, "서랍 2") }
+        // 기본 옷장 상세
+        fetchClosetDetail(selectedClosetId)
+
     }
 
     private fun setupClosetListeners(){
@@ -143,6 +144,7 @@ class ClosetCardFragment : Fragment() {
     }
     private fun setupRecyclerView() {
         closetAdapter = ClosetChipListAdapter { selectedCloset ->
+            selectedClosetId = selectedCloset.closetId // 빙기: 섹션 옷 조회를 위해 필요합니다.
             fetchClosetDetail(selectedCloset.closetId)
         }
 
@@ -201,7 +203,7 @@ class ClosetCardFragment : Fragment() {
     }
 
     private fun fetchClosetDetail(closetId: Int) {
-        val token = "actual_token_here"
+        val token = BuildConfig.TEST_TOKEN
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
@@ -210,10 +212,88 @@ class ClosetCardFragment : Fragment() {
                     val detail = response.data
                     // TODO: 받아온 detail(closetType, sections)을 UI에 반영
                     // 예: binding.tvClosetType.text = detail.closetType
+
+
+
+                    // 빙기: UploadAcivty에 필요한 정보를 넘깁니다.
+                    selectedClosetId = closetId
+                    val sections = detail.sections
+
+                    // 행거1 세팅
+                    if (sections.isNotEmpty()) {
+                        val section = sections[0]
+
+                        binding.tvHanger1Title.text = section.sectionName
+
+                        binding.btnHanger1.setOnClickListener {
+                            Log.d("NAV", "btnHanger1 clicked")
+                            openContainer(
+                                selectedClosetId,
+                                1,
+                                section.sectionName
+                            )
+                        }
+                    }
+
+                    // 행거2 세팅
+                    if (sections.size > 1) {
+                        val section = sections[1]
+
+                        binding.tvHanger2Title.text = section.sectionName
+
+                        binding.btnHanger2.setOnClickListener {
+                            openContainer(
+                                selectedClosetId,
+                                2,
+                                section.sectionName
+                            )
+                        }
+                    }
+
+                    // 서랍1 세팅
+                    if (sections.size > 1) {
+                        val section = sections[1]
+
+                        binding.tvDrawer1Title.text = section.sectionName
+
+                        binding.btnDrawer1.setOnClickListener {
+                            openContainer(
+                                selectedClosetId,
+                                3,
+                                section.sectionName
+                            )
+                        }
+                    }
+
+                    // 서랍2 세팅
+                    if (sections.size > 1) {
+                        val section = sections[1]
+
+                        binding.tvDrawer2Title.text = section.sectionName
+
+                        binding.btnDrawer2.setOnClickListener {
+                            openContainer(
+                                selectedClosetId,
+                                4,
+                                section.sectionName
+                            )
+                        }
+                    }
+
+
                     Log.d("API_TEST", "상세 정보 로드: ${detail.closetType}")
                 }
             } catch (e: Exception) {
+
+                // 빙기: 더미데이터 추가
+                val dummySections = listOf(
+                    SectionItem("행거1", 8),
+                    SectionItem("행거2", 8),
+                    SectionItem("서랍1", 8),
+                    SectionItem("서랍2", 8)
+                )
                 Log.e("API_TEST", "상세 조회 실패: ${e.message}")
+                applySections(closetId, dummySections)
             }
         }
     }
@@ -278,14 +358,61 @@ class ClosetCardFragment : Fragment() {
     }
 
     // 빙기: navigate 함수 추가함
-    private fun openContainer(type: String, id: Int, name: String) {
+    private fun openContainer(closetId: Int, sectionId: Int, name: String) {
+        Log.d("NAV", "openContainer closetId=$closetId sectionId=$sectionId name=$name")
+
         val intent = Intent(requireContext(), UploadActivity::class.java).apply {
-            putExtra("containerType", type)
-            putExtra("containerId", id)
+            putExtra("closetId", closetId)
+            putExtra("sectionId", sectionId)
             putExtra("containerName", name)
         }
         startActivity(intent)
     }
+
+    // API 연결이 되지 않더라도 우선 진행
+
+    private fun dummySections(): List<SectionItem> = listOf(
+        SectionItem(sectionName = "행거 1", clothesCount = 8),
+        SectionItem(sectionName = "행거 2", clothesCount = 8),
+        SectionItem(sectionName = "서랍 1", clothesCount = 4),
+        SectionItem(sectionName = "서랍 2", clothesCount = 2),
+    )
+
+
+    private fun applySections(closetId: Int, sections: List<SectionItem>) {
+        selectedClosetId = closetId
+
+        // 행거1
+        if (sections.isNotEmpty()) {
+            val s = sections[0]
+            binding.tvHanger1Title.text = s.sectionName
+            binding.btnHanger1.setOnClickListener { openContainer(selectedClosetId, 1, s.sectionName) } // 더미 sectionId
+        }
+
+        // 행거2
+        if (sections.size > 1) {
+            val s = sections[1]
+            binding.tvHanger2Title.text = s.sectionName
+            binding.btnHanger2.setOnClickListener { openContainer(selectedClosetId, 2, s.sectionName) }
+        }
+
+        // 서랍1
+        if (sections.size > 2) {
+            val s = sections[2]
+            binding.tvDrawer1Title.text = s.sectionName
+            binding.btnDrawer1.setOnClickListener { openContainer(selectedClosetId, 3, s.sectionName) }
+        }
+
+        // 서랍2
+        if (sections.size > 3) {
+            val s = sections[3]
+            binding.tvDrawer2Title.text = s.sectionName
+            binding.btnDrawer2.setOnClickListener { openContainer(selectedClosetId, 4, s.sectionName) }
+        }
+    }
+
+
+
 
     companion object{
         /**

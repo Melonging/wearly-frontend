@@ -11,26 +11,25 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.os.postDelayed
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import ddwu.com.mobile.wearly_frontend.BuildConfig
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityUploadBinding
-import ddwu.com.mobile.wearly_frontend.upload.data.SlotItem
-import ddwu.com.mobile.wearly_frontend.upload.data.entity.ClothingDetail
+import ddwu.com.mobile.wearly_frontend.upload.data.slot.SlotItem
+import ddwu.com.mobile.wearly_frontend.upload.data.model.ClothesDetailDto
+import ddwu.com.mobile.wearly_frontend.upload.data.remote.ApiClient
+import ddwu.com.mobile.wearly_frontend.upload.data.repository.ClosetRepository
 import ddwu.com.mobile.wearly_frontend.upload.network.FileUtil
 import ddwu.com.mobile.wearly_frontend.upload.ui.adapter.ClothingAdapter
-import java.util.logging.Handler
+import kotlinx.coroutines.launch
 
 class UploadActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUploadBinding
@@ -38,6 +37,12 @@ class UploadActivity : AppCompatActivity() {
     private var currentPhotoUri: Uri? = null
     private lateinit var adapter: ClothingAdapter
 
+    private val repository by lazy {
+        ClosetRepository(ApiClient.closetApi())
+    }
+
+
+    // 카메라 실행용
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -62,11 +67,11 @@ class UploadActivity : AppCompatActivity() {
             currentPhotoUri?.let { addPhotoToList(it) }
         }
 
-
     private val cameraPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) openCameraInternal()
         }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,18 +81,18 @@ class UploadActivity : AppCompatActivity() {
         binding = ActivityUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        Log.d("BASE_URL_CHECK", BuildConfig.BASE_URL)
+
+        // 섹션 전달 받기
         val name = intent.getStringExtra("containerName")
-        binding.uploadTitleTv.text = name ?: "행거"
+        val sectionId = intent.getIntExtra("sectionId", -1)
 
-        items.clear()
-        val dummyList = listOf(
-            R.drawable.cloth_01,
-            R.drawable.cloth_02,
-            R.drawable.cloth_03,
-        )
+        if (sectionId == -1) {
+            finish()
+            return
+        }
 
-        dummyList.forEach { items.add(SlotItem.Image(resId = it)) }
-        items.add(SlotItem.Empty)
+        Log.d("UPLOAD", "$name  $sectionId")
 
         val layoutManager = GridLayoutManager(this, 3)
         binding.itemRV.layoutManager = layoutManager
@@ -96,20 +101,17 @@ class UploadActivity : AppCompatActivity() {
             items,
             onAddClick = { openCamera() },
             onImageClick = { imageItem ->
-                val detail = ClothingDetail(
-                    uri = imageItem.uri?.toString(),
-                    resId = imageItem.resId,
-                    category = "아우터",
-                    recommendedTemp = 22,
-                    location = "행거1"
-                )
-
+                val clothesId = imageItem.id ?: return@ClothingAdapter
                 val intent = Intent(this, ClothingDetailActivity::class.java)
-                intent.putExtra("detail", detail)
+                intent.putExtra("clothesId", clothesId)
                 startActivity(intent)
             }
         )
         binding.itemRV.adapter = adapter
+
+        if (sectionId != -1) {
+            fetchSectionClothes(sectionId)
+        }
 
         binding.btnAdd.setOnClickListener {
             openCamera()
@@ -182,23 +184,65 @@ class UploadActivity : AppCompatActivity() {
 
         dialog.show()
 
-        // 2.5초 후 자동 닫기 (원하면 삭제)
+        // 2.5초 후 자동 닫기
         android.os.Handler(Looper.getMainLooper()).postDelayed({
             if (dialog.isShowing) dialog.dismiss()
         }, 2500)
     }
 
 
-    private fun showResultDialog(resultText: String) {
-        AlertDialog.Builder(this)
-            .setMessage(resultText)
-            .setCancelable(true)
-            .create()
-            .also { dialog ->
-                dialog.show()
-                android.os.Handler(Looper.getMainLooper()).postDelayed({
-                    if (dialog.isShowing) dialog.dismiss()
-                }, 1500)
-            }
+    // 더미 데이터
+    private fun loadDummySectionClothes(sectionId: Int) {
+
+        val dummyRes = when (sectionId) {
+            1 -> listOf(R.drawable.cloth_01, R.drawable.cloth_02)
+            2 -> listOf(R.drawable.cloth_03, R.drawable.cloth_01)
+            3 -> listOf(R.drawable.cloth_02, R.drawable.cloth_03, R.drawable.cloth_01) // 서랍2
+            4 -> listOf(R.drawable.cloth_01)
+            else -> listOf(R.drawable.cloth_01, R.drawable.cloth_02, R.drawable.cloth_03)
+        }
+
+        items.clear()
+        dummyRes.forEachIndexed { idx, resId ->
+            items.add(
+                SlotItem.Image(
+                    id = (sectionId * 100 + idx + 1).toLong(),
+                    resId = resId
+                )
+            )
+        }
     }
+
+    private fun fetchSectionClothes(sectionId: Int) {
+        val token = BuildConfig.TEST_TOKEN
+
+        lifecycleScope.launch {
+            try {
+                val clothesList = repository.fetchSectionClothes(sectionId)
+
+                items.clear()
+                clothesList.forEach { dto ->
+                    items.add(
+                        SlotItem.Image(
+                            id = dto.clothing_id,
+                            imageUrl = dto.image
+                        )
+                    )
+                }
+                adapter.notifyDataSetChanged()
+
+                if (items.isEmpty()) {
+                    // binding.emptyView.visibility = View.VISIBLE
+                }
+
+            } catch (e: Exception) {
+                Log.e("SECTION", e.message ?: "섹션 조회 실패")
+                Toast.makeText(this@UploadActivity, "섹션 조회 실패", Toast.LENGTH_SHORT).show()
+            } finally {
+            }
+        }
+    }
+
+
+
 }
