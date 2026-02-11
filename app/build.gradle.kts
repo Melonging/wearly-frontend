@@ -4,9 +4,9 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
 }
 
-val baseUrlDev: String = project.findProperty("BASE_URL") as? String ?: "***REMOVED***"
+val baseUrlDev: String = project.findProperty("BASE_URL") as? String ?: ""
 
-val testToken = project.findProperty("TEST_TOKEN") as? String ?: "***REMOVED***"
+val testToken = project.findProperty("TEST_TOKEN") as? String ?: ""
 
 android {
     namespace = "ddwu.com.mobile.wearly_frontend"
