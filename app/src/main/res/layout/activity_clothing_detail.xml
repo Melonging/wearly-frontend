@@ -100,22 +100,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                app:boxBackgroundMode="outline"
-                app:boxStrokeColor="#E5E7EB"
-                app:boxStrokeWidth="1dp"
-                app:boxCornerRadiusTopStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusBottomEnd="10dp"
+                style="@style/Wearly.Dropdown.Outline"
+                app:endIconMode="dropdown_menu"
                 app:layout_constraintTop_toBottomOf="@id/tvClosetLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <Spinner
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/spCloset"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:inputType="none"
+                    android:importantForAutofill="no"
+                    android:singleLine="true"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- 섹션 라벨 -->
