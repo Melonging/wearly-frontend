@@ -1,4 +1,4 @@
-package ddwu.com.mobile.wearly_frontend.upload.data.model
+package ddwu.com.mobile.wearly_frontend.upload.data.model.closet
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -9,5 +9,5 @@ data class ClothesDetailDto(
     val temperature: Int?,
     val image: String?,
     val category_id: Long?,
-    val section_id: Long?
+    val section_id: Int?
 ) : Parcelable
