@@ -1,21 +1,28 @@
 package ddwu.com.mobile.wearly_frontend
 
+import android.Manifest // 💡 중요: Manifest 임포트 추가
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts // 💡 중요: 계약 객체 임포트 추가
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityMainBinding
-
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
+
+    // 위치 권한 요청 비서
+    private val locationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val granted = permissions.entries.all { it.value }
+        if (granted) { }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +36,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        checkAndRequestPermissions()
+
         // Toolbar
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -41,9 +50,29 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNav.setupWithNavController(navController)
 
+        // 코디 일기 화면으로 이동 시 네비게이터 숨김
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.diaryWriteFragment) {
+                binding.bottomNav.visibility = View.GONE
+            } else {
+                binding.bottomNav.visibility = View.VISIBLE
+            }
+        }
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu)
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true
+    }
+
+    /**
+     * 위치 권한 요청 팝업
+     */
+    private fun checkAndRequestPermissions() {
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+        locationPermissionLauncher.launch(permissions)
     }
 }

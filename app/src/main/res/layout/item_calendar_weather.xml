@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="65dp"
+    android:layout_height="85dp"
+
+    android:background="@drawable/bg_calendar_weather_item_selector"
+    android:layout_marginEnd="5dp"
+    android:orientation="vertical"
+    android:gravity="center"
+
+    android:clickable="true">
+
+
+    <TextView
+        android:id="@+id/item_calendar_weather_date_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="1/1"
+        android:textSize="10sp"
+        android:textColor="@color/text_gray" />
+    
+    <ImageView
+        android:id="@+id/item_calendar_weather_iv"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+
+        android:src="@drawable/img_weather_snowy"
+
+        android:padding="5dp"/>
+
+    <TextView
+        android:id="@+id/item_calendar_weather_temp_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="0°/0°"
+        android:textColor="@color/black"
+        android:textSize="12dp" />
+
+</LinearLayout>
