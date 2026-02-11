@@ -24,9 +24,10 @@ import ddwu.com.mobile.wearly_frontend.BuildConfig
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityUploadBinding
 import ddwu.com.mobile.wearly_frontend.upload.data.slot.SlotItem
-import ddwu.com.mobile.wearly_frontend.upload.data.model.ClothesDetailDto
 import ddwu.com.mobile.wearly_frontend.upload.data.remote.ApiClient
 import ddwu.com.mobile.wearly_frontend.upload.data.repository.ClosetRepository
+import ddwu.com.mobile.wearly_frontend.upload.data.repository.UploadRepository
+import ddwu.com.mobile.wearly_frontend.upload.data.util.MultipartUtil
 import ddwu.com.mobile.wearly_frontend.upload.network.FileUtil
 import ddwu.com.mobile.wearly_frontend.upload.ui.adapter.ClothingAdapter
 import kotlinx.coroutines.launch
@@ -37,8 +38,14 @@ class UploadActivity : AppCompatActivity() {
     private var currentPhotoUri: Uri? = null
     private lateinit var adapter: ClothingAdapter
 
-    private val repository by lazy {
+    private var currentSectionId: Int = -1
+
+    private val closetRepository by lazy {
         ClosetRepository(ApiClient.closetApi())
+    }
+
+    private val uploadRepository by lazy {
+        UploadRepository(ApiClient.uploadApi())
     }
 
 
@@ -46,25 +53,47 @@ class UploadActivity : AppCompatActivity() {
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                currentPhotoUri?.let { uri -> openLoading(uri) }
+                currentPhotoUri?.let { uri ->
+                    openLoading(uri, currentSectionId)
+                }
             }
         }
 
-    val loadingActivityLauncher =
+    private val loadingActivityLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 
-            Log.d("UPLOAD", "loading resultCode=${result.resultCode}")
-            Log.d("UPLOAD", "intent data = ${result.data}")
-            val resultText = result.data?.getStringExtra("resultText")
-            Log.d("UPLOAD", "resultText=$resultText")
+            if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
 
-            if (result.resultCode == Activity.RESULT_OK && !resultText.isNullOrBlank()) {
-                showClassificationPopup(resultText, currentPhotoUri)
-            } else {
-                Log.d("UPLOAD", "popup skipped (code or text empty)")
+            val data = result.data
+            val resultText = data?.getStringExtra("resultText")
+            val imageUrl = data?.getStringExtra("imageUrl")
+
+            if (!resultText.isNullOrBlank()) {
+                showClassificationPopup(
+                    resultText = resultText,
+                    localPhotoUri = currentPhotoUri,
+                    fallbackImageUrl = imageUrl
+                )
             }
 
-            currentPhotoUri?.let { addPhotoToList(it) }
+            val clothingId = data?.getLongExtra("clothingId", -1L) ?: -1L
+
+            if (clothingId != -1L) {
+                items.add(0, SlotItem.Image(id = clothingId, imageUrl = imageUrl))
+                adapter.notifyItemInserted(0)
+                binding.itemRV.scrollToPosition(0)
+
+                if (currentSectionId != -1) {
+                    lifecycleScope.launch {
+                        kotlinx.coroutines.delay(300L)
+                        fetchSectionClothes(currentSectionId)
+                    }
+                }
+            } else {
+                if (currentSectionId != -1) {
+                    fetchSectionClothes(currentSectionId)
+                }
+            }
         }
 
     private val cameraPermissionLauncher =
@@ -85,14 +114,8 @@ class UploadActivity : AppCompatActivity() {
 
         // 섹션 전달 받기
         val name = intent.getStringExtra("containerName")
-        val sectionId = intent.getIntExtra("sectionId", -1)
-
-        if (sectionId == -1) {
-            finish()
-            return
-        }
-
-        Log.d("UPLOAD", "$name  $sectionId")
+        currentSectionId = intent.getIntExtra("sectionId", -1)
+        if (currentSectionId == -1) { finish(); return }
 
         val layoutManager = GridLayoutManager(this, 3)
         binding.itemRV.layoutManager = layoutManager
@@ -101,17 +124,18 @@ class UploadActivity : AppCompatActivity() {
             items,
             onAddClick = { openCamera() },
             onImageClick = { imageItem ->
-                val clothesId = imageItem.id ?: return@ClothingAdapter
-                val intent = Intent(this, ClothingDetailActivity::class.java)
-                intent.putExtra("clothesId", clothesId)
+                val clothingId = imageItem.id ?: return@ClothingAdapter
+
+                val intent = Intent(this, ClothingDetailActivity::class.java).apply {
+                    putExtra("clothingId", clothingId)
+                    putExtra("imageUrl", imageItem.imageUrl)
+                }
                 startActivity(intent)
             }
         )
         binding.itemRV.adapter = adapter
 
-        if (sectionId != -1) {
-            fetchSectionClothes(sectionId)
-        }
+        fetchSectionClothes(currentSectionId)
 
         binding.btnAdd.setOnClickListener {
             openCamera()
@@ -145,24 +169,20 @@ class UploadActivity : AppCompatActivity() {
         cameraLauncher.launch(intent)
     }
 
-    private fun openLoading(uri: Uri) {
+    private fun openLoading(uri: Uri, sectionId: Int) {
         val intent = Intent(this, UploadLoadingActivity::class.java).apply {
             putExtra("photoUri", uri.toString())
+            putExtra("sectionId", sectionId)
         }
         loadingActivityLauncher.launch(intent)
     }
 
-    private fun addPhotoToList(uri: Uri) {
-        val lastIndex = items.lastIndex
-        if (lastIndex >= 0 && items[lastIndex] is SlotItem.Empty) items.removeAt(lastIndex)
-        items.add(SlotItem.Image(uri = uri))
-        items.add(SlotItem.Empty)
-        adapter.notifyDataSetChanged()
-    }
-
-    private fun showClassificationPopup(resultText: String, photoUri: Uri?) {
+    private fun showClassificationPopup(
+        resultText: String,
+        localPhotoUri: Uri?,
+        fallbackImageUrl: String?
+    ) {
         val view = layoutInflater.inflate(R.layout.dialog_classification, null)
-
         val iv = view.findViewById<ImageView>(R.id.ivCloth)
         val tvTitle = view.findViewById<TextView>(R.id.tvTitle)
         val tvSub = view.findViewById<TextView>(R.id.tvSub)
@@ -170,11 +190,10 @@ class UploadActivity : AppCompatActivity() {
         tvTitle.text = resultText
         tvSub.text = "AI가 옷의 종류를 자동으로 분석했어요"
 
-        // 사진 표시 (Glide 있으면 Glide 추천)
-        if (photoUri != null) {
-            // Glide 사용 시:
-            Glide.with(this).load(photoUri).into(iv)
-
+        when {
+            !fallbackImageUrl.isNullOrBlank() -> Glide.with(this).load(fallbackImageUrl).into(iv) // ✅ 서버 우선
+            localPhotoUri != null -> Glide.with(this).load(localPhotoUri).into(iv)
+            else -> iv.setImageResource(R.drawable.cloth_01)
         }
 
         val dialog = AlertDialog.Builder(this, R.style.ClassificationDialog)
@@ -184,65 +203,28 @@ class UploadActivity : AppCompatActivity() {
 
         dialog.show()
 
-        // 2.5초 후 자동 닫기
         android.os.Handler(Looper.getMainLooper()).postDelayed({
             if (dialog.isShowing) dialog.dismiss()
         }, 2500)
     }
 
 
-    // 더미 데이터
-    private fun loadDummySectionClothes(sectionId: Int) {
-
-        val dummyRes = when (sectionId) {
-            1 -> listOf(R.drawable.cloth_01, R.drawable.cloth_02)
-            2 -> listOf(R.drawable.cloth_03, R.drawable.cloth_01)
-            3 -> listOf(R.drawable.cloth_02, R.drawable.cloth_03, R.drawable.cloth_01) // 서랍2
-            4 -> listOf(R.drawable.cloth_01)
-            else -> listOf(R.drawable.cloth_01, R.drawable.cloth_02, R.drawable.cloth_03)
-        }
-
-        items.clear()
-        dummyRes.forEachIndexed { idx, resId ->
-            items.add(
-                SlotItem.Image(
-                    id = (sectionId * 100 + idx + 1).toLong(),
-                    resId = resId
-                )
-            )
-        }
-    }
-
     private fun fetchSectionClothes(sectionId: Int) {
-        val token = BuildConfig.TEST_TOKEN
-
         lifecycleScope.launch {
             try {
-                val clothesList = repository.fetchSectionClothes(sectionId)
+                val clothesList = closetRepository.fetchSectionClothes(sectionId)
 
                 items.clear()
                 clothesList.forEach { dto ->
-                    items.add(
-                        SlotItem.Image(
-                            id = dto.clothing_id,
-                            imageUrl = dto.image
-                        )
-                    )
+                    items.add(SlotItem.Image(id = dto.clothing_id, imageUrl = dto.image))
                 }
-                adapter.notifyDataSetChanged()
 
-                if (items.isEmpty()) {
-                    // binding.emptyView.visibility = View.VISIBLE
-                }
+                adapter.notifyDataSetChanged()
 
             } catch (e: Exception) {
                 Log.e("SECTION", e.message ?: "섹션 조회 실패")
                 Toast.makeText(this@UploadActivity, "섹션 조회 실패", Toast.LENGTH_SHORT).show()
-            } finally {
             }
         }
     }
-
-
-
 }
