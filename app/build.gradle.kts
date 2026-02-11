@@ -4,9 +4,9 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
 }
 
-val baseUrlDev: String = project.findProperty("BASE_URL") as? String ?: ""
+val baseUrlDev: String = project.findProperty("BASE_URL") as? String ?: "https://wearly-backend-cvbo.onrender.com/"
 
-val testToken = project.findProperty("TEST_TOKEN") as? String ?: ""
+val testToken = project.findProperty("TEST_TOKEN") as? String ?: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImxvZ2luSWQiOiJ0ZXN0dXNlciIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3NzA4NDE4OTcsImV4cCI6MTc3MDg0NTQ5N30.ER0FXZs4a4JRWAaKdGoaIrkMyRlQvuhUVyPBYa-ShrU"
 
 android {
     namespace = "ddwu.com.mobile.wearly_frontend"
