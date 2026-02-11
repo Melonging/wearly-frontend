@@ -8,8 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.ItemListUploadBinding
-import ddwu.com.mobile.wearly_frontend.upload.data.SlotItem
+import ddwu.com.mobile.wearly_frontend.upload.data.slot.SlotItem
 import ddwu.com.mobile.wearly_frontend.upload.network.CameraManager
 
 class ClothingAdapter(private val list: ArrayList<SlotItem>,
@@ -31,18 +32,32 @@ class ClothingAdapter(private val list: ArrayList<SlotItem>,
             is SlotItem.Image -> {
                 holder.itemBinding.clothingIv.visibility = View.VISIBLE
 
-                if (item.uri != null) {
-                    Glide.with(holder.itemView)
-                        .load(item.uri)
-                        .centerCrop()
-                        .into(holder.itemBinding.clothingIv)
-                } else if (item.resId != null) {
-                    holder.itemBinding.clothingIv.setImageResource(item.resId)
+                val url = item.imageUrl
+                when {
+                    !url.isNullOrBlank() && (url.startsWith("http://") || url.startsWith("https://")) -> {
+                        Glide.with(holder.itemView)
+                            .load(url)
+                            .centerCrop()
+                            .into(holder.itemBinding.clothingIv)
+                    }
+
+                    item.uri != null -> {
+                        Glide.with(holder.itemView)
+                            .load(item.uri)
+                            .centerCrop()
+                            .into(holder.itemBinding.clothingIv)
+                    }
+
+                    item.resId != null -> {
+                        holder.itemBinding.clothingIv.setImageResource(item.resId)
+                    }
+
+                    else -> {
+                        holder.itemBinding.clothingIv.setImageResource(R.drawable.cloth_01)
+                    }
                 }
 
-                holder.itemBinding.root.setOnClickListener {
-                    onImageClick(item)
-                }
+                holder.itemBinding.root.setOnClickListener { onImageClick(item) }
             }
 
             is SlotItem.Empty -> {
@@ -50,6 +65,7 @@ class ClothingAdapter(private val list: ArrayList<SlotItem>,
             }
         }
     }
+
 
     // 이벤트 핸들러 구현
     interface OnItemClickListener {

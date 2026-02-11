@@ -1,6 +1,6 @@
-package ddwu.com.mobile.wearly_frontend.upload.data.remote
+package ddwu.com.mobile.wearly_frontend.upload.data.remote.upload
 
-import ddwu.com.mobile.wearly_frontend.upload.data.model.ApiResponse
+import ddwu.com.mobile.wearly_frontend.upload.data.remote.common.ApiResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
