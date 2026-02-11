@@ -5,11 +5,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewPropertyAnimator
 import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import ddwu.com.mobile.wearly_frontend.BuildConfig
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityLoadingUploadBinding
 import ddwu.com.mobile.wearly_frontend.databinding.StepItemBinding
@@ -67,9 +69,7 @@ class UploadLoadingActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             try {
-                val api = ApiClient.createUploadApi {
-                    ACCESS_TOKEN
-                }
+                val api = ApiClient.uploadApi()
 
                 crossFadeText(binding.tvTitle, "업로드 시작 중")
                 crossFadeText(binding.tvSub, "서버에 이미지를 전송하고 있습니다")

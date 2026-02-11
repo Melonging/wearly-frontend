@@ -1,4 +1,4 @@
-package ddwu.com.mobile.wearly_frontend.upload.data.model
+package ddwu.com.mobile.wearly_frontend.upload.data.remote.common
 
 data class ApiError(
     val code: String?,

@@ -74,4 +74,16 @@
         <item name="android:tint">#111111</item>
     </style>
 
+    <!-- 옷 상세 조회 드롭다운 -->
+    <style name="Wearly.Dropdown.Outline" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxStrokeColor">#E5E7EB</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusBottomStart">10dp</item>
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+    </style>
+
+
 </resources>

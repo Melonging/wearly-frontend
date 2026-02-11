@@ -4,14 +4,17 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
 }
 
-val baseUrlDev: String = project.findProperty("BASE_URL_DEV") as? String ?: ""
-    
+val baseUrlDev: String = project.findProperty("BASE_URL") as? String ?: ""
 
 val testToken = project.findProperty("TEST_TOKEN") as? String ?: ""
 
 android {
     namespace = "ddwu.com.mobile.wearly_frontend"
     compileSdk = 36
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "ddwu.com.mobile.wearly_frontend"
@@ -21,10 +24,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildFeatures {
-            buildConfig = true
-        }
 
         buildConfigField(
             "String",
