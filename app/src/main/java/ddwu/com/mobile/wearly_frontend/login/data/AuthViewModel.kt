@@ -3,58 +3,85 @@ package ddwu.com.mobile.wearly_frontend.login.data
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class AuthViewModel: ViewModel() {
-    var userId = MutableLiveData<String>("")
-    var userPassword = MutableLiveData<String>("")
-    var gender = MutableLiveData<String>("") // 남성 | 여성 | 선택안함
-    var userName = MutableLiveData<String>("")
-    var birthDate = MutableLiveData<String>("")
-    var email = MutableLiveData<String>("")
-    var phoneNumber = MutableLiveData<String>("")
+    var userId = MutableLiveData<String>()
+    var userPassword = MutableLiveData<String>()
+    var gender = MutableLiveData<String>("선택안함") // 남성 | 여성 | 선택안함
+    var userName = MutableLiveData<String>()
+    var birthDate = MutableLiveData<String>()
+    var email = MutableLiveData<String>()
+    var phoneNumber = MutableLiveData<String>()
+
+    val errorMessage = MutableLiveData<String>()
+
 
 
     // 인증 상태 관리
+    val verifCode = MutableLiveData<String>()
     val isEmailSent = MutableLiveData<Boolean>(false)
     val isEmailVerified = MutableLiveData<Boolean>(false)
-    val errorMessage = MutableLiveData<String>("")
+
+
 
     // 회원가입
     val isSignUpSuccess = MutableLiveData<Boolean>(false)
+    val isTermsChecked = MutableLiveData<Boolean>(false)
+
+    /**
+     * 회원가입 시 필요한 정보가 전부 입력되었는지 확인하는 함수
+     */
+    fun isFormFilled(): Boolean {
+        return !userName.value.isNullOrEmpty() &&
+                !gender.value.isNullOrEmpty() &&
+                !birthDate.value.isNullOrEmpty() &&
+                !email.value.isNullOrEmpty() &&
+                !userId.value.isNullOrEmpty() &&
+                !phoneNumber.value.isNullOrEmpty() &&
+                !userPassword.value.isNullOrEmpty()
+    }
 
 
     // 로그인
+    val loginResponse = MutableLiveData<LoginResponse?>()
     val isLoginSuccess = MutableLiveData<Boolean>(false)
 
 
-
+    /**
+     * 인증번호 전송 요청 함수
+     * 프레그먼트의 요청에 따라 뷰모델에 저장된 이메일로 인증번호 전송을 요청한다.
+     */
     fun sendEmailCode() {
-        val emailValue = email.value ?: ""
-        if (emailValue.isEmpty()) return
+        val emailData = EmailRequest(
+            email = email.value ?: ""
+        )
 
-        val request = mapOf("email" to emailValue)
+        Log.d("AuthVM", "테스트용 더미 log: ${emailData}로 발송")
 
-        Log.d("AuthVM", "테스트용 더미 log: ${emailValue}로 발송")
-
-        RetrofitClient.authService.sendEmailCode(request).enqueue(object : Callback<AuthResponse> {
+        AuthRetrofitClient.authService.sendEmailCode(emailData).enqueue(object : Callback<AuthResponse> {
             override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                 if (response.isSuccessful && response.body()?.success == true) {
                     isEmailSent.value = true
+
                     Log.d("AuthVM", "코드 발송 성공: ${response.body()?.message}")
                 } else {
                     isEmailSent.value = false
-                    errorMessage.value = response.body()?.message ?: "발송 실패"
+                    errorMessage.value = response.body()?.message ?: "인증번호 발송 실패"
+                    Log.e("AuthVM", "인증번호 발송 실패: ${response.code()}: ${errorMessage.value}")
                 }
             }
             override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
                 isEmailSent.value = false
-                errorMessage.value = "네트워크 연결 확인이 필요합니다."
+                errorMessage.value = "서버 연결 실패"
+                Log.e("AuthVM", "서버 연결 실패: ${t.message}")
             }
         })
     }
+    /*
 
     fun verifyCode(code: String) {
         val emailValue = userId.value ?: ""
@@ -84,7 +111,6 @@ class AuthViewModel: ViewModel() {
             }
         })
     }
-
 
     fun requestSignup() {
         val signupRequest = SignupRequest(
@@ -121,8 +147,12 @@ class AuthViewModel: ViewModel() {
             }
         })
     }
+*/
 
-
+    /**
+     * 로그인 요청 함수
+     * 액티비티의 요청에 따라 뷰모델에 저장된 아이디와 비밀번호로 로그인을 요청한다.
+     */
     fun requestLogin() {
         val loginData = LoginRequest(
             loginId = userId.value ?: "",
@@ -130,25 +160,39 @@ class AuthViewModel: ViewModel() {
         )
 
         Log.d("AuthVM", "테스트용 더미 log: '${loginData.loginId}' 로그인 요청")
-        // 테스트용 임시
+
+        // 코드 진행을 위한 임시 성공 응답 (테스트시 아래 코드를 한 줄 주석 처리하여 사용)
         isLoginSuccess.value = true
 
-        RetrofitClient.signupService.login(loginData).enqueue(object : Callback<LoginResponse> {
+        AuthRetrofitClient.authService.login(loginData).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful && response.body()?.success == true) {
-                    val body = response.body()
-                    Log.d("LoginVM", "로그인 성공 토큰: ${body?.accessToken}")
-
+                    loginResponse.value = response.body()
                     isLoginSuccess.value = true
+
+                    Log.d("AuthVM", "로그인 성공 토큰: ${loginResponse.value?.accessToken}")
+
                 } else {
-                    Log.e("LoginVM", "로그인 거부: ${response.code()}")
-                    errorMessage.value = "아이디 또는 비밀번호를 확인해주세요."
+                    val errorBody = response.errorBody()?.string()
+                    val errorData = Gson().fromJson(errorBody, LoginResponse::class.java)
+
+                    val msg = when (response.code()) {
+                        // toast 메시지
+                        400 -> "형식 오류/누락"
+                        401 -> "아이디 또는 비밀번호 불일치"
+                        429 -> "시도 너무 많음"
+                        500 -> "서버 오류(Internal Server Error)"
+                        else ->  errorData.error?.message ?: "로그인 실패"
+                    }
+                    errorMessage.value = msg
+
+                    Log.e("AuthVM", "로그인 거부: ${response.code()}: ${errorMessage.value}")
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                Log.e("LoginVM", "서버 연결 실패: ${t.message}")
-                errorMessage.value = "네트워크 상태를 확인해주세요."
+                errorMessage.value = "서버 연결 실패"
+                Log.e("AuthVM", "서버 연결 실패: ${t.message}")
             }
         })
     }
