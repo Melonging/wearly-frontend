@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
 }
 
-val baseUrlDev: String = project.findProperty("BASE_URL_DEV") as String
+val baseUrlDev: String = project.findProperty("BASE_URL_DEV") as? String ?: ""
     
 
 val testToken = project.findProperty("TEST_TOKEN") as? String ?: ""
