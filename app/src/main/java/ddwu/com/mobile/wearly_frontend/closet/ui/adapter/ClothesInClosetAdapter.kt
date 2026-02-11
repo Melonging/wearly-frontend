@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.ItemClothesInClosetBinding
-import ddwu.com.mobile.wearly_frontend.upload.data.SlotItem
+import ddwu.com.mobile.wearly_frontend.upload.data.slot.SlotItem
 class ClothesInClosetAdapter(val context: Context, var list: MutableList<SlotItem>)
     : RecyclerView.Adapter<ClothesInClosetAdapter.ItemViewHolder>() {
 

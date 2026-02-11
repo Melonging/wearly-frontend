@@ -1,26 +1,26 @@
 package ddwu.com.mobile.wearly_frontend.upload.data.remote
 
+import ddwu.com.mobile.wearly_frontend.BuildConfig
+import ddwu.com.mobile.wearly_frontend.upload.data.remote.closet.ClosetApi
+import ddwu.com.mobile.wearly_frontend.upload.data.remote.upload.UploadApi
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import ddwu.com.mobile.wearly_frontend.BuildConfig
 
 object ApiClient {
-    var BASE_URL: String = BuildConfig.BASE_URL
+    private val BASE_URL: String = BuildConfig.BASE_URL
+    private val TEST_TOKEN: String = BuildConfig.TEST_TOKEN
 
-    var TEST_TOKEN: String = BuildConfig.TEST_TOKEN
-
-    fun createUploadApi(tokenProvider: () -> String): UploadApi {
-
+    private val retrofit: Retrofit by lazy {
         val logger = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
         val authInterceptor = Interceptor { chain ->
-            val token =  TEST_TOKEN  //tokenProvider().trim()
+            val token = TEST_TOKEN.trim()
             val req = chain.request().newBuilder()
                 .addHeader("Authorization", "Bearer $token")
                 .build()
@@ -35,14 +35,13 @@ object ApiClient {
             .addInterceptor(logger)
             .build()
 
-        val retrofit = Retrofit.Builder()
+        Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
-        return retrofit.create(UploadApi::class.java)
     }
 
+    fun uploadApi(): UploadApi = retrofit.create(UploadApi::class.java)
+    fun closetApi(): ClosetApi = retrofit.create(ClosetApi::class.java)
 }
-

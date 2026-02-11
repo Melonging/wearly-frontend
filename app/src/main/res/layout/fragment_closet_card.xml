@@ -364,6 +364,7 @@
 
                 <TextView
                     android:text="행거 1"
+                    android:id="@+id/tv_hanger1_title"
                     android:textStyle="bold"
                     android:textSize="16sp"
                     android:layout_height="wrap_content"
@@ -409,6 +410,7 @@
 
                 <TextView
                     android:text="행거 2"
+                    android:id="@+id/tv_hanger2_title"
                     android:textStyle="bold"
                     android:textSize="16sp"
                     android:layout_height="wrap_content"
@@ -457,6 +459,7 @@
 
             <TextView
                 android:text="서랍 1"
+                android:id="@+id/tv_drawer1_title"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_height="wrap_content"
@@ -492,6 +495,7 @@
 
             <TextView
                 android:text="서랍 2"
+                android:id="@+id/tv_drawer2_title"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:textColor="@color/black"
