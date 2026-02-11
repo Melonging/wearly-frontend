@@ -94,7 +94,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- 옷장 Spinner 박스 -->
+            <!-- 옷장 박스 -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilCloset"
                 android:layout_width="0dp"
@@ -129,29 +129,28 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- 섹션 Spinner 박스 -->
+            <!-- 섹션 박스 -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilSection"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                app:boxBackgroundMode="outline"
-                app:boxStrokeColor="#E5E7EB"
-                app:boxStrokeWidth="1dp"
-                app:boxCornerRadiusTopStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusBottomEnd="10dp"
+                style="@style/Wearly.Dropdown.Outline"
+                app:endIconMode="dropdown_menu"
                 app:layout_constraintTop_toBottomOf="@id/tvSectionLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <Spinner
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/spSection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:inputType="none"
+                    android:importantForAutofill="no"
+                    android:singleLine="true"/>
             </com.google.android.material.textfield.TextInputLayout>
+
 
             <!-- 카테고리 정보 -->
             <TextView
@@ -180,28 +179,26 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- 분류 Spinner 박스 -->
+            <!-- 분류 박스 -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilType"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                app:boxBackgroundMode="outline"
-                app:boxStrokeColor="#E5E7EB"
-                app:boxStrokeWidth="1dp"
-                app:boxCornerRadiusTopStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusBottomEnd="10dp"
+                style="@style/Wearly.Dropdown.Outline"
+                app:endIconMode="dropdown_menu"
                 app:layout_constraintTop_toBottomOf="@id/tvTypeLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <Spinner
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/spType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:inputType="none"
+                    android:importantForAutofill="no"
+                    android:singleLine="true"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- 삭제 버튼 -->

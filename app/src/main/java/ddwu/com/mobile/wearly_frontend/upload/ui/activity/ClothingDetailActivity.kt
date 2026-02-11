@@ -1,18 +1,23 @@
 package ddwu.com.mobile.wearly_frontend.upload.ui.activity
 
 import android.os.Bundle
-import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityClothingDetailBinding
-import ddwu.com.mobile.wearly_frontend.upload.data.model.ClothesDetailDto
+import ddwu.com.mobile.wearly_frontend.upload.data.remote.ApiClient
+import ddwu.com.mobile.wearly_frontend.upload.data.repository.ClosetRepository
+import kotlinx.coroutines.launch
 
 class ClothingDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityClothingDetailBinding
+
+    private val repository by lazy {
+        ClosetRepository(ApiClient.closetApi())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,37 +34,45 @@ class ClothingDetailActivity : AppCompatActivity() {
 
         val closets = listOf("옷장 1", "옷장 2", "옷장 3")
         val sections = listOf("서랍 1", "행거 1", "행거 2", "서랍 2")
-        val types = listOf("아우터", "상의", "바지", "원피스")
+        val types = listOf("상의", "바지", "원피스/스커트", "가방", "모자", "신발", "기타 액세서리")
 
-        val spCloset = findViewById<Spinner>(R.id.spCloset)
-        val spSection = findViewById<Spinner>(R.id.spSection)
-        val spType = findViewById<Spinner>(R.id.spType)
-        val btnDelete = findViewById<View>(R.id.btnDelete)
+        val spCloset = binding.spCloset
+        val spSection = binding.spSection
+        val spType = binding.spType
+        val btnDelete = binding.btnDelete
 
-        spCloset.adapter = spinnerAdapter(closets)
-        spSection.adapter = spinnerAdapter(sections)
-        spType.adapter = spinnerAdapter(types)
-        spCloset.setSelection(0)
-        spSection.setSelection(0)
-        spType.setSelection(0)
+        spCloset.setAdapter(spinnerAdapter(closets))
+        spSection.setAdapter(spinnerAdapter(sections))
+        spType.setAdapter(spinnerAdapter(types))
+
+        spCloset.setText(closets[0], false)
+        spSection.setText(sections[0], false)
+        spType.setText(types[0], false)
 
 
-        val detail: ClothesDetailDto? =
-            if (android.os.Build.VERSION.SDK_INT >= 33) {
-                intent.getParcelableExtra("detail", ClothesDetailDto::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                intent.getParcelableExtra("detail")
-            }
+        val clothingId = intent.getLongExtra("clothingId", -1L)
+        if (clothingId == -1L) {
+            finish()
+            return
+        }
 
-        if (detail?.image != null) {
-            Glide.with(this)
-                .load(detail.image)
-                .into(binding.ivCloth)
+        val previewUrl = intent.getStringExtra("imageUrl")
+        if (!previewUrl.isNullOrBlank()) {
+            Glide.with(this).load(previewUrl).into(binding.ivCloth)
         } else {
             binding.ivCloth.setImageResource(R.drawable.cloth_01)
         }
 
+        lifecycleScope.launch {
+            try {
+                val detail = repository.fetchClothesDetail(clothingId)
+                Glide.with(this@ClothingDetailActivity).load(detail.image).into(binding.ivCloth)
+            } catch (e: Exception) {
+                if (previewUrl.isNullOrBlank()) {
+                    binding.ivCloth.setImageResource(R.drawable.cloth_01)
+                }
+            }
+        }
 
 
     }
