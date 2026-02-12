@@ -1,10 +1,12 @@
 package ddwu.com.mobile.wearly_frontend
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts // 💡 중요: 계약 객체 임포트 추가
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
@@ -22,6 +24,14 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
 
+    // 위치 권한 요청 비서
+    private val locationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val granted = permissions.entries.all { it.value }
+        if (granted) { }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,6 +44,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+        checkAndRequestPermissions()
 
         // Toolbar
         setSupportActionBar(binding.toolbar)
@@ -53,12 +65,17 @@ class MainActivity : AppCompatActivity() {
                     binding.toolbar.visibility = View.GONE
                     binding.bottomNav.visibility = View.GONE
                 }
+
+                R.id.diaryWriteFragment -> {
+                    binding.bottomNav.visibility = View.GONE
+                }
+
                 else -> {
                     binding.toolbar.visibility = View.VISIBLE
                     binding.bottomNav.visibility = View.VISIBLE
                 }
             }
-        }
+    }
 
 
         binding.bottomNav.setOnItemReselectedListener { item ->
@@ -74,8 +91,20 @@ class MainActivity : AppCompatActivity() {
 
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
         getMenuInflater().inflate(R.menu.toolbar_menu, menu)
         return true
+    }
+
+    /**
+     * 위치 권한 요청 팝업
+     */
+    private fun checkAndRequestPermissions() {
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+        locationPermissionLauncher.launch(permissions)
     }
 
     // 임시 코드, 없애야 함.

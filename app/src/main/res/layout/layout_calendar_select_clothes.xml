@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/bg_calendar_select_clothes">
+
+    <LinearLayout
+        android:id="@+id/calendar_select_from_category_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="40dp"
+        android:layout_marginHorizontal="20dp"
+
+        android:paddingHorizontal="50dp"
+        android:paddingVertical="10dp"
+
+        android:gravity="center"
+
+        android:background="@drawable/bg_calendar_select_clothes_btn">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+
+            android:src="@drawable/icon_select_from_category"
+
+            android:layout_margin="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="카테고리에서 옷 선택"
+            android:textColor="@color/text_gray" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/calendar_select_from_gallery_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="40dp"
+
+        android:paddingHorizontal="50dp"
+        android:paddingVertical="10dp"
+
+        android:gravity="center"
+
+        android:background="@drawable/bg_calendar_select_clothes_btn">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+
+            android:src="@drawable/icon_select_from_gallery"
+
+            android:layout_margin="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="갤러리에서 사진 선택"
+            android:textColor="@color/text_gray" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
-        android:label="홈">
+        android:label="홈" />
         <action
             android:id="@+id/action_homeFragment_to_uploadFragment"
             app:destination="@id/uploadFragment"
@@ -18,8 +18,6 @@
             android:id="@+id/action_homeFragment_to_codiDiaryFragment"
             app:destination="@id/codiDiaryFragment"
             app:enterAnim="@anim/slide_in_right"/>
-    </fragment>
-
 
     <fragment
         android:id="@+id/codiDiaryFragment"
@@ -30,11 +28,52 @@
             app:argType="string" />
     </fragment>
 
-    <!-- 아직 아래 프래그먼트 미구현 -->
     <fragment
         android:id="@+id/calendarFragment"
-        android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
-        android:label="코디 달력"/>
+        android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiCalendarFragment"
+        android:label="코디 달력" >
+
+        <action
+            android:id="@+id/action_calendar_to_diaryWrite"
+            app:destination="@id/diaryWriteFragment" />
+
+        <action
+            android:id="@+id/action_calendar_to_diaryRead"
+            app:destination="@id/diaryReadFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/diaryWriteFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiDiaryWriteFragment">
+
+        <action
+            android:id="@+id/action_return_to_calendar"
+            app:destination="@id/calendarFragment" />
+
+        <action
+            android:id="@+id/action_submit_diary"
+            app:destination="@id/calendarFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/diaryReadFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiDiaryReadFragment">
+
+        <action
+            android:id="@+id/action_return_to_calendar"
+            app:destination="@id/calendarFragment" />
+
+        <action
+            android:id="@+id/action_edit_diary"
+            app:destination="@id/diaryWriteFragment" />
+
+        <action
+            android:id="@+id/action_delete_diary"
+            app:destination="@id/calendarFragment" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/closetFragment"

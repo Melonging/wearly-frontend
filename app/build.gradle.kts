@@ -3,7 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.parcelize)
+    // alias(libs.plugins.kotlin.parcelize)
 }
 val localProps = Properties().apply {
     val f = rootProject.file("local.properties")
@@ -57,8 +57,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-
-
         }
     }
     compileOptions {
@@ -113,4 +111,7 @@ dependencies {
     // ViewModel 생명주기 관련 (필수)
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+
+    // 위치 서비스
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 }

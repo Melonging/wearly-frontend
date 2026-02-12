@@ -9,13 +9,13 @@
     
     <ImageButton
         android:id="@+id/signup_back_btn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
 
         android:layout_marginTop="15dp"
         android:layout_marginStart="30dp"
 
-        android:src="@drawable/btn_arrow_back_tmp"
+        android:src="@drawable/btn_arrow_left"
         android:scaleType="centerInside"
         android:background="@android:color/transparent"
 

@@ -70,7 +70,6 @@
             android:layout_height="wrap_content"
 
             android:text="에러"
-            android:textSize="10sp"
             android:textColor="@color/error_red"
 
             android:layout_marginTop="5dp"
@@ -104,7 +103,21 @@
 
             android:layout_marginTop="10dp"/>
 
-        
+
+        <TextView
+            android:id="@+id/login_pw_wrong_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="에러"
+            android:textSize="12sp"
+            android:textColor="@color/error_red"
+
+            android:layout_marginTop="5dp"
+
+            android:visibility="gone"/>
+
+
         
         <android.widget.Button
             android:id="@+id/login_submit_btn"

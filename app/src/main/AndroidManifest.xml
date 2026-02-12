@@ -2,9 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Retrofit Permission -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 인터넷 사용 권한 추가 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 인터넷 사용 권한 추가 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- 위치 권한 추가 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -64,6 +68,9 @@
             android:exported="false" />
         <activity
             android:name=".login.ui.SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".login.ui.SignupAgreementActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
