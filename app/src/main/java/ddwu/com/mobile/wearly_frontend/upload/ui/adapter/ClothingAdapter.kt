@@ -1,16 +1,21 @@
 package ddwu.com.mobile.wearly_frontend.upload.ui.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.ItemListUploadBinding
-import ddwu.com.mobile.wearly_frontend.upload.data.SlotItem
+import ddwu.com.mobile.wearly_frontend.upload.data.slot.SlotItem
+import ddwu.com.mobile.wearly_frontend.upload.network.CameraManager
 
-class ClothingAdapter(val context: Context, val list: ArrayList<SlotItem>)
+class ClothingAdapter(private val list: ArrayList<SlotItem>,
+                      private val onAddClick: () -> Unit,
+                      private val onImageClick: (SlotItem.Image) -> Unit)
     : RecyclerView.Adapter<ClothingAdapter.ItemViewHolder>() {
     override fun getItemCount(): Int = list.size
 
@@ -18,32 +23,49 @@ class ClothingAdapter(val context: Context, val list: ArrayList<SlotItem>)
         parent: ViewGroup,
         viewType: Int
     ): ClothingAdapter.ItemViewHolder {
-        val itemBinding = ItemListUploadBinding.inflate(LayoutInflater.from(context), parent, false)
+        val itemBinding = ItemListUploadBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ItemViewHolder(itemBinding)
     }
 
-    override fun onBindViewHolder(holder: ClothingAdapter.ItemViewHolder, position: Int) {
-        when(val item = list[position]) {
-            is SlotItem.Empty -> {
-                holder.itemBinding.btnAddClothing.visibility = View.VISIBLE
-                holder.itemBinding.clothingIv.visibility = View.GONE
-                holder.itemBinding.btnAddClothing.setOnClickListener {
-                    // 카메라 앱 실행
-                }
-            }
-
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+        when (val item = list[position]) {
             is SlotItem.Image -> {
-                holder.itemBinding.btnAddClothing.visibility = View.GONE
                 holder.itemBinding.clothingIv.visibility = View.VISIBLE
 
-                Glide.with(context)
-                    .load(item.path)
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .into(holder.itemBinding.clothingIv)
+                val url = item.imageUrl
+                when {
+                    !url.isNullOrBlank() && (url.startsWith("http://") || url.startsWith("https://")) -> {
+                        Glide.with(holder.itemView)
+                            .load(url)
+                            .centerCrop()
+                            .into(holder.itemBinding.clothingIv)
+                    }
+
+                    item.uri != null -> {
+                        Glide.with(holder.itemView)
+                            .load(item.uri)
+                            .centerCrop()
+                            .into(holder.itemBinding.clothingIv)
+                    }
+
+                    item.resId != null -> {
+                        holder.itemBinding.clothingIv.setImageResource(item.resId)
+                    }
+
+                    else -> {
+                        holder.itemBinding.clothingIv.setImageResource(R.drawable.cloth_01)
+                    }
+                }
+
+                holder.itemBinding.root.setOnClickListener { onImageClick(item) }
             }
 
+            is SlotItem.Empty -> {
+                holder.itemBinding.clothingIv.visibility = View.GONE
+            }
         }
     }
+
 
     // 이벤트 핸들러 구현
     interface OnItemClickListener {

@@ -1,11 +1,20 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    // alias(libs.plugins.kotlin.parcelize)
 }
+
+val baseUrlDev: String = project.findProperty("BASE_URL") as? String ?: ""
+
+val testToken = project.findProperty("TEST_TOKEN") as? String ?: ""
 
 android {
     namespace = "ddwu.com.mobile.wearly_frontend"
     compileSdk = 36
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "ddwu.com.mobile.wearly_frontend"
@@ -15,6 +24,18 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            "\"$baseUrlDev\""
+        )
+
+        buildConfigField(
+            "String",
+            "TEST_TOKEN",
+            "\"$testToken\""
+        )
     }
 
     buildTypes {
@@ -67,6 +88,9 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     // Gson Converter
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
 
     // ViewModel 공유를 위한 Fragment KTX

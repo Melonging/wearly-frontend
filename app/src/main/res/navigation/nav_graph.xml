@@ -8,7 +8,25 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
-        android:label="홈"/>
+        android:label="홈" />
+        <action
+            android:id="@+id/action_homeFragment_to_uploadFragment"
+            app:destination="@id/uploadFragment"
+            app:enterAnim="@anim/slide_in_right" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_codiDiaryFragment"
+            app:destination="@id/codiDiaryFragment"
+            app:enterAnim="@anim/slide_in_right"/>
+
+    <fragment
+        android:id="@+id/codiDiaryFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.codidiary.ui.fragment.CodiDraryFragment"
+        android:label="코디 다이어리">
+        <argument
+            android:name="selectedDate"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/calendarFragment"
@@ -25,37 +43,37 @@
 
     </fragment>
 
-        <fragment
-            android:id="@+id/diaryWriteFragment"
-            android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiDiaryWriteFragment">
+    <fragment
+        android:id="@+id/diaryWriteFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiDiaryWriteFragment">
 
-            <action
-                android:id="@+id/action_return_to_calendar"
-                app:destination="@id/calendarFragment" />
+        <action
+            android:id="@+id/action_return_to_calendar"
+            app:destination="@id/calendarFragment" />
 
-            <action
-                android:id="@+id/action_submit_diary"
-                app:destination="@id/calendarFragment" />
+        <action
+            android:id="@+id/action_submit_diary"
+            app:destination="@id/calendarFragment" />
 
-        </fragment>
+    </fragment>
 
-        <fragment
-            android:id="@+id/diaryReadFragment"
-            android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiDiaryReadFragment">
+    <fragment
+        android:id="@+id/diaryReadFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiDiaryReadFragment">
 
-            <action
-                android:id="@+id/action_return_to_calendar"
-                app:destination="@id/calendarFragment" />
+        <action
+            android:id="@+id/action_return_to_calendar"
+            app:destination="@id/calendarFragment" />
 
-            <action
-                android:id="@+id/action_edit_diary"
-                app:destination="@id/diaryWriteFragment" />
+        <action
+            android:id="@+id/action_edit_diary"
+            app:destination="@id/diaryWriteFragment" />
 
-            <action
-                android:id="@+id/action_delete_diary"
-                app:destination="@id/calendarFragment" />
+        <action
+            android:id="@+id/action_delete_diary"
+            app:destination="@id/calendarFragment" />
 
-        </fragment>
+    </fragment>
 
     <fragment
         android:id="@+id/closetFragment"
@@ -66,5 +84,45 @@
         android:id="@+id/categoryFragment"
         android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
         android:label="카테고리"/>
+
+    <fragment
+        android:id="@+id/uploadFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
+        android:label="업로드">
+
+        <argument
+            android:name="containerType"
+            app:argType="string" />
+
+        <argument
+            android:name="containerId"
+            app:argType="integer" />
+
+        <argument
+            android:name="containerName"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/action_uploadFragment_to_clothingDetailFragment"
+            app:destination="@id/clothingDetailFragment"
+            app:enterAnim="@anim/slide_in_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/clothingDetailFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.upload.ui.fragment.ClothingDetailFragment"
+        android:label="detail">
+
+        <argument
+            android:name="detail"
+            app:argType="ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClothesDetailDto"
+            app:nullable="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.setting.ui.SettingFragment"
+        android:label="설정" />
+
 
 </navigation>

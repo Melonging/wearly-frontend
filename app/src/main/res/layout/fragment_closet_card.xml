@@ -1,218 +1,521 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/closet_main_background">
+    android:background="#FFFFFF">
 
-    <TextView
-        android:id="@+id/my_closet_title_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
-        android:text="내 옷장"
-        android:textColor="#FFFFFF"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <HorizontalScrollView
-        android:id="@+id/closet_chip_scroll_hs"
+    <!-- Calendar Section -->
+    <LinearLayout
+        android:id="@+id/calendar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:paddingStart="20dp"
-        android:scrollbars="none"
-        app:layout_constraintTop_toBottomOf="@id/my_closet_title_tv">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView android:id="@+id/look_chip_title_01_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/closet_chip_scroll_on_background"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="8dp"
-                android:text="옷장1"
-                android:textColor="#000000" />
-
-            <TextView android:id="@+id/look_chip_title_02_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/closet_chip_scroll_off_background"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="8dp"
-                android:text="옷장2"
-                android:textColor="#FFFFFF" />
-
-            <TextView android:id="@+id/look_chip_title_03_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/closet_chip_scroll_off_background"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="8dp"
-                android:text="서랍장"
-                android:textColor="#FFFFFF" />
-
-            <TextView android:id="@+id/look_chip_title_04_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/closet_chip_scroll_off_background"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="8dp"
-                android:text="행거"
-                android:textColor="#FFFFFF" />
-
-            <TextView android:id="@+id/look_chip_title_05_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/closet_chip_scroll_off_background"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="8dp"
-                android:text="신발장1"
-                android:textColor="#FFFFFF" />
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/closet_grid_layout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@id/codi_record_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/closet_chip_scroll_hs">
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_vertical_50"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <LinearLayout
-            android:id="@+id/hanger_long"
-            style="@style/ClosetItemStyle"
-            android:layout_width="0dp"
-            android:layout_height="180dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="5dp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_50"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <TextView style="@style/ClosetItemTitle" android:text="행거.." />
-            <TextView style="@style/ClosetItemSub" android:text="아우터" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/hanger_right_top"
-            style="@style/ClosetItemStyle"
-            android:layout_width="0dp"
-            android:layout_height="85dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/guideline_vertical_50"
-            app:layout_constraintTop_toTopOf="@id/hanger_long">
-            <TextView style="@style/ClosetItemTitle" android:text="행거 1" />
-            <TextView style="@style/ClosetItemSub" android:text="아우터" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/hanger_right_bottom"
-            style="@style/ClosetItemStyle"
-            android:layout_width="0dp"
-            android:layout_height="85dp"
-            app:layout_constraintBottom_toBottomOf="@id/hanger_long"
-            app:layout_constraintEnd_toEndOf="@id/hanger_right_top"
-            app:layout_constraintStart_toStartOf="@id/hanger_right_top">
-            <TextView style="@style/ClosetItemTitle" android:text="행거 1" />
-            <TextView style="@style/ClosetItemSub" android:text="아우터" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/drawer_wide"
-            style="@style/ClosetItemStyle"
-            android:layout_width="0dp"
-            android:layout_height="90dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@id/hanger_right_bottom"
-            app:layout_constraintStart_toStartOf="@id/hanger_long"
-            app:layout_constraintTop_toBottomOf="@id/hanger_long">
-            <TextView style="@style/ClosetItemTitle" android:text="서랍 1" />
-            <TextView style="@style/ClosetItemSub" android:text="아우터" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/hanger_bottom"
-            style="@style/ClosetItemStyle"
-            android:layout_width="0dp"
-            android:layout_height="90dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@id/drawer_wide"
-            app:layout_constraintStart_toStartOf="@id/drawer_wide"
-            app:layout_constraintTop_toBottomOf="@id/drawer_wide">
-            <TextView style="@style/ClosetItemTitle" android:text="행거 1" />
-            <TextView style="@style/ClosetItemSub" android:text="아우터" />
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/codi_record_layout"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"
         android:background="#FFFFFF"
-        android:paddingBottom="20dp"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/codi_record_title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
-            android:text="코디 기록"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/view_more_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:text="더보기 >"
-            android:textColor="#8E8E8E"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/codi_record_title_tv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/codi_record_title_tv" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/codi_record_recyclerview"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:clipToPadding="false"
-            android:orientation="horizontal"
             android:paddingStart="15dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@id/codi_record_title_tv"
-            tools:listitem="@layout/item_codi_record" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
 
+            <TextView
+                android:id="@+id/tvCalendarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2026년 1월 1일"
+                android:textColor="#333333"
+                android:textSize="19sp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="12dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="#DDDDDD" />
+
+            <TextView
+                android:id="@+id/tvWeatherInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="최고: 2° 최저: -10°"
+                android:textColor="#666666"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <!-- Dates -->
+        <LinearLayout
+            android:id="@+id/dates_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingHorizontal="10dp">
+
+            <FrameLayout
+                android:id="@+id/frame_date_1"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1">
+
+                <View
+                    android:id="@+id/date_view_1"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_closet_date_selected" />
+
+                <TextView
+                    android:id="@+id/tv_date_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_date_2"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1">
+
+                <View
+                    android:id="@+id/date_view_2"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_closet_date_selected" />
+
+                <TextView
+                    android:id="@+id/tv_date_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_date_3"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1">
+
+                <View
+                    android:id="@+id/date_view_3"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_closet_date_selected" />
+
+                <TextView
+                    android:id="@+id/tv_date_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_date_4"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1">
+
+                <View
+                    android:id="@+id/date_view_4"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_closet_date_selected" />
+
+                <TextView
+                    android:id="@+id/tv_date_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_date_5"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1">
+
+                <View
+                    android:id="@+id/date_view_5"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_closet_date_selected" />
+
+                <TextView
+                    android:id="@+id/tv_date_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_date_6"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1">
+
+                <View
+                    android:id="@+id/date_view_6"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_closet_date_selected" />
+
+                <TextView
+                    android:id="@+id/tv_date_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_date_7"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1">
+
+                <View
+                    android:id="@+id/date_view_7"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_closet_date_selected" />
+
+                <TextView
+                    android:id="@+id/tv_date_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"/>
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Empty slots (optional) -->
+        <LinearLayout
+            android:id="@+id/day_slots_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp"
+            android:paddingBottom="8dp">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_closet_card" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/bg_closet_card" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/bg_closet_card" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/bg_closet_card" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/bg_closet_card" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/bg_closet_card" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/bg_closet_card" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- My Wardrobe Header -->
+    <LinearLayout
+        android:id="@+id/wardrobe_header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/calendar_layout">
+
+        <TextView
+            android:id="@+id/my_closet_title_tv"
+            android:layout_width="308dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="내 옷장"
+            android:textColor="#000000"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/add_icon_iv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_closet_plus"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"/>
+
+        <ImageView
+            android:id="@+id/more_options_iv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_closet_more"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"/>
+    </LinearLayout>
+
+    <!-- Tabs -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_closet_chips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/wardrobe_header_layout"
+        tools:listitem="@layout/item_closet_chip_list" />
+
+    <!-- 전체 배경 카드 -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="25dp"
+        android:background="@drawable/bg_closet_card_back"
+        app:layout_constraintTop_toBottomOf="@id/rv_closet_chips"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 상단 행거 2개 -->
+        <LinearLayout
+            android:id="@+id/hanger_row"
+            android:layout_width="280dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <!-- 행거 1 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_closet_card"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginEnd="8dp">
+
+                <TextView
+                    android:text="행거 1"
+                    android:id="@+id/tv_hanger1_title"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:text="아우터"
+                    android:textSize="12sp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:text="8 items"
+                    android:textSize="12sp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/black"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:id = "@+id/btn_hanger1"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_closet_chevron_right"/>
+            </LinearLayout>
+
+            <!-- 행거 2 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_closet_card"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginStart="8dp">
+
+                <TextView
+                    android:text="행거 2"
+                    android:id="@+id/tv_hanger2_title"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:text="아우터"
+                    android:textSize="12sp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:text="8 items"
+                    android:textSize="12sp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/black"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:id = "@+id/btn_hanger2"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_closet_chevron_right"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <!-- 서랍 1 -->
+        <LinearLayout
+            android:id="@+id/drawer1"
+            android:layout_width="280dp"
+            android:layout_height="90dp"
+            android:background="@drawable/bg_closet_card"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:padding="16dp"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:text="서랍 1"
+                android:id="@+id/tv_drawer1_title"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:text="아우터"
+                android:textSize="12sp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textColor="@color/black"/>
+
+            <ImageView
+                android:id = "@+id/btn_drawer1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="end"
+                android:src="@drawable/ic_closet_chevron_right"/>
+        </LinearLayout>
+
+
+        <!-- 서랍 2 -->
+        <LinearLayout
+            android:id="@+id/drawer2"
+            android:layout_width="280dp"
+            android:layout_height="90dp"
+            android:background="@drawable/bg_closet_card"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:padding="16dp"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:text="서랍 2"
+                android:id="@+id/tv_drawer2_title"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+
+            <TextView
+                android:text="아우터"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+
+            <ImageView
+                android:id = "@+id/btn_drawer2"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="end"
+                android:src="@drawable/ic_closet_chevron_right"/>
+        </LinearLayout>
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

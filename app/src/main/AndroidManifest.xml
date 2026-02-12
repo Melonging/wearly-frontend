@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- Retrofit Permission -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 인터넷 사용 권한 추가 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- 위치 권한 추가 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -17,10 +24,41 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Wearly_frontend"
+        android:forceDarkAllowed="false"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".login.ui.SignupAgreementActivity"
+            android:name=".setting.ui.PinEnabledActivity"
             android:exported="false" />
+        <activity
+            android:name=".setting.ui.PinActivity"
+            android:exported="false" />
+        <activity
+            android:name=".upload.TestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".upload.ui.activity.ClothingDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".upload.ui.activity.UploadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".upload.ui.activity.UploadLoadingActivity"
+            android:exported="false" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="ddwu.com.mobile.wearly_frontend.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name=".codidiary.ui.CodiDiaryWritingActivity" />
+        <activity
+            android:name=".codidiary.ui.CodiDiaryEndActivity" />
         <activity
             android:name=".login.ui.ResetPwActivity"
             android:exported="false" />
@@ -29,6 +67,9 @@
             android:exported="false" />
         <activity
             android:name=".login.ui.SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".login.ui.SignupAgreementActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
