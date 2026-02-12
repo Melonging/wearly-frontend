@@ -3,7 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    // alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.parcelize)
 }
 val localProps = Properties().apply {
     val f = rootProject.file("local.properties")
@@ -114,4 +114,8 @@ dependencies {
 
     // 위치 서비스
     implementation("com.google.android.gms:play-services-location:21.0.1")
+
+    // 통신 로그
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
 }

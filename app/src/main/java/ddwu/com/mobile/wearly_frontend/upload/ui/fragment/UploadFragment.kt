@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentUploadBinding
-import ddwu.com.mobile.wearly_frontend.upload.data.SlotItem
+import ddwu.com.mobile.wearly_frontend.upload.data.slot.SlotItem
 import ddwu.com.mobile.wearly_frontend.upload.ui.adapter.ClothingAdapter
 
 private const val ARG_PARAM1 = "param1"
@@ -52,7 +52,18 @@ class UploadFragment : Fragment() {
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.itemRV.layoutManager = layoutManager
 
-        val adapter = ClothingAdapter(requireContext(), items)
+        // 원본 val adapter = ClothingAdapter(requireContext(), items)
+        val adapter = ClothingAdapter(
+                list = items,
+        onAddClick = {
+            // 더하기(+) 버튼 클릭 시 실행할 코드 (예: 카메라 열기)
+            // 지금 당장 구현할 게 없다면 비워두세요.
+        },
+        onImageClick = { imageItem ->
+            // 이미지를 클릭했을 때 실행할 코드
+            // imageItem.imageUrl 등을 사용 가능합니다.
+        }
+        )
         binding.itemRV.adapter = adapter
 
     }

@@ -6,7 +6,7 @@ import retrofit2.http.Header
 import retrofit2.http.Query
 
 interface WeaklyWeatherService {
-    @GET("api/v1/weather/we")
+    @GET("api/weather/weekly")
     suspend fun getWeeklyWeather(
         @Header("Authorization") token: String,
         @Query("latitude") lat: Double,
