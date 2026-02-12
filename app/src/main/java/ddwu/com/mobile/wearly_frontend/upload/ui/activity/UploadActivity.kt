@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
+import android.os.SystemClock
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
@@ -79,7 +80,8 @@ class UploadActivity : AppCompatActivity() {
             val clothingId = data?.getLongExtra("clothingId", -1L) ?: -1L
 
             if (clothingId != -1L) {
-                items.add(0, SlotItem.Image(id = clothingId, imageUrl = imageUrl))
+                val safeUrl = imageUrl?.takeIf { it.isNotBlank() }
+                items.add(0, SlotItem.Image(id = clothingId, imageUrl = safeUrl))
                 adapter.notifyItemInserted(0)
                 binding.itemRV.scrollToPosition(0)
 
@@ -101,6 +103,13 @@ class UploadActivity : AppCompatActivity() {
             if (isGranted) openCameraInternal()
         }
 
+    private val detailLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                fetchSectionClothes(currentSectionId)
+            }
+        }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +124,7 @@ class UploadActivity : AppCompatActivity() {
         // 섹션 전달 받기
         val name = intent.getStringExtra("containerName")
         currentSectionId = intent.getIntExtra("sectionId", -1)
+        val closet = intent.getStringExtra("closet")
         if (currentSectionId == -1) { finish(); return }
 
         val layoutManager = GridLayoutManager(this, 3)
@@ -125,20 +135,26 @@ class UploadActivity : AppCompatActivity() {
             onAddClick = { openCamera() },
             onImageClick = { imageItem ->
                 val clothingId = imageItem.id ?: return@ClothingAdapter
+                Log.d("CLICK", "clicked id=${imageItem.id}, url=${imageItem.imageUrl}")
+                startActivity(
+                    Intent(this, ClothingDetailActivity::class.java).apply {
+                        putExtra("section", name)
+                        putExtra("closet", closet)
+                        putExtra("clothingId", clothingId)
+                        putExtra("imageUrl", imageItem.imageUrl)
+                    }
+                )
 
-                val intent = Intent(this, ClothingDetailActivity::class.java).apply {
-                    putExtra("clothingId", clothingId)
-                    putExtra("imageUrl", imageItem.imageUrl)
-                }
-                startActivity(intent)
             }
         )
+
         binding.itemRV.adapter = adapter
 
         fetchSectionClothes(currentSectionId)
 
         binding.btnAdd.setOnClickListener {
-            openCamera()
+            if (!canClick()) return@setOnClickListener
+                openCamera()
         }
 
         binding.toolbar.setNavigationOnClickListener {
@@ -146,6 +162,14 @@ class UploadActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    private var lastClickAt = 0L
+    private fun canClick(): Boolean {
+        val now = SystemClock.elapsedRealtime()
+        if (now - lastClickAt < 600) return false
+        lastClickAt = now
+        return true
     }
 
     private fun openCamera() {
@@ -223,7 +247,12 @@ class UploadActivity : AppCompatActivity() {
 
             } catch (e: Exception) {
                 Log.e("SECTION", e.message ?: "섹션 조회 실패")
-                Toast.makeText(this@UploadActivity, "섹션 조회 실패", Toast.LENGTH_SHORT).show()
+
+                if (isFinishing || isDestroyed) {
+                    return@launch
+                }
+
+                Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
             }
         }
     }

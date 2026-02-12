@@ -36,7 +36,8 @@
             android:exported="false" />
         <activity
             android:name=".upload.ui.activity.UploadActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".upload.ui.activity.UploadLoadingActivity"
             android:exported="false" />

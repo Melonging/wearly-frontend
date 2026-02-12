@@ -1,7 +1,12 @@
 package ddwu.com.mobile.wearly_frontend.upload.data.repository
 
 import android.util.Log
+import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.Category
+import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClosetDto
 import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClothesDetailDto
+import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClothesDetailInnerDto
+import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClothingUpdateRequestDto
+import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClothingUpdateResponseDto
 import ddwu.com.mobile.wearly_frontend.upload.data.remote.closet.ClosetApi
 
 class ClosetRepository(
@@ -27,16 +32,54 @@ class ClosetRepository(
         val res = closetApi.getClothesDetail(clothingId)
 
         if (!res.success || res.data == null) {
-            throw RuntimeException("API 실패")
+            val msg = when (val err = res.error) {
+                null -> res.message ?: "상세 조회 실패"
+                is String -> err
+                else -> err.toString()
+            }
+            throw IllegalStateException(msg)
         }
 
-        val inner = res.data
+        return res.data
+    }
 
-        if (!inner.success || inner.data == null) {
-            throw RuntimeException("상세 데이터 없음")
+
+
+
+    suspend fun fetchCategories(): List<Category> {
+        val res = closetApi.getCategories()
+        return if (res.success) {
+            res.data?.categories ?: emptyList()
+        } else {
+            emptyList()
+        }
+    }
+
+    suspend fun fetchClosets(): List<ClosetDto> {
+        val res = closetApi.getClosets()
+        if (!res.success) return emptyList()
+        return res.data ?: emptyList()
+    }
+
+    // 옷 정보 수정
+    suspend fun updateClothing(
+        clothingId: Long,
+        req: ClothingUpdateRequestDto
+    ): ClothingUpdateResponseDto {
+        // “업데이트할 필드가 없음” 방지
+        if (req.closetId == null && req.sectionId == null && req.categoryId == null) {
+            throw IllegalArgumentException("업데이트할 필드가 없습니다.")
         }
 
-        return inner.data
+        val res = closetApi.updateClothing(clothingId, req)
+        if (!res.success) throw RuntimeException(res.message ?: "의류 수정 실패")
+        return res
+    }
+
+    // 옷 삭제
+    suspend fun deleteClothing(clothingId: Long) {
+        val res = closetApi.deleteClothing(clothingId)
+        if (!res.success) throw RuntimeException(res.message ?: "삭제 실패")
     }
 
 }

@@ -218,6 +218,7 @@ class ClosetCardFragment : Fragment() {
                     // 빙기: UploadAcivty에 필요한 정보를 넘깁니다.
                     selectedClosetId = closetId
                     val sections = detail.sections
+                    val closet = detail.closetType
 
                     // 행거1 세팅
                     if (sections.isNotEmpty()) {
@@ -230,7 +231,8 @@ class ClosetCardFragment : Fragment() {
                             openContainer(
                                 selectedClosetId,
                                 1,
-                                section.sectionName
+                                section.sectionName,
+                                closet
                             )
                         }
                     }
@@ -245,7 +247,9 @@ class ClosetCardFragment : Fragment() {
                             openContainer(
                                 selectedClosetId,
                                 2,
-                                section.sectionName
+                                section.sectionName,
+                                closet
+
                             )
                         }
                     }
@@ -260,7 +264,9 @@ class ClosetCardFragment : Fragment() {
                             openContainer(
                                 selectedClosetId,
                                 3,
-                                section.sectionName
+                                section.sectionName,
+                                closet
+
                             )
                         }
                     }
@@ -275,7 +281,9 @@ class ClosetCardFragment : Fragment() {
                             openContainer(
                                 selectedClosetId,
                                 4,
-                                section.sectionName
+                                section.sectionName,
+                                closet
+
                             )
                         }
                     }
@@ -358,13 +366,14 @@ class ClosetCardFragment : Fragment() {
     }
 
     // 빙기: navigate 함수 추가함
-    private fun openContainer(closetId: Int, sectionId: Int, name: String) {
+    private fun openContainer(closetId: Int, sectionId: Int, name: String, closet: String) {
         Log.d("NAV", "openContainer closetId=$closetId sectionId=$sectionId name=$name")
 
         val intent = Intent(requireContext(), UploadActivity::class.java).apply {
             putExtra("closetId", closetId)
             putExtra("sectionId", sectionId)
             putExtra("containerName", name)
+            putExtra("closet", closet)
         }
         startActivity(intent)
     }
@@ -386,28 +395,28 @@ class ClosetCardFragment : Fragment() {
         if (sections.isNotEmpty()) {
             val s = sections[0]
             binding.tvHanger1Title.text = s.sectionName
-            binding.btnHanger1.setOnClickListener { openContainer(selectedClosetId, 1, s.sectionName) } // 더미 sectionId
+            binding.btnHanger1.setOnClickListener { openContainer(selectedClosetId, 1, s.sectionName, "옷장1") } // 더미 sectionId
         }
 
         // 행거2
         if (sections.size > 1) {
             val s = sections[1]
             binding.tvHanger2Title.text = s.sectionName
-            binding.btnHanger2.setOnClickListener { openContainer(selectedClosetId, 2, s.sectionName) }
+            binding.btnHanger2.setOnClickListener { openContainer(selectedClosetId, 2, s.sectionName,"옷장1") }
         }
 
         // 서랍1
         if (sections.size > 2) {
             val s = sections[2]
             binding.tvDrawer1Title.text = s.sectionName
-            binding.btnDrawer1.setOnClickListener { openContainer(selectedClosetId, 3, s.sectionName) }
+            binding.btnDrawer1.setOnClickListener { openContainer(selectedClosetId, 3, s.sectionName, "옷장1") }
         }
 
         // 서랍2
         if (sections.size > 3) {
             val s = sections[3]
             binding.tvDrawer2Title.text = s.sectionName
-            binding.btnDrawer2.setOnClickListener { openContainer(selectedClosetId, 4, s.sectionName) }
+            binding.btnDrawer2.setOnClickListener { openContainer(selectedClosetId, 4, s.sectionName,"옷장1") }
         }
     }
 

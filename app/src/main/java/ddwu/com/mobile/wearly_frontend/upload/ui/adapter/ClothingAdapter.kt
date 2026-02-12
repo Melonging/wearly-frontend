@@ -28,43 +28,52 @@ class ClothingAdapter(private val list: ArrayList<SlotItem>,
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+        val b = holder.itemBinding
+
+        holder.itemView.setOnClickListener(null)
+        holder.itemView.isEnabled = true
+        b.root.isEnabled = true
+
+        b.clothingIv.isClickable = false
+        b.clothingIv.isFocusable = false
+
         when (val item = list[position]) {
             is SlotItem.Image -> {
-                holder.itemBinding.clothingIv.visibility = View.VISIBLE
+                b.clothingIv.visibility = View.VISIBLE
 
                 val url = item.imageUrl
                 when {
                     !url.isNullOrBlank() && (url.startsWith("http://") || url.startsWith("https://")) -> {
-                        Glide.with(holder.itemView)
-                            .load(url)
-                            .centerCrop()
-                            .into(holder.itemBinding.clothingIv)
+                        Glide.with(holder.itemView).load(url).centerCrop().into(b.clothingIv)
                     }
-
                     item.uri != null -> {
-                        Glide.with(holder.itemView)
-                            .load(item.uri)
-                            .centerCrop()
-                            .into(holder.itemBinding.clothingIv)
+                        Glide.with(holder.itemView).load(item.uri).centerCrop().into(b.clothingIv)
                     }
-
-                    item.resId != null -> {
-                        holder.itemBinding.clothingIv.setImageResource(item.resId)
-                    }
-
-                    else -> {
-                        holder.itemBinding.clothingIv.setImageResource(R.drawable.cloth_01)
-                    }
+                    item.resId != null -> b.clothingIv.setImageResource(item.resId)
+                    else -> b.clothingIv.setImageResource(R.drawable.cloth_01)
                 }
 
-                holder.itemBinding.root.setOnClickListener { onImageClick(item) }
+                holder.itemView.setOnClickListener {
+                    val pos = holder.bindingAdapterPosition
+                    if (pos == RecyclerView.NO_POSITION) return@setOnClickListener
+                    android.util.Log.d("ADAPTER", "CLICK image pos=$pos id=${item.id}")
+                    onImageClick(item)
+                }
             }
 
             is SlotItem.Empty -> {
-                holder.itemBinding.clothingIv.visibility = View.GONE
+                b.clothingIv.visibility = View.GONE
+
+                holder.itemView.setOnClickListener {
+                    val pos = holder.bindingAdapterPosition
+                    if (pos == RecyclerView.NO_POSITION) return@setOnClickListener
+                    android.util.Log.d("ADAPTER", "CLICK add pos=$pos")
+                    onAddClick()
+                }
             }
         }
     }
+
 
 
     // 이벤트 핸들러 구현

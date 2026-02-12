@@ -1,12 +1,24 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
 }
+val localProps = Properties().apply {
+    val f = rootProject.file("local.properties")
+    if (f.exists()) load(f.inputStream())
+}
 
-val baseUrlDev: String = project.findProperty("BASE_URL") as? String ?: ""
+val baseUrlDev = (localProps.getProperty("BASE_URL") ?: "").trim()
+val testToken = (localProps.getProperty("TEST_TOKEN") ?: "").trim()
 
-val testToken = project.findProperty("TEST_TOKEN") as? String ?: ""
+require(baseUrlDev.startsWith("http://") || baseUrlDev.startsWith("https://")) {
+    "BASE_URL must start with http:// or https:// (check local.properties)"
+}
+require(baseUrlDev.endsWith("/")) {
+    "BASE_URL must end with '/' (check local.properties)"
+}
 
 android {
     namespace = "ddwu.com.mobile.wearly_frontend"
