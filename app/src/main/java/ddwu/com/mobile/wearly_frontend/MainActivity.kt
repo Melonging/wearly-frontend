@@ -1,6 +1,6 @@
 package ddwu.com.mobile.wearly_frontend
 
-import android.Manifest // 💡 중요: Manifest 임포트 추가
+import android.Manifest
 import android.os.Bundle
 import android.view.Menu
 import android.view.View

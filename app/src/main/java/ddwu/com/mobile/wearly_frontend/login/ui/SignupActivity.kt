@@ -1,6 +1,11 @@
 package ddwu.com.mobile.wearly_frontend.login.ui
 
+import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,7 +18,7 @@ class SignupActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityLoginSignupBinding
 
-    private val viewModel: AuthViewModel by viewModels()
+    private val sharedViewModel: AuthViewModel by viewModels()
 
     // 어댑터 생성
     lateinit var signupAdapter: SignupAdapter
@@ -36,23 +41,21 @@ class SignupActivity : AppCompatActivity() {
         binding.signupVp.isUserInputEnabled = false
 
 
-
-
-        // 클릭리스너
+        // --------------- 클릭리스너 ---------------
 
         // 뒤로가기
         binding.signupBackBtn.setOnClickListener {
+            /*  한 페이지 씩 뒤로가기
             val currentPage = binding.signupVp.currentItem
 
             if (currentPage == 0) {
                 finish()
-            }
-            else {
+            } else {
                 binding.signupVp.setCurrentItem(currentPage - 1, true)
             }
+            */
+            finish()
         }
-
-
     }
 
 
@@ -67,9 +70,32 @@ class SignupActivity : AppCompatActivity() {
 
         if (currentPage == 1) {
             finish()
-        }
-        else {
+        } else {
             binding.signupVp.setCurrentItem(currentPage + 1, true)
         }
+    }
+
+
+    /**
+     * 빈 화면 터치 시 포커스 해제를 위한 함수.
+     */
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (ev?.action == MotionEvent.ACTION_DOWN) {
+            val v = currentFocus
+            if (v is EditText) {
+                val outRect = Rect()
+                v.getGlobalVisibleRect(outRect)
+
+                // 터치 지점이 현재 포커스된 EditText 밖이라면?
+                if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
+                    v.clearFocus() // 포커스 해제
+
+                    // 키보드 숨기기
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(v.windowToken, 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
     }
 }
