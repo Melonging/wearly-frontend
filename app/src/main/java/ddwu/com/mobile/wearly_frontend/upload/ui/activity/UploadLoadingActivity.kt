@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.random.Random
+import java.util.concurrent.atomic.AtomicBoolean
 
 class UploadLoadingActivity : AppCompatActivity() {
 
@@ -34,6 +35,9 @@ class UploadLoadingActivity : AppCompatActivity() {
     private lateinit var s3: StepItemBinding
 
     private var pollingJob: Job? = null
+
+    private val didFinish = AtomicBoolean(false)
+    private var uiJob: Job? = null
 
     private companion object {
         private const val TOTAL_MS = 4500L
@@ -79,6 +83,7 @@ class UploadLoadingActivity : AppCompatActivity() {
     //  API 결과 저장
     @Volatile private var resultText: String? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -122,7 +127,7 @@ class UploadLoadingActivity : AppCompatActivity() {
         //  1) 업로드+폴링은 백그라운드로 시작
         startUploadAndPolling(photoUri, sectionId)
 
-        lifecycleScope.launch {
+        uiJob = lifecycleScope.launch {
             delay(STEP_MS)
             applyStep(2)
 
@@ -141,6 +146,8 @@ class UploadLoadingActivity : AppCompatActivity() {
     }
 
     private fun finishWithUploadResult(res: UploadResult) {
+        if (!didFinish.compareAndSet(false, true)) return
+
         pollingJob?.cancel()
 
         val data = Intent().apply {
