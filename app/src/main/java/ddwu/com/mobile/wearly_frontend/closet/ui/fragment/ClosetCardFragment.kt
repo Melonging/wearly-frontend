@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,6 @@ import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.closet.ui.adapter.ClosetChipListAdapter
 import ddwu.com.mobile.wearly_frontend.closet.data.ClosetItem
 import ddwu.com.mobile.wearly_frontend.closet.network.ClosetService
-import ddwu.com.mobile.wearly_frontend.closet.ui.ClothesListActivity
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentClosetCardBinding
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,6 +24,12 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import androidx.navigation.fragment.findNavController
+import ddwu.com.mobile.wearly_frontend.BuildConfig
+import ddwu.com.mobile.wearly_frontend.closet.data.SectionItem
+import ddwu.com.mobile.wearly_frontend.upload.ui.activity.UploadActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 private const val ARG_PARAM1 = "param1"
@@ -37,6 +43,8 @@ class ClosetCardFragment : Fragment() {
     lateinit var binding : FragmentClosetCardBinding
     private lateinit var service: ClosetService
     private lateinit var closetAdapter: ClosetChipListAdapter
+
+    private var selectedClosetId: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,8 +75,16 @@ class ClosetCardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //이번 주 날짜 받아오기
         getWeekFullDates()
+
+        setupClosetListeners()
+
+        // 기본 옷장 상세
+        fetchClosetDetail(selectedClosetId)
+
+    }
+
+    private fun setupClosetListeners(){
 
         //옷장 추가
         binding.addIconIv.setOnClickListener {
@@ -125,32 +141,11 @@ class ClosetCardFragment : Fragment() {
                 popupWindow.dismiss()
             }
         }
-
-        //옷장 옷 목록 조회
-        // 빙기: uploadFragment로 넘어갑니다.
-        binding.btnHanger1.setOnClickListener {
-            openContainer("HANGER", 1, "행거 1")
-        }
-
-        binding.btnHanger2.setOnClickListener {
-            openContainer("HANGER", 2, "행거 2")
-        }
-
-        binding.btnDrawer1.setOnClickListener {
-            openContainer("DRAWER", 1, "서랍 1")
-        }
-
-        binding.btnDrawer2.setOnClickListener {
-            openContainer("DRAWER", 2, "서랍 2")
-        }
-
-
     }
     private fun setupRecyclerView() {
         closetAdapter = ClosetChipListAdapter { selectedCloset ->
-            // 칩을 클릭했을 때 수행할 동작 (예: 상세 정보 불러오기)
-            //fetchClosetDetail(selectedCloset.closetId)
-            //Log.d("CLOSET_CLICK", "선택된 옷장 ID: ${selectedCloset.closetId}")
+            selectedClosetId = selectedCloset.closetId // 빙기: 섹션 옷 조회를 위해 필요합니다.
+            fetchClosetDetail(selectedCloset.closetId)
         }
 
         //리사이클러뷰 연결
@@ -163,7 +158,7 @@ class ClosetCardFragment : Fragment() {
     }
     private fun initRetrofit() {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080")
+            .baseUrl("http://10.0.2.2:4000")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         service = retrofit.create(ClosetService::class.java)
@@ -180,23 +175,128 @@ class ClosetCardFragment : Fragment() {
         // 어댑터에 데이터 전달
         closetAdapter.submitList(dummyClosets)
 
-        /* 서버 연동 시 사용될 코드
+        //서버 연동 시 사용될 코드
         val token = "actual_token_here"
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val response = service.getClosetList("Bearer $token")
-                // ... 생략
+                val response = service.getClosetList(token)
+
+                if (response.success && response.data != null) {
+                    // 서버에서 받아온 목록을 어댑터에 반영
+                    closetAdapter.submitList(response.data)
+                    Log.d("API_TEST", "옷장 목록 로드 성공: ${response.data.size}개")
+                } else {
+                    Log.e("API_TEST", "서버 에러: ${response.error}")
+                }
             } catch (e: Exception) {
                 Log.e("API_TEST", "통신 실패: ${e.message}")
+
+                // 테스트를 위해 통신 실패 시에만 더미 데이터 보이기 (선택 사항)
+                val dummyClosets = listOf(
+                    ClosetItem(closetId = 1, closetName = "연결실패-더미1"),
+                    ClosetItem(closetId = 2, closetName = "연결실패-더미2")
+                )
+                closetAdapter.submitList(dummyClosets)
             }
         }
-        */
-    }
-
-    private fun fetchClosetDetail(){
 
     }
 
+    private fun fetchClosetDetail(closetId: Int) {
+        val token = BuildConfig.TEST_TOKEN
+
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = service.getClosetDetail(token, closetId)
+                if (response.success && response.data != null) {
+                    val detail = response.data
+                    // TODO: 받아온 detail(closetType, sections)을 UI에 반영
+                    // 예: binding.tvClosetType.text = detail.closetType
+
+
+
+                    // 빙기: UploadAcivty에 필요한 정보를 넘깁니다.
+                    selectedClosetId = closetId
+                    val sections = detail.sections
+
+                    // 행거1 세팅
+                    if (sections.isNotEmpty()) {
+                        val section = sections[0]
+
+                        binding.tvHanger1Title.text = section.sectionName
+
+                        binding.btnHanger1.setOnClickListener {
+                            Log.d("NAV", "btnHanger1 clicked")
+                            openContainer(
+                                selectedClosetId,
+                                1,
+                                section.sectionName
+                            )
+                        }
+                    }
+
+                    // 행거2 세팅
+                    if (sections.size > 1) {
+                        val section = sections[1]
+
+                        binding.tvHanger2Title.text = section.sectionName
+
+                        binding.btnHanger2.setOnClickListener {
+                            openContainer(
+                                selectedClosetId,
+                                2,
+                                section.sectionName
+                            )
+                        }
+                    }
+
+                    // 서랍1 세팅
+                    if (sections.size > 1) {
+                        val section = sections[1]
+
+                        binding.tvDrawer1Title.text = section.sectionName
+
+                        binding.btnDrawer1.setOnClickListener {
+                            openContainer(
+                                selectedClosetId,
+                                3,
+                                section.sectionName
+                            )
+                        }
+                    }
+
+                    // 서랍2 세팅
+                    if (sections.size > 1) {
+                        val section = sections[1]
+
+                        binding.tvDrawer2Title.text = section.sectionName
+
+                        binding.btnDrawer2.setOnClickListener {
+                            openContainer(
+                                selectedClosetId,
+                                4,
+                                section.sectionName
+                            )
+                        }
+                    }
+
+
+                    Log.d("API_TEST", "상세 정보 로드: ${detail.closetType}")
+                }
+            } catch (e: Exception) {
+
+                // 빙기: 더미데이터 추가
+                val dummySections = listOf(
+                    SectionItem("행거1", 8),
+                    SectionItem("행거2", 8),
+                    SectionItem("서랍1", 8),
+                    SectionItem("서랍2", 8)
+                )
+                Log.e("API_TEST", "상세 조회 실패: ${e.message}")
+                applySections(closetId, dummySections)
+            }
+        }
+    }
 
     private fun formatDate(date: Date): String {
         val dayFormat = SimpleDateFormat("d", Locale.getDefault())
@@ -206,62 +306,113 @@ class ClosetCardFragment : Fragment() {
     fun getWeekFullDates() {
         val calendar = Calendar.getInstance()
         val today = Date()
+        val todayDateString = formatDate(today)
 
-        val titleFormat = SimpleDateFormat("yyyy년 M월 d일", Locale.getDefault())
-        binding.tvCalendarTitle.text = titleFormat.format(today)
-        binding.tvWeatherInfo.text = "최고: 2° 최저: -10°" // 실제 데이터 연결?
+        val fullDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
         val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-        val diffToSunday = -(currentDayOfWeek - 1)
-        calendar.add(Calendar.DAY_OF_MONTH, diffToSunday)
+        calendar.add(Calendar.DAY_OF_MONTH, -(currentDayOfWeek - 1))
 
-        val weekDates = mutableListOf<String>()
 
-        //날짜
         val dateViews = listOf(
             binding.tvDate1, binding.tvDate2, binding.tvDate3,
             binding.tvDate4, binding.tvDate5, binding.tvDate6, binding.tvDate7
         )
-
-        //오늘날짜 표시
         val dateViewBg = listOf(
             binding.dateView1, binding.dateView2, binding.dateView3,
             binding.dateView4, binding.dateView5, binding.dateView6, binding.dateView7
         )
 
-        val todayDateString = formatDate(Date())
-
         for (i in 0 until 7) {
-            val dateString = formatDate(calendar.time)
+            val currentLoopDate = calendar.time
+            val dateText = formatDate(currentLoopDate)
+            val fullDateString = fullDateFormat.format(currentLoopDate)
 
-            dateViews[i].text = dateString
 
-            dateViewBg[i].setBackgroundResource(R.drawable.bg_closet_date_unselected)
-            dateViews[i].setTextColor(Color.parseColor("#666666"))
+            dateViews[i].text = dateText
 
-            if (dateString == todayDateString) {
+            // 오늘 날짜 하이라이트 처리
+            if (dateText == todayDateString) {
                 dateViewBg[i].setBackgroundResource(R.drawable.bg_closet_date_selected)
                 dateViews[i].setTextColor(Color.WHITE)
+            } else {
+                dateViewBg[i].setBackgroundResource(R.drawable.bg_closet_date_unselected)
+                dateViews[i].setTextColor(Color.parseColor("#666666"))
             }
 
-            weekDates.add(dateString)
+            //각 요일별 클릭 리스너 달기
+            dateViewBg[i].setOnClickListener {
+                val bundle = Bundle().apply {
+                    putString("selectedDate", fullDateString)
+                }
+
+                // CodiDiaryFragment로 이동 (Action ID 확인 필수)
+                findNavController().navigate(
+                    R.id.action_homeFragment_to_codiDiaryFragment,
+                    bundle
+                )
+            }
+
             calendar.add(Calendar.DAY_OF_MONTH, 1)
         }
     }
 
     // 빙기: navigate 함수 추가함
-    private fun openContainer(type: String, id: Int, name: String) {
-        val bundle = Bundle().apply {
-            putString("containerType", type)
-            putInt("containerId", id)
-            putString("containerName", name)
+    private fun openContainer(closetId: Int, sectionId: Int, name: String) {
+        Log.d("NAV", "openContainer closetId=$closetId sectionId=$sectionId name=$name")
+
+        val intent = Intent(requireContext(), UploadActivity::class.java).apply {
+            putExtra("closetId", closetId)
+            putExtra("sectionId", sectionId)
+            putExtra("containerName", name)
+        }
+        startActivity(intent)
+    }
+
+    // API 연결이 되지 않더라도 우선 진행
+
+    private fun dummySections(): List<SectionItem> = listOf(
+        SectionItem(sectionName = "행거 1", clothesCount = 8),
+        SectionItem(sectionName = "행거 2", clothesCount = 8),
+        SectionItem(sectionName = "서랍 1", clothesCount = 4),
+        SectionItem(sectionName = "서랍 2", clothesCount = 2),
+    )
+
+
+    private fun applySections(closetId: Int, sections: List<SectionItem>) {
+        selectedClosetId = closetId
+
+        // 행거1
+        if (sections.isNotEmpty()) {
+            val s = sections[0]
+            binding.tvHanger1Title.text = s.sectionName
+            binding.btnHanger1.setOnClickListener { openContainer(selectedClosetId, 1, s.sectionName) } // 더미 sectionId
         }
 
-        findNavController().navigate(
-            R.id.action_homeFragment_to_uploadFragment,
-            bundle
-        )
+        // 행거2
+        if (sections.size > 1) {
+            val s = sections[1]
+            binding.tvHanger2Title.text = s.sectionName
+            binding.btnHanger2.setOnClickListener { openContainer(selectedClosetId, 2, s.sectionName) }
+        }
+
+        // 서랍1
+        if (sections.size > 2) {
+            val s = sections[2]
+            binding.tvDrawer1Title.text = s.sectionName
+            binding.btnDrawer1.setOnClickListener { openContainer(selectedClosetId, 3, s.sectionName) }
+        }
+
+        // 서랍2
+        if (sections.size > 3) {
+            val s = sections[3]
+            binding.tvDrawer2Title.text = s.sectionName
+            binding.btnDrawer2.setOnClickListener { openContainer(selectedClosetId, 4, s.sectionName) }
+        }
     }
+
+
+
 
     companion object{
         /**

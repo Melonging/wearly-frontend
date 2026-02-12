@@ -1,16 +1,15 @@
 package ddwu.com.mobile.wearly_frontend.setting.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import ddwu.com.mobile.wearly_frontend.R
+import ddwu.com.mobile.wearly_frontend.databinding.FragmentSettingBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -18,15 +17,11 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class SettingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentSettingBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
         }
     }
 
@@ -35,7 +30,43 @@ class SettingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting, container, false)
+
+        binding = FragmentSettingBinding.inflate(inflater, container, false)
+
+        binding.switchRemind.setOnCheckedChangeListener { _, isChecked ->
+            binding.layoutRemindDetail.visibility =
+                if (isChecked) View.VISIBLE else View.GONE
+        }
+        val times = listOf(
+            "오전 12시","오전 1시","오전 2시","오전 3시",
+            "오전 4시","오전 5시","오전 6시","오전 7시",
+            "오전 8시","오전 9시","오전 10시","오전 11시",
+            "오후 12시","오후 1시","오후 2시","오후 3시",
+            "오후 4시","오후 5시","오후 6시","오후 7시",
+            "오후 8시","오후 9시","오후 10시","오후 11시"
+        )
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_list_item_1, times
+        )
+
+        binding.actRemindTime.setAdapter(adapter)
+        binding.actRemindTime.setText(times[0], false)
+
+        binding.chipGroupDays.setOnCheckedStateChangeListener { group, checkedIds ->
+
+
+        }
+
+        binding.rowAppLock.setOnClickListener {
+            val intent = Intent(requireContext(), PinActivity::class.java)
+            startActivity(intent)
+
+        }
+
+
+        return binding.root
     }
 
     companion object {
@@ -52,8 +83,6 @@ class SettingFragment : Fragment() {
         fun newInstance(param1: String, param2: String) =
             SettingFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
                 }
             }
     }

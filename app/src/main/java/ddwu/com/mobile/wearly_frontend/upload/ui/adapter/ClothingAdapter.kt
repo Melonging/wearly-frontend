@@ -8,11 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.ItemListUploadBinding
-import ddwu.com.mobile.wearly_frontend.upload.data.SlotItem
+import ddwu.com.mobile.wearly_frontend.upload.data.slot.SlotItem
 import ddwu.com.mobile.wearly_frontend.upload.network.CameraManager
-import ddwu.com.mobile.wearly_frontend.upload.ui.LoadingActivity
-import ddwu.com.mobile.wearly_frontend.upload.ui.fragment.UploadFragment
 
 class ClothingAdapter(private val list: ArrayList<SlotItem>,
                       private val onAddClick: () -> Unit,
@@ -29,36 +28,44 @@ class ClothingAdapter(private val list: ArrayList<SlotItem>,
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        when(val item = list[position]) {
-            is SlotItem.Empty -> {
-                holder.itemBinding.btnAddClothing.visibility = View.VISIBLE
-                holder.itemBinding.clothingIv.visibility = View.GONE
-                holder.itemBinding.btnAddClothing.setOnClickListener {
-                    onAddClick()
-                }
-            }
+        when (val item = list[position]) {
             is SlotItem.Image -> {
-                holder.itemBinding.btnAddClothing.visibility = View.GONE
                 holder.itemBinding.clothingIv.visibility = View.VISIBLE
 
+                val url = item.imageUrl
                 when {
+                    !url.isNullOrBlank() && (url.startsWith("http://") || url.startsWith("https://")) -> {
+                        Glide.with(holder.itemView)
+                            .load(url)
+                            .centerCrop()
+                            .into(holder.itemBinding.clothingIv)
+                    }
+
                     item.uri != null -> {
                         Glide.with(holder.itemView)
                             .load(item.uri)
                             .centerCrop()
                             .into(holder.itemBinding.clothingIv)
                     }
+
                     item.resId != null -> {
                         holder.itemBinding.clothingIv.setImageResource(item.resId)
                     }
+
+                    else -> {
+                        holder.itemBinding.clothingIv.setImageResource(R.drawable.cloth_01)
+                    }
                 }
 
-                holder.itemBinding.clothingIv.setOnClickListener {
-                    onImageClick(item)
-                }
+                holder.itemBinding.root.setOnClickListener { onImageClick(item) }
+            }
+
+            is SlotItem.Empty -> {
+                holder.itemBinding.clothingIv.visibility = View.GONE
             }
         }
     }
+
 
     // 이벤트 핸들러 구현
     interface OnItemClickListener {

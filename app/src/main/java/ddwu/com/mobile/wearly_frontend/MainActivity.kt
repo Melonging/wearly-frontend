@@ -1,9 +1,12 @@
 package ddwu.com.mobile.wearly_frontend
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -12,6 +15,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityMainBinding
+import ddwu.com.mobile.wearly_frontend.upload.TestActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +33,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         // Toolbar
         setSupportActionBar(binding.toolbar)
@@ -42,7 +47,30 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNav.setupWithNavController(navController)
 
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.settingFragment -> {
+                    binding.toolbar.visibility = View.GONE
+                    binding.bottomNav.visibility = View.GONE
+                }
+                else -> {
+                    binding.toolbar.visibility = View.VISIBLE
+                    binding.bottomNav.visibility = View.VISIBLE
+                }
+            }
+        }
 
+
+        binding.bottomNav.setOnItemReselectedListener { item ->
+            when (item.itemId) {
+                R.id.homeFragment -> {
+                }
+                R.id.closetFragment -> {
+                    //dispatchReselectToCurrentFragment { (it as? ProfileFragment)?.refresh() }
+
+                }
+            }
+        }
 
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -50,17 +78,25 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    // 임시 코드, 없애야 함.
+    /*
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.btn_profile -> {   // ← toolbar_menu.xml에 있는 id로 맞춰
-                val navController = findNavController(R.id.nav_host)
+            R.id.btn_profile -> {
+                /*val navController = findNavController(R.id.nav_host)
                 if (navController.currentDestination?.id != R.id.settingFragment) {
                     navController.navigate(R.id.settingFragment)
                 }
+
+                 */
+                val intent = Intent(this, TestActivity::class.java)
+                startActivity(intent)
                 true
             }
 
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+     */
 }

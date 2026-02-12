@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:background="#FFFFFF"
+        app:title="PIN 설정"
+        app:titleCentered="true"
+        app:navigationIcon="@drawable/ic_back"
+        app:titleTextAppearance="@style/ToolbarTitleBold"
+        app:elevation="0dp"
+        android:stateListAnimator="@null"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- 중앙 아이콘 + 텍스트 -->
+    <LinearLayout
+        android:id="@+id/layoutCenter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="110dp">
+
+        <!-- 보라색 원 -->
+        <View
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:background="@drawable/ic_pin_lock"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="앱 잠금 활성화됨"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#111111"
+            android:layout_marginBottom="6dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PIN으로 앱이 보호되고 있습니다"
+            android:textSize="13sp"
+            android:textColor="#777777"/>
+    </LinearLayout>
+
+    <!-- 하단 카드 영역 -->
+    <LinearLayout
+        android:id="@+id/layoutBottom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/layoutCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="60dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp">
+
+        <!-- PIN 변경 -->
+        <LinearLayout
+            android:id="@+id/cardChangePin"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:background="@drawable/bg_pin_option"
+            android:layout_marginBottom="14dp">
+
+            <TextView
+                android:text="PIN 변경"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="#111111"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:text="새로운 PIN으로 변경합니다"
+                android:textSize="12sp"
+                android:textColor="#777777"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+        <!-- 앱 잠금 해제 -->
+        <LinearLayout
+            android:id="@+id/cardDisablePin"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:background="@drawable/bg_pin_option">
+
+            <TextView
+                android:text="앱 잠금 해제"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="#111111"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:text="PIN 보호를 해제합니다"
+                android:textSize="12sp"
+                android:textColor="#777777"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

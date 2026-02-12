@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.ItemClothesInClosetBinding
-import ddwu.com.mobile.wearly_frontend.upload.data.SlotItem
+import ddwu.com.mobile.wearly_frontend.upload.data.slot.SlotItem
 class ClothesInClosetAdapter(val context: Context, var list: MutableList<SlotItem>)
     : RecyclerView.Adapter<ClothesInClosetAdapter.ItemViewHolder>() {
 
@@ -29,8 +29,10 @@ class ClothesInClosetAdapter(val context: Context, var list: MutableList<SlotIte
         /*
         // item이 Image 타입일 때만
         if (item is SlotItem.Image) {
+            val model = item.uri ?: item.resId
+
             Glide.with(context)
-                .load(item.path)
+                .load(model)
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(holder.binding.clothesIv)
         } else if (item is SlotItem.Empty) {
