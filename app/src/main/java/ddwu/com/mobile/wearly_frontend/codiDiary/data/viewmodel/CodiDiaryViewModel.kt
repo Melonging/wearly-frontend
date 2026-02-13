@@ -1,0 +1,171 @@
+package ddwu.com.mobile.wearly_frontend.codiDiary.data.viewmodel
+
+import CodiDiaryRecordRequest
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import ddwu.com.mobile.wearly_frontend.BuildConfig
+import ddwu.com.mobile.wearly_frontend.codiDiary.data.CategoryItem
+import ddwu.com.mobile.wearly_frontend.codiDiary.data.ClothItem
+import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryRead
+import ddwu.com.mobile.wearly_frontend.codiDiary.network.CodiCalendarRetrofitClient.codiDiaryService
+import kotlinx.coroutines.launch
+
+class CodiDiaryViewModel : ViewModel() {
+    private val _diaryDateList = MutableLiveData<List<String>>()
+    val diaryDateList: LiveData<List<String>> = _diaryDateList
+
+    private val _saveStatus = MutableLiveData<Boolean>()
+    val saveStatus: LiveData<Boolean> = _saveStatus
+
+    private val _diaryReadData = MutableLiveData<CodiDiaryRead?>()
+    val diaryReadData: LiveData<CodiDiaryRead?> = _diaryReadData
+
+    private val _categoryList = MutableLiveData<List<CategoryItem>>()
+    val categoryList: LiveData<List<CategoryItem>> = _categoryList
+
+    private val _clothesList = MutableLiveData<List<ClothItem>>()
+    val clothesList: LiveData<List<ClothItem>> = _clothesList
+
+
+    /**
+     * 달력에 일기가 기록된 날짜 리스트를 받아오는 API 호출
+     *
+     * @param year 연도
+     * @param month 월
+     * @param token 토큰
+     */
+    fun fetchDiaryDates(year: Int, month: Int, token: String) {
+        viewModelScope.launch {
+            try {
+                val response = codiDiaryService.getWearRecordsDates("Bearer $token", year, month)
+                if (response.isSuccessful && response.body() != null) {
+                    _diaryDateList.value = response.body()?.data ?: emptyList()
+                    Log.d("CodiDiaryVM", "기록 있는 날짜들: ${ _diaryDateList.value}")
+                }
+            } catch (e: Exception) {
+                Log.e("CodiDiaryVM", "에러 발생: ${e.message}")
+            }
+        }
+    }
+
+
+    /**
+     * 일기 저장 API를 호출하는 함수.
+     *
+     * @param isWeatherLog 일기
+     * @param request 저장된 형식
+     */
+    fun saveRecord(isWeatherLog: Boolean, request: CodiDiaryRecordRequest) {
+        viewModelScope.launch {
+            try {
+                val response = codiDiaryService.postWearRecord(
+                    "Bearer ${BuildConfig.TEST_API_TOKEN}",
+                    isWeatherLog,
+                    request
+                )
+
+                if (response.isSuccessful && response.body()?.success == true) {
+                    _saveStatus.value = true
+
+                } else {
+                    _saveStatus.value = false
+                    Log.e("CodiDiaryVM", "코드: ${response.code()}, 메시지: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                _saveStatus.value = false
+                Log.e("CodiDiaryVM", e.message.toString())
+            }
+        }
+    }
+
+
+    /**
+     * 특정 날짜에 저장된 일기를 불러오는 API를 호출하는 함수.
+     *
+     * @param date 지정된 날짜
+     * @param token 토큰
+     */
+    fun fetchDiaryRead(date: String, token: String) {
+        viewModelScope.launch {
+            try {
+                val response = codiDiaryService.getWearRecord("Bearer $token", date)
+                if (response.isSuccessful && response.body()?.success == true) {
+                    _diaryReadData.value = response.body()?.data?.firstOrNull()
+                    Log.d("CodiDiaryVM", "조회 성공: ${_diaryReadData.value}")
+                } else {
+                    _diaryReadData.value = null
+                    Log.e("CodiDiaryVM", "조회 실패: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                _diaryReadData.value = null
+                Log.e("CodiDiaryVM", "네트워크 에러: ${e.message}")
+            }
+        }
+    }
+
+
+    /**
+     * 옷 카테고리 목록 조회 API 호출 함수.
+     *
+     * @param token 토큰
+     */
+    fun fetchCategories(token: String) {
+        viewModelScope.launch {
+            try {
+                val response = codiDiaryService.getCategories("Bearer $token")
+                if (response.isSuccessful && response.body() != null) {
+                    _categoryList.value = response.body()!!.data.categories
+                    Log.d("CodiDiaryVM", "카테고리 로드 성공: ${_categoryList.value}")
+                } else if (response.code() == 404) {
+                    Log.e("CodiDiaryVM", "카테고리 데이터 없음 (seed 필요)")
+                }
+            } catch (e: Exception) {
+                Log.e("CodiDiaryVM", "에러: ${e.message}")
+            }
+        }
+    }
+
+
+    /**
+     * 카테고리에 해당하는 옷 목록 조회 API 호출
+     *
+     * @param token 토큰
+     * @param categoryId 카테고리
+     */
+    fun fetchClothes(token: String, categoryId: Int) {
+        viewModelScope.launch {
+            try {
+                val response = codiDiaryService.getClothesByCategory("Bearer $token", categoryId)
+                if (response.isSuccessful && response.body() != null) {
+//                    _clothesList.value = response.body()!!.data.clothes
+//                    Log.d("CodiDiaryVM", "옷 목록 로드 성공: ${response.body()!!.data.clothes.size}개")
+
+                    val dummyClothes = listOf(
+                        ClothItem(
+                            clothing_id = 101,
+                            image = "https://via.placeholder.com/300x400?text=Top1"
+                        ),
+                        ClothItem(
+                            clothing_id = 102,
+                            image = "https://via.placeholder.com/300x400?text=Top2"
+                        ),
+                        ClothItem(
+                            clothing_id = 103,
+                            image = "https://via.placeholder.com/300x400?text=Top3"
+                        ),
+                        ClothItem(
+                            clothing_id = 104,
+                            image = "https://via.placeholder.com/300x400?text=Top4"
+                        )
+                    )
+                    _clothesList.value = dummyClothes
+                }
+            } catch (e: Exception) {
+                Log.e("CodiDiaryVM", "에러: ${e.message}")
+            }
+        }
+    }
+}
