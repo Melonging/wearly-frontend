@@ -15,12 +15,14 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.activityViewModels
 import ddwu.com.mobile.wearly_frontend.MainActivity
 import ddwu.com.mobile.wearly_frontend.R
+import ddwu.com.mobile.wearly_frontend.TokenManager
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityLoginBinding
 import ddwu.com.mobile.wearly_frontend.login.data.AuthViewModel
 import kotlin.getValue
@@ -66,28 +68,28 @@ class LoginActivity : AppCompatActivity() {
 
 
         // 아이디 유효성 검사 -> 뷰모델에 저장
-        binding.loginIdEt.setOnFocusChangeListener { view, hasFocus ->
-            if (!hasFocus) {
-                val v = view as EditText
-                val errorText = binding.loginIdWrongTv
-                val input = v.text.toString()
-
-                when {
-                    // 아이디가 이메일 형식이 아닐 때
-                    !android.util.Patterns.EMAIL_ADDRESS.matcher(input).matches() -> {
-                        errorText.text = "올바르지 않은 형식입니다. 다시 입력해주세요."
-                        errorText.visibility = View.VISIBLE
-                        v.isSelected = true
-                    }
-
-                    else -> {
-                        errorText.visibility = View.GONE
-                        v.isSelected = false
-                        sharedViewModel.userId.value = input
-                    }
-                }
-            }
-        }
+//        binding.loginIdEt.setOnFocusChangeListener { view, hasFocus ->
+//            if (!hasFocus) {
+//                val v = view as EditText
+//                val errorText = binding.loginIdWrongTv
+//                val input = v.text.toString()
+//
+//                when {
+//                    // 아이디가 이메일 형식이 아닐 때
+//                    !android.util.Patterns.EMAIL_ADDRESS.matcher(input).matches() -> {
+//                        errorText.text = "올바르지 않은 형식입니다. 다시 입력해주세요."
+//                        errorText.visibility = View.VISIBLE
+//                        v.isSelected = true
+//                    }
+//
+//                    else -> {
+//                        errorText.visibility = View.GONE
+//                        v.isSelected = false
+//                        sharedViewModel.userId.value = input
+//                    }
+//                }
+//            }
+//        }
 
         // 비밀번호 유효성 검사 -> 뷰모델에 저장
         binding.loginPwEt.setOnFocusChangeListener { view, hasFocus ->
@@ -128,11 +130,15 @@ class LoginActivity : AppCompatActivity() {
                 binding.loginPwEt.isSelected = true
             }
 
-//            if (sharedViewModel.userId.value.isNullOrEmpty() or sharedViewModel.userPassword.value.isNullOrEmpty()) {
-//                return@setOnClickListener
-//            }
+            sharedViewModel.userId.value = binding.loginIdEt.text.toString()
 
-            sharedViewModel.requestLogin()
+
+            if (sharedViewModel.userId.value.isNullOrEmpty() or sharedViewModel.userPassword.value.isNullOrEmpty()) {
+                return@setOnClickListener
+            }
+
+            val tm = TokenManager(this)
+            sharedViewModel.requestLogin(tm)
         }
 
         sharedViewModel.isLoginSuccess.observe(this) { isSuccess ->

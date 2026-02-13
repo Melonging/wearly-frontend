@@ -12,6 +12,13 @@ class WeaklyWeatherViewModel: ViewModel() {
     private val _weaklyWeatherData = MutableLiveData<List<WeaklyWeatherData>>()
     val weaklyWeatherData: LiveData<List<WeaklyWeatherData>> = _weaklyWeatherData
 
+    /**
+     * 주간 날씨 조회 API
+     *
+     * @param lat 위도
+     * @param lon 경도
+     * @param token 토큰
+     */
     fun fetchWeeklyWeather(lat: Double, lon: Double, token: String) {
         viewModelScope.launch {
             try {

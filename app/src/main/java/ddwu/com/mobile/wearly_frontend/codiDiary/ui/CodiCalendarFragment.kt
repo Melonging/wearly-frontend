@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import ddwu.com.mobile.wearly_frontend.R
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import ddwu.com.mobile.wearly_frontend.BuildConfig
 import ddwu.com.mobile.wearly_frontend.codiDiary.data.CalendarDateData
+import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryViewModel
 import ddwu.com.mobile.wearly_frontend.codiDiary.data.WeaklyWeatherViewModel
 import ddwu.com.mobile.wearly_frontend.codiDiary.ui.adapter.CalendarAdapter
 import ddwu.com.mobile.wearly_frontend.codiDiary.ui.adapter.WeatherAdapter
@@ -36,10 +39,10 @@ class CodiCalendarFragment : Fragment() {
     private lateinit var weatherAdapter: WeatherAdapter
 
     private val weaklyWeatherViewModel: WeaklyWeatherViewModel by viewModels()
+    private val codiDiaryViewModel : CodiDiaryViewModel by viewModels()
 
     private lateinit var fusedLocationClient: com.google.android.gms.location.FusedLocationProviderClient
 
-    private val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImxvZ2luSWQiOiJ0ZXN0dXNlciIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3NzA4MzA2OTUsImV4cCI6MTc3MDgzNDI5NX0.yvetEy-ixhgiZhr2N04QzDk7AEpyuN75Wc_3OkQ4Yts"
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,9 +64,18 @@ class CodiCalendarFragment : Fragment() {
             findNavController().navigate(R.id.action_calendar_to_diaryWrite)
         }
 
-        calendarAdapter = CalendarAdapter { day ->
+        calendarAdapter = CalendarAdapter { day, hasRecord ->
             val selectedFullDate = "${currentYear}년 ${currentMonth}월 ${day}일"
-            showSelectDialog(selectedFullDate)        }
+
+            if (hasRecord) {
+                val bundle = Bundle().apply {
+                    putString("selectedDate", selectedFullDate)
+                }
+                findNavController().navigate(R.id.action_calendar_to_diaryRead, bundle)
+            } else {
+                showSelectDialog(selectedFullDate)
+            }
+        }
 
         binding.calendarRv.apply {
             adapter = calendarAdapter
@@ -89,6 +101,14 @@ class CodiCalendarFragment : Fragment() {
         // 처음 진입 시 당월 달력 그리기
         binding.calendarYearmonthTv.text = "${currentYear}년 ${currentMonth}월"
         updateCalendar(currentYear, currentMonth)
+
+        codiDiaryViewModel.diaryDateList.observe(viewLifecycleOwner) { dates ->
+            if (dates.isNotEmpty()) {
+                Log.d("Fragment", "받아온 날짜 개수: ${dates.size}")
+
+                calendarAdapter.setRecordedDates(dates)
+            }
+        }
     }
 
 
@@ -145,7 +165,7 @@ class CodiCalendarFragment : Fragment() {
 
         val calendar = Calendar.getInstance()
         calendar.set(year, month - 1, 1)
-        val firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1 // 0:일, 1:월...
+        val firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1
         val maxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
 
         val prevCalendar = calendar.clone() as Calendar
@@ -153,18 +173,20 @@ class CodiCalendarFragment : Fragment() {
         val prevMaxDay = prevCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)
 
         for (i in firstDayOfWeek - 1 downTo 0) {
-            dayList.add(CalendarDateData((prevMaxDay - i).toString(), false, false))
+            dayList.add(CalendarDateData((prevMaxDay - i).toString(), false, false, ""))
         }
 
         for (i in 1..maxDay) {
             val isToday = (year == tYear && month == tMonth && i == tDay)
-            dayList.add(CalendarDateData(i.toString(), true, isToday))
+            val formattedDate = String.format("%04d-%02d-%02d", year, month, i)
+
+            dayList.add(CalendarDateData(i.toString(), true, isToday, formattedDate))
         }
 
         if (dayList.size % 7 != 0) {
             val nextMonthRemaining = 7 - (dayList.size % 7)
             for (i in 1..nextMonthRemaining) {
-                dayList.add(CalendarDateData(i.toString(), false, false))
+                dayList.add(CalendarDateData(i.toString(), false, false, ""))
             }
         }
 
@@ -228,15 +250,15 @@ class CodiCalendarFragment : Fragment() {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
                     // weaklyWeatherViewModel.fetchWeeklyWeather(location.latitude, location.longitude, token)
-                    weaklyWeatherViewModel.fetchWeeklyWeather(37.5665, 126.9780, token)
+                    weaklyWeatherViewModel.fetchWeeklyWeather(37.5665, 126.9780, BuildConfig.TEST_API_TOKEN)
                 } else {
                     // 위치를 못 잡을 경우 기본값 (서울)
-                    weaklyWeatherViewModel.fetchWeeklyWeather(37.5665, 126.9780, token)
+                    weaklyWeatherViewModel.fetchWeeklyWeather(37.5665, 126.9780, BuildConfig.TEST_API_TOKEN)
                 }
             }
         } else {
             // 권한이 없을 경우 기본값 (서울)
-            weaklyWeatherViewModel.fetchWeeklyWeather(37.5665, 126.9780, token)
+            weaklyWeatherViewModel.fetchWeeklyWeather(37.5665, 126.9780, BuildConfig.TEST_API_TOKEN)
         }
     }
 
@@ -244,6 +266,7 @@ class CodiCalendarFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        codiDiaryViewModel.fetchDiaryDates(currentYear, currentMonth, BuildConfig.TEST_API_TOKEN)
 
         // 액션바 숨기기
         (activity as AppCompatActivity).supportActionBar?.hide()

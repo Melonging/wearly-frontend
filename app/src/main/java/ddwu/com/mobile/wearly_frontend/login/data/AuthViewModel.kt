@@ -1,9 +1,11 @@
 package ddwu.com.mobile.wearly_frontend.login.data
 
 import android.util.Log
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
+import ddwu.com.mobile.wearly_frontend.TokenManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -153,25 +155,25 @@ class AuthViewModel: ViewModel() {
      * 로그인 요청 함수
      * 액티비티의 요청에 따라 뷰모델에 저장된 아이디와 비밀번호로 로그인을 요청한다.
      */
-    fun requestLogin() {
+    fun requestLogin(tokenManager: TokenManager) {
         val loginData = LoginRequest(
             loginId = userId.value ?: "",
             password = userPassword.value ?: ""
         )
 
-        Log.d("AuthVM", "테스트용 더미 log: '${loginData.loginId}' 로그인 요청")
-
-        // 코드 진행을 위한 임시 성공 응답 (테스트시 아래 코드를 한 줄 주석 처리하여 사용)
-        isLoginSuccess.value = true
-
         AuthRetrofitClient.authService.login(loginData).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful && response.body()?.success == true) {
-                    loginResponse.value = response.body()
-                    isLoginSuccess.value = true
+                    val body = response.body()
+                    loginResponse.value = body
 
-                    Log.d("AuthVM", "로그인 성공 토큰: ${loginResponse.value?.accessToken}")
+                    val receivedToken = loginResponse.value?.accessToken
 
+                    if (receivedToken != null) {
+                        tokenManager.saveToken(receivedToken)
+                        Log.d("AuthVM", "토큰 저장 완료!")
+                        isLoginSuccess.value = true
+                    }
                 } else {
                     val errorBody = response.errorBody()?.string()
                     val errorData = Gson().fromJson(errorBody, LoginResponse::class.java)
@@ -189,10 +191,8 @@ class AuthViewModel: ViewModel() {
                     Log.e("AuthVM", "로그인 거부: ${response.code()}: ${errorMessage.value}")
                 }
             }
-
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 errorMessage.value = "서버 연결 실패"
-                Log.e("AuthVM", "서버 연결 실패: ${t.message}")
             }
         })
     }

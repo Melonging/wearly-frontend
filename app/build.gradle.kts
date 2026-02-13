@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,6 +9,12 @@ plugins {
 val baseUrlDev: String = project.findProperty("BASE_URL") as? String ?: ""
 
 val testToken = project.findProperty("TEST_TOKEN") as? String ?: ""
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
 
 android {
     namespace = "ddwu.com.mobile.wearly_frontend"
@@ -36,6 +44,9 @@ android {
             "TEST_TOKEN",
             "\"$testToken\""
         )
+
+        val apiToken = localProperties.getProperty("TEST_API_TOKEN") ?: ""
+        buildConfigField("String", "TEST_API_TOKEN", "\"$apiToken\"")
     }
 
     buildTypes {

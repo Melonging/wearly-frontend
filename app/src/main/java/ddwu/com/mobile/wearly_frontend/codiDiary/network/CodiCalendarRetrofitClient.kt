@@ -1,6 +1,5 @@
 package ddwu.com.mobile.wearly_frontend.codiDiary.network
 
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryRecordRequest
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

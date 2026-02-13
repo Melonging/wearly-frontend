@@ -1,5 +1,6 @@
 package ddwu.com.mobile.wearly_frontend.codiDiary.ui
 
+import CodiDiaryRecordRequest
 import ddwu.com.mobile.wearly_frontend.R
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +12,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryRecordRequest
 import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryViewModel
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentCodiDiaryBinding
 
@@ -20,8 +20,6 @@ class CodiDiaryWriteFragment: Fragment() {
     private lateinit var binding: FragmentCodiDiaryBinding
 
     private val codiDiaryWriteViewModel: CodiDiaryViewModel by viewModels()
-
-    private val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImxvZ2luSWQiOiJ0ZXN0dXNlciIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3NzA4MzA2OTUsImV4cCI6MTc3MDgzNDI5NX0.yvetEy-ixhgiZhr2N04QzDk7AEpyuN75Wc_3OkQ4Yts"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,34 +46,40 @@ class CodiDiaryWriteFragment: Fragment() {
         // 다이어리 저장
         binding.diarySubmitBtn.setOnClickListener {
             val title = binding.diaryTitleEt.text.toString()
-            val memo = binding.diaryEt.text.toString()
+            val diary = binding.diaryEt.text.toString()
 
             if (title.isEmpty()) {
-                binding.diaryTitleEt.hint = "코디 제목을 입력해주세요!!"
-                binding.diaryEt.hint = "오늘 있었던 일을 알려주세요!!"
+                binding.diaryTitleEt.hint = "제목을 입력해주세요!!"
+                binding.diaryEt.hint = "일기를 입력해주세요!!"
+
                 return@setOnClickListener
             }
+            if (selectedDate.isNullOrEmpty()) {
+                findNavController().popBackStack()
+                Toast.makeText(requireContext(), "오류가 발생했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            }
+
 
             val request = CodiDiaryRecordRequest(
-                wear_date =  binding.diaryDayTv.text.toString(),
+                wear_date = selectedDate.toString(),
                 clothes_ids = listOf(1, 2, 5),
                 outfit_name = title,
-                latitude = 37.5665,
-                longitude = 126.9780,
-                memo = memo,
+                temp_min = 5,
+                temp_max = 12,
+                weather_icon = "01d",
+                memo = diary,
                 is_heart = false
             )
 
-            codiDiaryWriteViewModel.saveDiary(request)
+            codiDiaryWriteViewModel.saveRecord(isWeatherLog = true, request = request)
         }
 
         codiDiaryWriteViewModel.saveStatus.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
-                Toast.makeText(requireContext(), "기록이 저장되었습니다.", Toast.LENGTH_SHORT).show()
-
+                Toast.makeText(context, "코디 일기가 저장되었습니다.", Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack()
             } else {
-                Toast.makeText(requireContext(), "저장에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "저장에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
 
