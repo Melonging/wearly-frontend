@@ -15,33 +15,44 @@ import android.widget.NumberPicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import ddwu.com.mobile.wearly_frontend.BuildConfig
+import ddwu.com.mobile.wearly_frontend.TokenManager
 import ddwu.com.mobile.wearly_frontend.codiDiary.data.CalendarDateData
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryViewModel
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.WeaklyWeatherViewModel
+import ddwu.com.mobile.wearly_frontend.codiDiary.data.viewmodel.CodiDiaryViewModel
+import ddwu.com.mobile.wearly_frontend.codiDiary.data.viewmodel.WeatherViewModel
 import ddwu.com.mobile.wearly_frontend.codiDiary.ui.adapter.CalendarAdapter
 import ddwu.com.mobile.wearly_frontend.codiDiary.ui.adapter.WeatherAdapter
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentCodiCalendarBinding
-import java.util.Calendar
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class CodiCalendarFragment : Fragment() {
     private lateinit var binding: FragmentCodiCalendarBinding
 
-    private var currentYear: Int = Calendar.getInstance().get(Calendar.YEAR)
-    private var currentMonth: Int = Calendar.getInstance().get(Calendar.MONTH) + 1
+    private var currentYear: Int = LocalDate.now().year
+    private var currentMonth: Int = LocalDate.now().monthValue
 
     private lateinit var calendarAdapter: CalendarAdapter
     private lateinit var weatherAdapter: WeatherAdapter
 
-    private val weaklyWeatherViewModel: WeaklyWeatherViewModel by viewModels()
-    private val codiDiaryViewModel : CodiDiaryViewModel by viewModels()
+    private val weatherViewModel: WeatherViewModel by activityViewModels()
+    private val codiDiaryViewModel : CodiDiaryViewModel by activityViewModels()
 
     private lateinit var fusedLocationClient: com.google.android.gms.location.FusedLocationProviderClient
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // 옷 목록 캐시 비우기
+        codiDiaryViewModel.clearClothesCache()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,38 +60,69 @@ class CodiCalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCodiCalendarBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 토큰 호출
+        val tokenManager = TokenManager(requireContext())
+        val token = tokenManager.getToken()
 
-        // 위치 권환 확인
+
+        // 위치 권환 확인 후 주간 날씨 불러오기
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        fetchLocationAndWeather()
+        if (token != null) {
+            fetchLocationAndWeather(token)
 
-        binding.calendarDayLayout.setOnClickListener {
-            findNavController().navigate(R.id.action_calendar_to_diaryWrite)
+        } else {
+            Snackbar.make(binding.root, "토큰 없음.", Snackbar.LENGTH_SHORT).show()
         }
 
+
+        // 달력 어댑터 연결
         calendarAdapter = CalendarAdapter { day, hasRecord ->
+            val dayInt = day.toIntOrNull() ?: 1
+            val selectedDate = LocalDate.of(currentYear, currentMonth, dayInt)
             val selectedFullDate = "${currentYear}년 ${currentMonth}월 ${day}일"
 
-            if (hasRecord) {
-                val bundle = Bundle().apply {
-                    putString("selectedDate", selectedFullDate)
+            // 날짜 범위 확인 (한 달 전 ~ 다음 주)
+            if (isWithinRange(selectedDate)) {
+                if (hasRecord) {
+                    val serverDate = formatToServerDate(selectedFullDate)
+                    val token = TokenManager(requireContext()).getToken()
+
+                    if (token != null && serverDate != null) {
+                        codiDiaryViewModel.diaryReadData.removeObservers(viewLifecycleOwner)
+
+                        codiDiaryViewModel.clearDiaryReadData()
+                        codiDiaryViewModel.fetchDiaryRead(token, serverDate)
+
+                        codiDiaryViewModel.diaryReadData.observe(viewLifecycleOwner) { data ->
+                            if (data != null) {
+                                codiDiaryViewModel.diaryReadData.removeObservers(viewLifecycleOwner)
+
+                                val bundle = Bundle().apply {
+                                    putString("selectedDate", selectedFullDate)
+                                }
+                                findNavController().navigate(R.id.action_calendar_to_diaryRead, bundle)
+                            }
+                        }
+                    }
+                } else {
+                    showSelectDialog(selectedFullDate)
                 }
-                findNavController().navigate(R.id.action_calendar_to_diaryRead, bundle)
             } else {
-                showSelectDialog(selectedFullDate)
+                Snackbar.make(binding.root, "일기를 작성할 수 없는 날짜입니다.", Snackbar.LENGTH_SHORT).show()
             }
         }
-
         binding.calendarRv.apply {
             adapter = calendarAdapter
             layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 7)
         }
+
 
         // 날씨 어댑터 연결
         weatherAdapter = WeatherAdapter()
@@ -89,14 +131,17 @@ class CodiCalendarFragment : Fragment() {
             adapter = weatherAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
-
-        weaklyWeatherViewModel.weaklyWeatherData.observe(viewLifecycleOwner) { list ->
+        weatherViewModel.weaklyWeatherData.observe(viewLifecycleOwner) { list ->
             weatherAdapter.submitList(list)
         }
 
+
+        // 달력 피커
         binding.calendarYearmonthTv.setOnClickListener {
             showMonthPicker()
         }
+
+
 
         // 처음 진입 시 당월 달력 그리기
         binding.calendarYearmonthTv.text = "${currentYear}년 ${currentMonth}월"
@@ -109,6 +154,18 @@ class CodiCalendarFragment : Fragment() {
                 calendarAdapter.setRecordedDates(dates)
             }
         }
+
+    }
+
+
+    /**
+     * 일기 작성 가능한 날짜인지 확인하는 함수
+     */
+    private fun isWithinRange(selectedDate: LocalDate): Boolean {
+        val today = LocalDate.now()
+        val startDate = today.minusMonths(1)
+        val endDate = today.plusWeeks(1).minusDays(1)
+        return !selectedDate.isBefore(startDate) && !selectedDate.isAfter(endDate)
     }
 
 
@@ -153,32 +210,25 @@ class CodiCalendarFragment : Fragment() {
 
 
     /**
-     * 선택된 년도와 달에 따라 달력 범위를 결정하여 어댑터에게 넘기는 함수
+     * 선택된 년도와 달에 따라 달력 범위를 결정하여 어댑터에게 넘기는 함수 (LocalDate 버전)
      */
     private fun updateCalendar(year: Int, month: Int) {
         val dayList = mutableListOf<CalendarDateData>()
+        val firstDayOfMonth = LocalDate.of(year, month, 1)
+        val today = LocalDate.now()
 
-        val today = Calendar.getInstance()
-        val tYear = today.get(Calendar.YEAR)
-        val tMonth = today.get(Calendar.MONTH) + 1
-        val tDay = today.get(Calendar.DATE)
+        val firstDayOfWeek = firstDayOfMonth.dayOfWeek.value % 7
+        val maxDay = firstDayOfMonth.lengthOfMonth()
 
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month - 1, 1)
-        val firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1
-        val maxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-
-        val prevCalendar = calendar.clone() as Calendar
-        prevCalendar.add(Calendar.MONTH, -1)
-        val prevMaxDay = prevCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-
+        val prevMonthLastDay = firstDayOfMonth.minusMonths(1).lengthOfMonth()
         for (i in firstDayOfWeek - 1 downTo 0) {
-            dayList.add(CalendarDateData((prevMaxDay - i).toString(), false, false, ""))
+            dayList.add(CalendarDateData((prevMonthLastDay - i).toString(), false, false, ""))
         }
 
         for (i in 1..maxDay) {
-            val isToday = (year == tYear && month == tMonth && i == tDay)
-            val formattedDate = String.format("%04d-%02d-%02d", year, month, i)
+            val current = LocalDate.of(year, month, i)
+            val isToday = (current == today)
+            val formattedDate = current.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
             dayList.add(CalendarDateData(i.toString(), true, isToday, formattedDate))
         }
@@ -191,6 +241,11 @@ class CodiCalendarFragment : Fragment() {
         }
 
         calendarAdapter.submitList(dayList)
+
+        val token = TokenManager(requireContext()).getToken()
+        if (token != null) {
+            codiDiaryViewModel.fetchDiaryDates(currentYear, currentMonth, token)
+        }
     }
 
 
@@ -221,52 +276,78 @@ class CodiCalendarFragment : Fragment() {
         }
 
         dialogView.findViewById<LinearLayout>(R.id.calendar_select_from_category_btn).setOnClickListener {
-            moveToDiaryWrite(selectedDate, "category")
+            val bundle = Bundle().apply {
+                putString("selectedDate", selectedDate)
+            }
+            findNavController().navigate(R.id.action_calendar_to_codi_select, bundle)
             alertDialog.dismiss()
         }
 
         dialogView.findViewById<LinearLayout>(R.id.calendar_select_from_gallery_btn).setOnClickListener {
-            moveToDiaryWrite(selectedDate, "gallery")
+            val bundle = Bundle().apply {
+                putString("selectedDate", selectedDate)
+            }
+            findNavController().navigate(R.id.action_calendar_to_diaryWrite, bundle)
             alertDialog.dismiss()
         }
-    }
-
-    private fun moveToDiaryWrite(date: String, mode: String) {
-        val bundle = Bundle().apply {
-            putString("selectedDate", date)
-            putString("selectMode", mode)
-        }
-        findNavController().navigate(R.id.action_calendar_to_diaryWrite, bundle)
     }
 
     /**
      * 날씨 권한 여부 확인 후 API 호출하는 함수.
      */
-    private fun fetchLocationAndWeather() {
-        // 권한이 있는지 확인
+    private fun fetchLocationAndWeather(token: String) {
+        // 권한 확인
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
 
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
-                    // weaklyWeatherViewModel.fetchWeeklyWeather(location.latitude, location.longitude, token)
-                    weaklyWeatherViewModel.fetchWeeklyWeather(37.5665, 126.9780, BuildConfig.TEST_API_TOKEN)
+                    // 에뮬레이터 위치 조회 불가로 인해 서울 정보 넣었습니다. 실제 휴대폰 사용 시 아래 주석 처리된 코드로 바꿔주세요.
+                    // weatherViewModel.fetchWeeklyWeather(location.latitude, location.longitude, token)
+                    weatherViewModel.fetchWeeklyWeather(37.5665, 126.9780, token)
                 } else {
                     // 위치를 못 잡을 경우 기본값 (서울)
-                    weaklyWeatherViewModel.fetchWeeklyWeather(37.5665, 126.9780, BuildConfig.TEST_API_TOKEN)
+                    weatherViewModel.fetchWeeklyWeather(37.5665, 126.9780, BuildConfig.TEST_API_TOKEN)
                 }
             }
         } else {
             // 권한이 없을 경우 기본값 (서울)
-            weaklyWeatherViewModel.fetchWeeklyWeather(37.5665, 126.9780, BuildConfig.TEST_API_TOKEN)
+            weatherViewModel.fetchWeeklyWeather(37.5665, 126.9780, BuildConfig.TEST_API_TOKEN)
         }
+    }
+
+
+    /**
+     * 날짜 포맷팅 함수
+     *
+     * @param selectedFullDate 선택된 날짜
+     * @return 포맷팅된 날짜
+     */
+    private fun formatToServerDate(selectedFullDate: String): String? {
+        return selectedFullDate.replace("년 ", "-")
+            .replace("월 ", "-")
+            .replace("일", "")
+            .split("-")
+            .let { parts ->
+                if (parts.size >= 3) {
+                    "${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].trim().padStart(2, '0')}"
+                } else null
+            }
     }
 
 
 
     override fun onResume() {
         super.onResume()
-        codiDiaryViewModel.fetchDiaryDates(currentYear, currentMonth, BuildConfig.TEST_API_TOKEN)
+
+        // 토큰 호출
+        val token = TokenManager(requireContext()).getToken()
+
+        if (token != null) {
+            codiDiaryViewModel.fetchDiaryDates(currentYear, currentMonth, token)
+        } else {
+            Snackbar.make(binding.root, "토큰 없음.", Snackbar.LENGTH_SHORT).show()
+        }
 
         // 액션바 숨기기
         (activity as AppCompatActivity).supportActionBar?.hide()

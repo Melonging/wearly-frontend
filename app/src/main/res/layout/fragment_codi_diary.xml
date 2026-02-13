@@ -71,17 +71,17 @@
         android:layout_marginHorizontal="30dp"
         android:layout_marginVertical="10dp"
 
+        android:clickable="false"
+
         app:layout_constraintTop_toBottomOf="@id/diary_day_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/diary_layout">
 
-        <ImageView
-            android:id="@+id/diary_clothes_iv"
+        <FrameLayout
+            android:id="@+id/diary_clothes_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            android:background="@color/box_gray" />
+            android:layout_height="match_parent" />
     </androidx.cardview.widget.CardView>
 
 
@@ -112,7 +112,7 @@
 
             android:layout_marginEnd="5dp"
 
-            android:src="@drawable/img_weather_snowy"
+            android:src="@drawable/ic_weather_snowy"
             android:scaleType="centerInside"/>
 
         <TextView
@@ -139,6 +139,8 @@
 
         android:translationZ="10dp"
 
+        android:clickable="true"
+
         app:layout_constraintTop_toTopOf="@id/diary_clothes_cv"
         app:layout_constraintEnd_toEndOf="@id/diary_clothes_cv">
 
@@ -146,6 +148,8 @@
             android:id="@+id/diary_like_unselected"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
+            android:clickable="false"
 
             android:src="@drawable/btn_like_unselected"
             android:background="@android:color/transparent"
@@ -155,6 +159,8 @@
             android:id="@+id/diary_like_selected"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
+            android:clickable="false"
 
             android:src="@drawable/btn_like_selected"
             android:background="@android:color/transparent"

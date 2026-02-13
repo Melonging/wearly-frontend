@@ -66,6 +66,12 @@ class MainActivity : AppCompatActivity() {
                     binding.bottomNav.visibility = View.GONE
                 }
 
+                // 코디 일기 옷 선택 프레그먼트
+                R.id.codiSelectCategoryFrament -> {
+                    binding.bottomNav.visibility = View.GONE
+                }
+
+                // 코디 일기 작석 프레그먼트
                 R.id.diaryWriteFragment -> {
                     binding.bottomNav.visibility = View.GONE
                 }

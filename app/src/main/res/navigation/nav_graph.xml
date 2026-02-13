@@ -16,22 +16,18 @@
 
         <action
             android:id="@+id/action_homeFragment_to_codiDiaryFragment"
-            app:destination="@id/codiDiaryFragment"
+            app:destination="@id/calendarFragment"
             app:enterAnim="@anim/slide_in_right"/>
 
-    <fragment
-        android:id="@+id/codiDiaryFragment"
-        android:name="ddwu.com.mobile.wearly_frontend.codidiary.ui.fragment.CodiDraryFragment"
-        android:label="코디 다이어리">
-        <argument
-            android:name="selectedDate"
-            app:argType="string" />
-    </fragment>
-
+    <!-- 코디 달력 -->
     <fragment
         android:id="@+id/calendarFragment"
         android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiCalendarFragment"
         android:label="코디 달력" >
+
+        <action
+            android:id="@+id/action_calendar_to_codi_select"
+            app:destination="@id/codiSelectCategoryFrament" />
 
         <action
             android:id="@+id/action_calendar_to_diaryWrite"
@@ -40,40 +36,42 @@
         <action
             android:id="@+id/action_calendar_to_diaryRead"
             app:destination="@id/diaryReadFragment" />
-
     </fragment>
 
-    <fragment
-        android:id="@+id/diaryWriteFragment"
-        android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiDiaryWriteFragment">
+            <fragment
+                android:id="@+id/diaryReadFragment"
+                android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiDiaryReadFragment">
 
-        <action
-            android:id="@+id/action_return_to_calendar"
-            app:destination="@id/calendarFragment" />
+                <action
+                    android:id="@+id/action_edit_diary"
+                    app:destination="@id/diaryEditFragment" />
 
-        <action
-            android:id="@+id/action_submit_diary"
-            app:destination="@id/calendarFragment" />
+            </fragment>
 
-    </fragment>
 
-    <fragment
-        android:id="@+id/diaryReadFragment"
-        android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiDiaryReadFragment">
+            <fragment
+                android:id="@+id/codiSelectCategoryFrament"
+                android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiSelectCategoryFragment"
+                android:label="코디 다이어리" >
 
-        <action
-            android:id="@+id/action_return_to_calendar"
-            app:destination="@id/calendarFragment" />
+                <action
+                    android:id="@+id/action_codi_select_to_diaryWrite"
+                    app:destination="@id/diaryWriteFragment" />
+            </fragment>
 
-        <action
-            android:id="@+id/action_edit_diary"
-            app:destination="@id/diaryWriteFragment" />
 
-        <action
-            android:id="@+id/action_delete_diary"
-            app:destination="@id/calendarFragment" />
+            <fragment
+                android:id="@+id/diaryWriteFragment"
+                android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiDiaryWriteFragment">
 
-    </fragment>
+            </fragment>
+
+            <fragment
+                android:id="@+id/diaryEditFragment"
+                android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiDiaryEditFragment" />
+
+
+
 
     <fragment
         android:id="@+id/closetFragment"

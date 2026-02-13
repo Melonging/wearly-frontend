@@ -63,7 +63,7 @@ class WeatherViewModel: ViewModel() {
             WeaklyWeatherData(
                 date = formattedDate,
                 weatherIcon = getIconCode(item.weatherMain),
-                temperature = "${item.tempMax}°/${item.tempMin}°"
+                temperature = "${item.tempMin}°/${item.tempMax}°"
             )
         }
     }
@@ -107,7 +107,7 @@ class WeatherViewModel: ViewModel() {
                             _pastWeatherData.value = WeaklyWeatherData(
                                 date = date,
                                 weatherIcon = convertIconToCode(data.weatherIcon),
-                                temperature = "${data.tempMax}°/${data.tempMin}°"
+                                temperature = "${data.tempMin}°/${data.tempMax}°"
                             )
                             Log.d("WeatherVM", "LiveData 업데이트 완료: ${_pastWeatherData.value}")
                         }

@@ -159,14 +159,12 @@
         android:layout_marginBottom="40dp"
 
         android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_calendar_weather"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-
-        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/calendar_weather_tv"
-        app:layout_constraintVertical_bias="1.0"
-        tools:listitem="@layout/item_calendar_weather" />
+        app:layout_constraintTop_toBottomOf="@id/calendar_weather_tv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

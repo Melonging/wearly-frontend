@@ -8,7 +8,7 @@
     android:background="#FFFFFF">
 
     <ImageButton
-        android:id="@+id/diary_select_category_btn"
+        android:id="@+id/diary_select_category_back_btn"
         android:layout_width="30dp"
         android:layout_height="30dp"
 
@@ -26,7 +26,7 @@
 
 
     <TextView
-        android:id="@+id/diary_select_category_tv"
+        android:id="@+id/diary_select_category_date_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -39,10 +39,10 @@
         android:paddingBottom="15dp"
 
 
-        app:layout_constraintTop_toTopOf="@id/diary_select_category_btn"
+        app:layout_constraintTop_toTopOf="@id/diary_select_category_back_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/diary_select_category_btn"/>
+        app:layout_constraintBottom_toBottomOf="@id/diary_select_category_back_btn"/>
 
 
     <ImageButton
@@ -57,8 +57,8 @@
         android:layout_marginEnd="30dp"
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/diary_select_category_tv"
-        app:layout_constraintBottom_toBottomOf="@id/diary_select_category_tv" />
+        app:layout_constraintTop_toTopOf="@id/diary_select_category_date_tv"
+        app:layout_constraintBottom_toBottomOf="@id/diary_select_category_date_tv" />
 
 
     <ImageButton
@@ -88,11 +88,13 @@
 
         android:paddingVertical="5dp"
 
+        android:layout_marginTop="10dp"
+
         android:layout_marginHorizontal="30dp"
 
         android:gravity="center"
 
-        app:layout_constraintTop_toBottomOf="@id/diary_select_category_tv"
+        app:layout_constraintTop_toBottomOf="@id/diary_select_category_date_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" >
 
@@ -101,7 +103,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
 
-            android:src="@drawable/img_weather_sunny"
+            android:src="@drawable/ic_weather_sunny"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
 
@@ -152,10 +154,10 @@
                 android:id="@+id/diary_select_category_selected_items_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3개"
-                android:textColor="#000000"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+
+                android:text="0개"
+                android:textColor="@color/black" />
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -168,6 +170,7 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_diary_clothes_category_selected" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -185,6 +188,8 @@
             android:id="@+id/diary_select_category_tb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+            android:padding="10dp"
 
             android:background="@android:color/transparent"
 

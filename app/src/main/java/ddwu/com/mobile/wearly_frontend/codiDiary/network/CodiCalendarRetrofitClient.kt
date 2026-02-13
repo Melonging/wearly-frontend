@@ -25,8 +25,8 @@ object CodiCalendarRetrofitClient {
             .build()
     }
 
-    val weatherService: WeaklyWeatherService by lazy {
-        retrofit.create(WeaklyWeatherService::class.java)
+    val weatherService: WeatherService by lazy {
+        retrofit.create(WeatherService::class.java)
     }
 
     val codiDiaryService: CodiDiaryService by lazy {

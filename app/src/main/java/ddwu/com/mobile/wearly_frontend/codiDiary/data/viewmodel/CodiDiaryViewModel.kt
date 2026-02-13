@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import ddwu.com.mobile.wearly_frontend.BuildConfig
 import ddwu.com.mobile.wearly_frontend.codiDiary.data.CategoryItem
 import ddwu.com.mobile.wearly_frontend.codiDiary.data.ClothItem
+import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryEditRequest
 import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryRead
 import ddwu.com.mobile.wearly_frontend.codiDiary.network.CodiCalendarRetrofitClient.codiDiaryService
 import kotlinx.coroutines.launch
@@ -23,12 +24,19 @@ class CodiDiaryViewModel : ViewModel() {
     private val _diaryReadData = MutableLiveData<CodiDiaryRead?>()
     val diaryReadData: LiveData<CodiDiaryRead?> = _diaryReadData
 
+    private val _updateStatus = MutableLiveData<Boolean>()
+    val updateStatus: LiveData<Boolean> = _updateStatus
+
+    private val _deleteStatus = MutableLiveData<Boolean>()
+    val deleteStatus: LiveData<Boolean> = _deleteStatus
+
     private val _categoryList = MutableLiveData<List<CategoryItem>>()
     val categoryList: LiveData<List<CategoryItem>> = _categoryList
 
     private val _clothesList = MutableLiveData<List<ClothItem>>()
     val clothesList: LiveData<List<ClothItem>> = _clothesList
 
+    private val clothesCache = mutableMapOf<Int, List<ClothItem>>()
 
     /**
      * 달력에 일기가 기록된 날짜 리스트를 받아오는 API 호출
@@ -58,11 +66,11 @@ class CodiDiaryViewModel : ViewModel() {
      * @param isWeatherLog 일기
      * @param request 저장된 형식
      */
-    fun saveRecord(isWeatherLog: Boolean, request: CodiDiaryRecordRequest) {
+    fun saveRecord(token: String, isWeatherLog: Boolean, request: CodiDiaryRecordRequest) {
         viewModelScope.launch {
             try {
                 val response = codiDiaryService.postWearRecord(
-                    "Bearer ${BuildConfig.TEST_API_TOKEN}",
+                    "Bearer $token",
                     isWeatherLog,
                     request
                 )
@@ -88,7 +96,7 @@ class CodiDiaryViewModel : ViewModel() {
      * @param date 지정된 날짜
      * @param token 토큰
      */
-    fun fetchDiaryRead(date: String, token: String) {
+    fun fetchDiaryRead(token: String, date: String) {
         viewModelScope.launch {
             try {
                 val response = codiDiaryService.getWearRecord("Bearer $token", date)
@@ -105,6 +113,66 @@ class CodiDiaryViewModel : ViewModel() {
             }
         }
     }
+    fun clearDiaryReadData() {
+        _diaryReadData.value = null
+    }
+
+
+
+    /**
+     * 일기 수정 API 호출 함수.
+     *
+     * @param token 토큰
+     * @param dateId 날짜
+     * @param request 수정 데이터
+     */
+    fun updateRecord(token: String, dateId: Int, request: CodiDiaryEditRequest) {
+        viewModelScope.launch {
+            try {
+                val response = codiDiaryService.updateDiaryRecord("Bearer $token", dateId, request)
+                if (response.isSuccessful && response.body()?.success == true) {
+                    _updateStatus.postValue(true)
+                } else {
+                    _updateStatus.postValue(false)
+                }
+            } catch (e: Exception) {
+                _updateStatus.postValue(false)
+                Log.e("CodiDiaryViewModel", "Update Error: ${e.message}")
+            }
+        }
+    }
+
+
+    /**
+     * 일기 삭제 API 호출 함수
+     *
+     * @param token 토큰
+     * @param dateId 날짜
+     */
+    fun deleteRecord(token: String, dateId: Int) {
+        viewModelScope.launch {
+            try {
+                val response = codiDiaryService.deleteWearRecord("Bearer $token", dateId)
+                if (response.isSuccessful && response.body()?.success == true) {
+                    _diaryReadData.postValue(null)
+                    _deleteStatus.postValue(true)
+
+                    _deleteStatus.value = false
+                } else {
+                    _deleteStatus.postValue(false)
+                }
+            } catch (e: Exception) {
+                _deleteStatus.postValue(false)
+            }
+        }
+    }
+
+    fun resetDeleteStatus() {
+        _deleteStatus.value = false
+    }
+
+
+
 
 
     /**
@@ -113,6 +181,11 @@ class CodiDiaryViewModel : ViewModel() {
      * @param token 토큰
      */
     fun fetchCategories(token: String) {
+        if (!_categoryList.value.isNullOrEmpty()) {
+            Log.d("CodiDiaryVM", "카테고리 이미 존재.")
+            return
+        }
+
         viewModelScope.launch {
             try {
                 val response = codiDiaryService.getCategories("Bearer $token")
@@ -135,37 +208,34 @@ class CodiDiaryViewModel : ViewModel() {
      * @param token 토큰
      * @param categoryId 카테고리
      */
-    fun fetchClothes(token: String, categoryId: Int) {
+    fun fetchClothes(token: String, categoryId: Int, forceRefresh: Boolean = false) {
+        if (clothesCache.containsKey(categoryId)) {
+            val cachedData = clothesCache[categoryId]
+
+            if (!cachedData.isNullOrEmpty()) {
+                _clothesList.value = cachedData!!
+                Log.d("CodiDiaryVM", "캐시 사용 중 (카테고리 ID: $categoryId)")
+                return
+            }
+        }
+
         viewModelScope.launch {
             try {
                 val response = codiDiaryService.getClothesByCategory("Bearer $token", categoryId)
                 if (response.isSuccessful && response.body() != null) {
-//                    _clothesList.value = response.body()!!.data.clothes
-//                    Log.d("CodiDiaryVM", "옷 목록 로드 성공: ${response.body()!!.data.clothes.size}개")
+                    val clothes = response.body()!!.data.clothes
 
-                    val dummyClothes = listOf(
-                        ClothItem(
-                            clothing_id = 101,
-                            image = "https://via.placeholder.com/300x400?text=Top1"
-                        ),
-                        ClothItem(
-                            clothing_id = 102,
-                            image = "https://via.placeholder.com/300x400?text=Top2"
-                        ),
-                        ClothItem(
-                            clothing_id = 103,
-                            image = "https://via.placeholder.com/300x400?text=Top3"
-                        ),
-                        ClothItem(
-                            clothing_id = 104,
-                            image = "https://via.placeholder.com/300x400?text=Top4"
-                        )
-                    )
-                    _clothesList.value = dummyClothes
+                    clothesCache[categoryId] = clothes
+                    _clothesList.value = clothes
+                    Log.d("CodiDiaryVM", "옷 목록 로드 성공: ${response.body()!!.data.clothes.size}개")
                 }
             } catch (e: Exception) {
                 Log.e("CodiDiaryVM", "에러: ${e.message}")
             }
         }
+    }
+
+    fun clearClothesCache() {
+        clothesCache.clear()
     }
 }

@@ -9,3 +9,14 @@ data class CodiDiaryEditRequest (
     val temp_max: Double? = null,
     val weather_icon: String? = null
 )
+
+data class CodiDiaryEditResponse(
+    val success: Boolean,
+    val data: CodiDiaryUpdateResult?,
+    val error: String?
+)
+
+data class CodiDiaryUpdateResult(
+    val date_id: Int,
+    val outfit_id: Int,
+)

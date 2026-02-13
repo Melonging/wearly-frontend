@@ -193,6 +193,7 @@ class AuthViewModel: ViewModel() {
             }
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 errorMessage.value = "서버 연결 실패"
+                Log.e("AuthVM", "서버 연결 실패")
             }
         })
     }

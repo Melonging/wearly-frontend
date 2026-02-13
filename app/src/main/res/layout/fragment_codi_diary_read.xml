@@ -54,18 +54,18 @@
         android:layout_marginHorizontal="30dp"
         android:layout_marginVertical="10dp"
 
+        android:clickable="false"
+
 
         app:layout_constraintTop_toBottomOf="@id/diary_read_day_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/diary_read_btns_layout">
 
-        <ImageView
-            android:id="@+id/diary_read_clothes_iv"
+        <FrameLayout
+            android:id="@+id/diary_read_clothes_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            android:background="@color/box_gray" />
+            android:layout_height="match_parent" />
     </androidx.cardview.widget.CardView>
 
 
@@ -96,7 +96,7 @@
 
             android:layout_marginEnd="5dp"
 
-            android:src="@drawable/img_weather_snowy"
+            android:src="@drawable/ic_weather_snowy"
             android:scaleType="centerInside"/>
 
         <TextView
@@ -124,13 +124,17 @@
 
         android:translationZ="10dp"
 
+        android:clickable="true"
+
         app:layout_constraintTop_toTopOf="@id/diary_read_clothes_cv"
         app:layout_constraintEnd_toEndOf="@id/diary_read_clothes_cv">
 
         <ImageButton
             android:id="@+id/diary_read_like_unselected"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+
+            android:clickable="false"
 
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
@@ -140,6 +144,8 @@
             android:id="@+id/diary_read_like_selected"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
+            android:clickable="false"
 
             android:src="@drawable/btn_like_selected"
             android:background="@android:color/transparent"
@@ -256,12 +262,14 @@
             android:overScrollMode="always"
             android:scrollbars="vertical"
 
+            android:maxLines="6"
+
             android:text="여기에 저장된 일기 내용이 출력됩니다."
             android:textColor="@color/black"
             android:textSize="14sp"
 
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="50dp"/>
+            android:layout_marginBottom="30dp"/>
 
 
 

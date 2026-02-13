@@ -26,11 +26,11 @@ class WeatherAdapter : RecyclerView.Adapter<WeatherAdapter.WeeklyViewHolder>() {
         val item = items[position]
 
         val iconRes = when (item.weatherIcon) {
-            0 -> ddwu.com.mobile.wearly_frontend.R.drawable.img_weather_sunny
-            1 -> ddwu.com.mobile.wearly_frontend.R.drawable.img_weather_cloudy
-            2 -> ddwu.com.mobile.wearly_frontend.R.drawable.img_weather_rainy
-            3 -> ddwu.com.mobile.wearly_frontend.R.drawable.img_weather_snowy
-            else -> ddwu.com.mobile.wearly_frontend.R.drawable.img_weather_sunny
+            0 -> ddwu.com.mobile.wearly_frontend.R.drawable.ic_weather_sunny
+            1 -> ddwu.com.mobile.wearly_frontend.R.drawable.ic_weather_cloudy
+            2 -> ddwu.com.mobile.wearly_frontend.R.drawable.ic_weather_rainy
+            3 -> ddwu.com.mobile.wearly_frontend.R.drawable.ic_weather_snowy
+            else -> ddwu.com.mobile.wearly_frontend.R.drawable.ic_weather_sunny
         }
 
         holder.binding.itemCalendarWeatherDateTv.text = item.date
