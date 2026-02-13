@@ -1,13 +1,13 @@
-package ddwu.com.mobile.wearly_frontend.codiDiary.data.viewmodel
+package ddwu.com.mobile.wearly_frontend.codidiary.data.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.ForecastItem
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.WeaklyWeatherData
-import ddwu.com.mobile.wearly_frontend.codiDiary.network.CodiCalendarRetrofitClient
+import ddwu.com.mobile.wearly_frontend.codidiary.data.ForecastItem
+import ddwu.com.mobile.wearly_frontend.codidiary.data.WeaklyWeatherData
+import ddwu.com.mobile.wearly_frontend.codidiary.network.CodiCalendarRetrofitClient
 import kotlinx.coroutines.launch
 
 class WeatherViewModel: ViewModel() {

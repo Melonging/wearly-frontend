@@ -1,4 +1,4 @@
-package ddwu.com.mobile.wearly_frontend.codiDiary.ui.adapter
+package ddwu.com.mobile.wearly_frontend.codidiary.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.ClothItem
+import ddwu.com.mobile.wearly_frontend.codidiary.data.ClothItem
 import ddwu.com.mobile.wearly_frontend.databinding.ItemDiaryClothesCategorySelectedBinding
 
 class SelectedCodiClothesAdapter(private val onDeleteClick: (ClothItem) -> Unit) :

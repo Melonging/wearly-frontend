@@ -1,9 +1,9 @@
-package ddwu.com.mobile.wearly_frontend.codiDiary.ui.adapter
+package ddwu.com.mobile.wearly_frontend.codidiary.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.WeaklyWeatherData // 💡 데이터 클래스 임포트
+import ddwu.com.mobile.wearly_frontend.codidiary.data.WeaklyWeatherData // 💡 데이터 클래스 임포트
 import ddwu.com.mobile.wearly_frontend.databinding.ItemCalendarWeatherBinding
 
 class WeatherAdapter : RecyclerView.Adapter<WeatherAdapter.WeeklyViewHolder>() {

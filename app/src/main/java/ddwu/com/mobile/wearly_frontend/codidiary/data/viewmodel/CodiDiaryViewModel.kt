@@ -1,4 +1,4 @@
-package ddwu.com.mobile.wearly_frontend.codiDiary.data.viewmodel
+package ddwu.com.mobile.wearly_frontend.codidiary.data.viewmodel
 
 import CodiDiaryRecordRequest
 import android.util.Log
@@ -6,12 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ddwu.com.mobile.wearly_frontend.BuildConfig
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CategoryItem
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.ClothItem
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryEditRequest
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryRead
-import ddwu.com.mobile.wearly_frontend.codiDiary.network.CodiCalendarRetrofitClient.codiDiaryService
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CategoryItem
+import ddwu.com.mobile.wearly_frontend.codidiary.data.ClothItem
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryEditRequest
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryRead
+import ddwu.com.mobile.wearly_frontend.codidiary.network.CodiCalendarRetrofitClient.codiDiaryService
 import kotlinx.coroutines.launch
 
 class CodiDiaryViewModel : ViewModel() {

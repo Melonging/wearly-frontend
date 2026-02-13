@@ -1,4 +1,4 @@
-package ddwu.com.mobile.wearly_frontend.codiDiary.network
+package ddwu.com.mobile.wearly_frontend.codidiary.network
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

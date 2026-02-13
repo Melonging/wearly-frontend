@@ -1,13 +1,12 @@
-package ddwu.com.mobile.wearly_frontend.codiDiary.ui.adapter
+package ddwu.com.mobile.wearly_frontend.codidiary.ui.adapter
 
 import ddwu.com.mobile.wearly_frontend.R
 import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CalendarDateData
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CalendarDateData
 import ddwu.com.mobile.wearly_frontend.databinding.ItemCalendarBinding
 
 class CalendarAdapter(private val onClick: (String, Boolean) -> Unit) :

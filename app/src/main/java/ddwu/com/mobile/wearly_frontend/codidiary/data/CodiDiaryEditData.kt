@@ -1,4 +1,4 @@
-package ddwu.com.mobile.wearly_frontend.codiDiary.data
+package ddwu.com.mobile.wearly_frontend.codidiary.data
 
 data class CodiDiaryEditRequest (
     val outfit_name: String? = null,

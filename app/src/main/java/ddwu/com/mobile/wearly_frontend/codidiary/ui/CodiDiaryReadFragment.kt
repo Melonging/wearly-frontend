@@ -1,4 +1,4 @@
-package ddwu.com.mobile.wearly_frontend.codiDiary.ui
+package ddwu.com.mobile.wearly_frontend.codidiary.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -16,11 +15,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
-import ddwu.com.mobile.wearly_frontend.BuildConfig
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.TokenManager
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryReadCloth
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.viewmodel.CodiDiaryViewModel
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryReadCloth
+import ddwu.com.mobile.wearly_frontend.codidiary.data.viewmodel.CodiDiaryViewModel
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentCodiDiaryReadBinding
 
 class CodiDiaryReadFragment : Fragment() {

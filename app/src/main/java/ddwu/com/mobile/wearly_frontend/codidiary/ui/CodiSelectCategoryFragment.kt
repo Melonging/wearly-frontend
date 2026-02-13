@@ -1,9 +1,8 @@
-package ddwu.com.mobile.wearly_frontend.codiDiary.ui
+package ddwu.com.mobile.wearly_frontend.codidiary.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,11 +15,11 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.TokenManager
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.ClothItem
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.viewmodel.CodiDiaryViewModel
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.viewmodel.WeatherViewModel
-import ddwu.com.mobile.wearly_frontend.codiDiary.ui.adapter.CodiClothesAdapter
-import ddwu.com.mobile.wearly_frontend.codiDiary.ui.adapter.SelectedCodiClothesAdapter
+import ddwu.com.mobile.wearly_frontend.codidiary.data.ClothItem
+import ddwu.com.mobile.wearly_frontend.codidiary.data.viewmodel.CodiDiaryViewModel
+import ddwu.com.mobile.wearly_frontend.codidiary.data.viewmodel.WeatherViewModel
+import ddwu.com.mobile.wearly_frontend.codidiary.ui.adapter.CodiClothesAdapter
+import ddwu.com.mobile.wearly_frontend.codidiary.ui.adapter.SelectedCodiClothesAdapter
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentCodiSelectFromCategoryBinding
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

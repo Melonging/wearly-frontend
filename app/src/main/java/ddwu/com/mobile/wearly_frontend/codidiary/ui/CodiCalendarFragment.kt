@@ -1,4 +1,4 @@
-package ddwu.com.mobile.wearly_frontend.codiDiary.ui
+package ddwu.com.mobile.wearly_frontend.codidiary.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -23,11 +23,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import ddwu.com.mobile.wearly_frontend.BuildConfig
 import ddwu.com.mobile.wearly_frontend.TokenManager
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CalendarDateData
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.viewmodel.CodiDiaryViewModel
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.viewmodel.WeatherViewModel
-import ddwu.com.mobile.wearly_frontend.codiDiary.ui.adapter.CalendarAdapter
-import ddwu.com.mobile.wearly_frontend.codiDiary.ui.adapter.WeatherAdapter
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CalendarDateData
+import ddwu.com.mobile.wearly_frontend.codidiary.data.viewmodel.CodiDiaryViewModel
+import ddwu.com.mobile.wearly_frontend.codidiary.data.viewmodel.WeatherViewModel
+import ddwu.com.mobile.wearly_frontend.codidiary.ui.adapter.CalendarAdapter
+import ddwu.com.mobile.wearly_frontend.codidiary.ui.adapter.WeatherAdapter
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentCodiCalendarBinding
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

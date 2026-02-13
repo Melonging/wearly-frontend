@@ -1,4 +1,4 @@
-package ddwu.com.mobile.wearly_frontend.codiDiary.data
+package ddwu.com.mobile.wearly_frontend.codidiary.data
 
 class CodiClothesResponse (
     val success: Boolean,

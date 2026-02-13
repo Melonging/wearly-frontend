@@ -22,7 +22,7 @@
     <!-- 코디 달력 -->
     <fragment
         android:id="@+id/calendarFragment"
-        android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiCalendarFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.codidiary.ui.CodiCalendarFragment"
         android:label="코디 달력" >
 
         <action
@@ -40,7 +40,7 @@
 
             <fragment
                 android:id="@+id/diaryReadFragment"
-                android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiDiaryReadFragment">
+                android:name="ddwu.com.mobile.wearly_frontend.codidiary.ui.CodiDiaryReadFragment">
 
                 <action
                     android:id="@+id/action_edit_diary"
@@ -51,7 +51,7 @@
 
             <fragment
                 android:id="@+id/codiSelectCategoryFrament"
-                android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiSelectCategoryFragment"
+                android:name="ddwu.com.mobile.wearly_frontend.codidiary.ui.CodiSelectCategoryFragment"
                 android:label="코디 다이어리" >
 
                 <action
@@ -62,13 +62,13 @@
 
             <fragment
                 android:id="@+id/diaryWriteFragment"
-                android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiDiaryWriteFragment">
+                android:name="ddwu.com.mobile.wearly_frontend.codidiary.ui.CodiDiaryWriteFragment">
 
             </fragment>
 
             <fragment
                 android:id="@+id/diaryEditFragment"
-                android:name="ddwu.com.mobile.wearly_frontend.codiDiary.ui.CodiDiaryEditFragment" />
+                android:name="ddwu.com.mobile.wearly_frontend.codidiary.ui.CodiDiaryEditFragment" />
 
 
 

@@ -1,7 +1,7 @@
-package ddwu.com.mobile.wearly_frontend.codiDiary.network
+package ddwu.com.mobile.wearly_frontend.codidiary.network
 
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.PastWeatherResponse
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.WeaklyWeatherResponse
+import ddwu.com.mobile.wearly_frontend.codidiary.data.PastWeatherResponse
+import ddwu.com.mobile.wearly_frontend.codidiary.data.WeaklyWeatherResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header

@@ -1,14 +1,14 @@
-package ddwu.com.mobile.wearly_frontend.codiDiary.network
+package ddwu.com.mobile.wearly_frontend.codidiary.network
 
 import CodiDiaryRecordRequest
 import CodiDiaryRecordResponse
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiCategoryResponse
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiClothesResponse
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryDateListResponse
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryDeleteResponse
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryEditRequest
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryEditResponse
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryReadResponse
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiCategoryResponse
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiClothesResponse
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryDateListResponse
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryDeleteResponse
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryEditRequest
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryEditResponse
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryReadResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE

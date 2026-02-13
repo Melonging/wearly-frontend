@@ -8,7 +8,7 @@
 
     android:background="@color/white"
 
-    tools:context=".codiDiary.ui.CodiCalendarFragment">
+    tools:context=".codidiary.ui.CodiCalendarFragment">
 
     <TextView
         android:id="@+id/calendar_yearmonth_tv"
