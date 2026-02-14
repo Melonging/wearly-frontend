@@ -118,10 +118,11 @@ class UploadActivity : AppCompatActivity() {
         Log.d("BASE_URL_CHECK", BuildConfig.BASE_URL)
 
         // 섹션 전달 받기
-        val name = intent.getStringExtra("containerName")
-        //currentSectionId = intent.getIntExtra("sectionId", -1)
-        currentSectionId = 50
-        val closet = intent.getStringExtra("closet")
+        val name = intent.getStringExtra("containerName") ?: ""
+        currentSectionId = intent.getIntExtra("sectionId", -1)
+        val closet = intent.getStringExtra("closet") ?: ""
+        Log.d("UPLOAD", "받은 containerName=$name closet=$closet sectionId=$currentSectionId")
+
         if (currentSectionId == -1) { finish(); return }
 
         val layoutManager = GridLayoutManager(this, 3)

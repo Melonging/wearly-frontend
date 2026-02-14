@@ -323,26 +323,31 @@
     <!-- Tabs -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_closet_chips"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:clipToPadding="false"
         android:orientation="horizontal"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/wardrobe_header_layout"
         tools:listitem="@layout/item_closet_chip_list" />
 
     <!-- 전체 배경 카드 -->
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_closet_card_back"
         android:orientation="vertical"
         android:padding="25dp"
-        android:background="@drawable/bg_closet_card_back"
-        app:layout_constraintTop_toBottomOf="@id/rv_closet_chips"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/rv_closet_chips">
 
         <!-- 상단 행거 2개 -->
         <LinearLayout
@@ -356,92 +361,92 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_closet_card"
                 android:orientation="vertical"
-                android:padding="16dp"
-                android:layout_marginEnd="8dp">
+                android:padding="16dp">
 
                 <TextView
-                    android:text="행거 1"
                     android:id="@+id/tv_hanger1_title"
-                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="행거 1"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:textColor="@color/black" />
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="아우터"
-                    android:textSize="12sp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
 
                 <TextView
-                    android:text="8 items"
-                    android:textSize="12sp"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:textColor="@color/black"/>
+                    android:layout_height="wrap_content"
+                    android:text="8 items"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <ImageView
-                    android:id = "@+id/btn_hanger1"
+                    android:id="@+id/btn_hanger1"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="end"
-                    android:src="@drawable/ic_closet_chevron_right"/>
+                    android:src="@drawable/ic_closet_chevron_right" />
             </LinearLayout>
 
             <!-- 행거 2 -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_closet_card"
                 android:orientation="vertical"
-                android:padding="16dp"
-                android:layout_marginStart="8dp">
+                android:padding="16dp">
 
                 <TextView
-                    android:text="행거 2"
                     android:id="@+id/tv_hanger2_title"
-                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="행거 2"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:textColor="@color/black"/>
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="아우터"
-                    android:textSize="12sp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
 
                 <TextView
-                    android:text="8 items"
-                    android:textSize="12sp"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:textColor="@color/black"/>
+                    android:layout_height="wrap_content"
+                    android:text="8 items"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <ImageView
-                    android:id = "@+id/btn_hanger2"
+                    android:id="@+id/btn_hanger2"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="end"
-                    android:src="@drawable/ic_closet_chevron_right"/>
+                    android:src="@drawable/ic_closet_chevron_right" />
             </LinearLayout>
         </LinearLayout>
 
@@ -451,34 +456,34 @@
             android:id="@+id/drawer1"
             android:layout_width="280dp"
             android:layout_height="90dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
             android:background="@drawable/bg_closet_card"
             android:orientation="vertical"
-            android:layout_gravity="center"
-            android:padding="16dp"
-            android:layout_marginTop="16dp">
+            android:padding="16dp">
 
             <TextView
-                android:text="서랍 1"
                 android:id="@+id/tv_drawer1_title"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:textColor="@color/black"/>
+                android:layout_height="wrap_content"
+                android:text="서랍 1"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:text="아우터"
-                android:textSize="12sp"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:textColor="@color/black"/>
+                android:layout_height="wrap_content"
+                android:text="아우터"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
 
             <ImageView
-                android:id = "@+id/btn_drawer1"
+                android:id="@+id/btn_drawer1"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="end"
-                android:src="@drawable/ic_closet_chevron_right"/>
+                android:src="@drawable/ic_closet_chevron_right" />
         </LinearLayout>
 
 
@@ -487,34 +492,34 @@
             android:id="@+id/drawer2"
             android:layout_width="280dp"
             android:layout_height="90dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
             android:background="@drawable/bg_closet_card"
             android:orientation="vertical"
-            android:layout_gravity="center"
-            android:padding="16dp"
-            android:layout_marginTop="16dp">
+            android:padding="16dp">
 
             <TextView
-                android:text="서랍 2"
                 android:id="@+id/tv_drawer2_title"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="@color/black"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
+                android:text="서랍 2"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:text="아우터"
-                android:textSize="12sp"
-                android:textColor="@color/black"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
+                android:text="아우터"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
 
             <ImageView
-                android:id = "@+id/btn_drawer2"
+                android:id="@+id/btn_drawer2"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="end"
-                android:src="@drawable/ic_closet_chevron_right"/>
+                android:src="@drawable/ic_closet_chevron_right" />
         </LinearLayout>
 
     </LinearLayout>
