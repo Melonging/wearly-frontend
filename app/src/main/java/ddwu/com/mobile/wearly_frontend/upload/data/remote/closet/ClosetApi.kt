@@ -2,6 +2,7 @@ package ddwu.com.mobile.wearly_frontend.upload.data.remote.closet
 
 import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.CategoryResponse
 import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClosetListResponseDto
+import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClosetViewResponseDto
 import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClothesDetailDto
 import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClothesDetailInnerDto
 import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClothingDeleteResponseDto
@@ -32,24 +33,31 @@ interface ClosetApi {
 
 
     // 카테고리 조회
-    @GET("/api/outfit/categories")
+    @GET("api/outfit/categories")
     suspend fun getCategories(): CategoryResponse
 
     // 옷장 목록 조회
-    @GET("/api/closet")
+    @GET("api/closet")
     suspend fun getClosets(): ClosetListResponseDto
 
     // 옷 정보 수정
-    @PATCH("/api/upload/clothing/{clothingId}")
+    @PATCH("api/upload/clothing/{clothingId}")
     suspend fun updateClothing(
         @Path("clothingId") clothingId: Long,
         @Body body: ClothingUpdateRequestDto
     ): ClothingUpdateResponseDto
 
     // 옷 삭제
-    @DELETE("/api/upload/clothing/{clothingId}")
+    @DELETE("api/upload/clothing/{clothingId}")
     suspend fun deleteClothing(
         @Path("clothingId") clothingId: Long
     ): ClothingDeleteResponseDto
+
+    // 옷장 뷰 조회
+    @GET("api/closet/{closetId}/view")
+    suspend fun getClosetView(
+        @Path("closetId") closetId: Int
+    ): ClosetViewResponseDto
+
 
 }
