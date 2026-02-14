@@ -175,11 +175,10 @@ class ClosetCardFragment : Fragment() {
                     return@launch
                 }
 
-                closetAdapter.submitList(list){
-                    closetAdapter.notifyItemChanged(0)
-                }
+                closetAdapter.submitList(list)
 
                 selectedClosetId = list.first().closetId
+                Log.d("API_TEST", "$selectedClosetId")
                 fetchClosetDetail(selectedClosetId!!)
 
                 Log.d("API_TEST", "옷장 목록 로드 성공: ${list.size}개")
@@ -201,75 +200,86 @@ class ClosetCardFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val response = closetApi.getClosetView(closetId)
-                val data = response.data
+                val data = response.data ?: return@launch
 
-
-                if (response.success != true || data == null) {
-                    Log.e("API_TEST", "옷장 뷰 실패 또는 data=null")
-                    return@launch
-                }
-
+                val closetName = data.closet.closet_name
                 val closetType = data.closet.closet_type
                 val sections = data.sections
 
-                applySectionsFromApi(closetId, closetType, sections)
+                applySectionsFromApi(
+                    closetId = closetId,
+                    closetName = closetName,
+                    closetType = closetType,
+                    sections = sections
+                )
+
 
             } catch (e: Exception) {
                 Log.e("API_TEST", "옷장 뷰 통신 실패: ${e.message}")
-
-                binding.btnHanger1.isEnabled = false
-                binding.btnHanger2.isEnabled = false
-                binding.btnDrawer1.isEnabled = false
-                binding.btnDrawer2.isEnabled = false
-
-                // 타이틀만 보여주고 싶으면 텍스트만 세팅(클릭은 막음)
-                binding.tvHanger1Title.text = "불러오기 실패"
-                binding.tvHanger2Title.text = ""
-                binding.tvDrawer1Title.text = ""
-                binding.tvDrawer2Title.text = ""
             }
         }
     }
 
+
     private fun applySectionsFromApi(
         closetId: Int,
+        closetName: String,
         closetType: String,
         sections: List<ClosetViewSectionDto>
     ) {
         selectedClosetId = closetId
 
+        binding.tvHanger1Title.text = ""
+        binding.tvHanger2Title.text = ""
+        binding.tvDrawer1Title.text = ""
+        binding.tvDrawer2Title.text = ""
+
+        binding.btnHanger1.setOnClickListener(null)
+        binding.btnHanger2.setOnClickListener(null)
+        binding.btnDrawer1.setOnClickListener(null)
+        binding.btnDrawer2.setOnClickListener(null)
+
+        binding.btnHanger1.isEnabled = false
+        binding.btnHanger2.isEnabled = false
+        binding.btnDrawer1.isEnabled = false
+        binding.btnDrawer2.isEnabled = false
+
         val hangers = sections.filter { it.section_type == "행거" }
         val drawers = sections.filter { it.section_type == "서랍" }
 
-        // 행거1
         hangers.getOrNull(0)?.let { s ->
             binding.tvHanger1Title.text = s.section_name
+            binding.btnHanger1.isEnabled = true
             binding.btnHanger1.setOnClickListener {
-                openContainer(closetId, s.section_id, s.section_name, closetType)
+                Log.d("NAV", "CLICK hanger1 closetId=$closetId sectionId=${s.section_id} name=${s.section_name}")
+                openContainer(closetId, s.section_id, s.section_name, closetName)
             }
         }
 
-        // 행거2
         hangers.getOrNull(1)?.let { s ->
             binding.tvHanger2Title.text = s.section_name
+            binding.btnHanger2.isEnabled = true
             binding.btnHanger2.setOnClickListener {
-                openContainer(closetId, s.section_id, s.section_name, closetType)
+                Log.d("NAV", "CLICK hanger1 closetId=$closetId sectionId=${s.section_id} name=${s.section_name}")
+                openContainer(closetId, s.section_id, s.section_name, closetName)
             }
         }
 
-        // 서랍1
         drawers.getOrNull(0)?.let { s ->
             binding.tvDrawer1Title.text = s.section_name
+            binding.btnDrawer1.isEnabled = true
             binding.btnDrawer1.setOnClickListener {
-                openContainer(closetId, s.section_id, s.section_name, closetType)
+                Log.d("NAV", "CLICK hanger1 closetId=$closetId sectionId=${s.section_id} name=${s.section_name}")
+                openContainer(closetId, s.section_id, s.section_name, closetName)
             }
         }
 
-        // 서랍2
         drawers.getOrNull(1)?.let { s ->
             binding.tvDrawer2Title.text = s.section_name
+            binding.btnDrawer2.isEnabled = true
             binding.btnDrawer2.setOnClickListener {
-                openContainer(closetId, s.section_id, s.section_name, closetType)
+                Log.d("NAV", "CLICK hanger1 closetId=$closetId sectionId=${s.section_id} name=${s.section_name}")
+                openContainer(closetId, s.section_id, s.section_name, closetName)
             }
         }
     }
