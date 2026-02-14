@@ -12,15 +12,19 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.snackbar.Snackbar
 import ddwu.com.mobile.wearly_frontend.MainActivity
 import ddwu.com.mobile.wearly_frontend.R
+import ddwu.com.mobile.wearly_frontend.TokenManager
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityLoginBinding
 import ddwu.com.mobile.wearly_frontend.login.data.AuthViewModel
 import kotlin.getValue
@@ -60,79 +64,43 @@ class LoginActivity : AppCompatActivity() {
         // (디자인) 로그인 화면 "회원가입" 밑줄
         binding.loginSignupTv.paintFlags = binding.loginSignupTv.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
+        // 테스트 계정 자동 로그인
+        binding.loginIdEt.setText("test2@email.com")
+        binding.loginPwEt.setText("password1234")
+
+
 
 
         // --------------- 이벤트 리스너 ---------------
 
 
-        // 아이디 유효성 검사 -> 뷰모델에 저장
+        // 아이디 유효성 검사 호출
         binding.loginIdEt.setOnFocusChangeListener { view, hasFocus ->
             if (!hasFocus) {
-                val v = view as EditText
-                val errorText = binding.loginIdWrongTv
-                val input = v.text.toString()
-
-                when {
-                    // 아이디가 이메일 형식이 아닐 때
-                    !android.util.Patterns.EMAIL_ADDRESS.matcher(input).matches() -> {
-                        errorText.text = "올바르지 않은 형식입니다. 다시 입력해주세요."
-                        errorText.visibility = View.VISIBLE
-                        v.isSelected = true
-                    }
-
-                    else -> {
-                        errorText.visibility = View.GONE
-                        v.isSelected = false
-                        sharedViewModel.userId.value = input
-                    }
-                }
+                validateId(binding.loginIdEt, binding.loginIdWrongTv)
             }
         }
 
-        // 비밀번호 유효성 검사 -> 뷰모델에 저장
+        // 비밀번호 유효성 검사 호출
         binding.loginPwEt.setOnFocusChangeListener { view, hasFocus ->
             if (!hasFocus) {
-                val v = view as EditText
-                val errorText = binding.loginPwWrongTv
-                val input = v.text.toString()
-
-                when {
-                    // 비밀번호가 8자 미만일 때
-                    input.length < 8 -> {
-                        errorText.text = "8자 이상 입력해주세요."
-                        errorText.visibility = View.VISIBLE
-                        v.isSelected = true
-                    }
-
-                    else -> {
-                        errorText.visibility = View.GONE
-                        v.isSelected = false
-                        sharedViewModel.userPassword.value = input
-                    }
-                }
+               validatePw(binding.loginPwEt, binding.loginPwWrongTv)
             }
-
         }
-
 
         // 로그인
         binding.loginSubmitBtn.setOnClickListener {
-            if(binding.loginIdEt.text.toString().isEmpty()) {
-                binding.loginIdWrongTv.text = "아이디를 입력해주세요."
-                binding.loginIdWrongTv.visibility = View.VISIBLE
-                binding.loginIdEt.isSelected = true
-            }
-            if(binding.loginPwEt.text.toString().isEmpty()) {
-                binding.loginPwWrongTv.text = "비밀번호를 입력해주세요."
-                binding.loginPwWrongTv.visibility = View.VISIBLE
-                binding.loginPwEt.isSelected = true
+            validateId(binding.loginIdEt, binding.loginIdWrongTv)
+            validatePw(binding.loginPwEt, binding.loginPwWrongTv)
+
+            if (sharedViewModel.userId.value.isNullOrEmpty() or sharedViewModel.userPassword.value.isNullOrEmpty()) {
+                return@setOnClickListener
             }
 
-//            if (sharedViewModel.userId.value.isNullOrEmpty() or sharedViewModel.userPassword.value.isNullOrEmpty()) {
-//                return@setOnClickListener
-//            }
+            val tm = TokenManager(this)
+            sharedViewModel.requestLogin(tm)
 
-            sharedViewModel.requestLogin()
+            Log.d("token", tm.toString())
         }
 
         sharedViewModel.isLoginSuccess.observe(this) { isSuccess ->
@@ -143,9 +111,10 @@ class LoginActivity : AppCompatActivity() {
                 finish()
             }
         }
+
         sharedViewModel.errorMessage.observe(this) { message ->
             if (!message.isNullOrEmpty()){
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
 
                 sharedViewModel.errorMessage.value = null
             }
@@ -175,6 +144,62 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 아이디 유효성 검사를 위한 함수
+     */
+    private fun validateId(editText: EditText, errorTextView: TextView) {
+        val input = editText.text.toString()
+
+        when {
+            // 비어있는 경우
+            input.isEmpty() -> {
+                errorTextView.text = "아이디를 입력해주세요."
+                errorTextView.visibility = View.VISIBLE
+                editText.isSelected = true
+            }
+            // 이메일 형식이 아닐 때
+            !android.util.Patterns.EMAIL_ADDRESS.matcher(input).matches() -> {
+                errorTextView.text = "올바르지 않은 형식입니다. 다시 입력해주세요."
+                errorTextView.visibility = View.VISIBLE
+                editText.isSelected = true
+            }
+            // 통과
+            else -> {
+                errorTextView.visibility = View.GONE
+                editText.isSelected = false
+                sharedViewModel.userId.value = input // 뷰모델에 저장
+            }
+        }
+    }
+
+    /**
+     * 비밀번호 유효성 검사를 위한 함수
+     */
+    private fun validatePw(editText: EditText, errorTextView: TextView) {
+        val input = editText.text.toString()
+
+        when {
+            // 비어있는 경우
+            input.isEmpty() -> {
+                errorTextView.text = "비밀번호를 입력해주세요."
+                errorTextView.visibility = View.VISIBLE
+                editText.isSelected = true
+            }
+            // 비밀번호가 8자 미만일 때
+            input.length < 8 -> {
+                errorTextView.text = "8자 이상 입력해주세요."
+                errorTextView.visibility = View.VISIBLE
+                editText.isSelected = true
+            }
+            // 통과
+            else -> {
+                errorTextView.visibility = View.GONE
+                editText.isSelected = false
+                sharedViewModel.userPassword.value = input // 뷰모델에 저장
+            }
+        }
+    }
+
 
     /**
      * 빈 화면 터치 시 포커스 해제를 위한 함수
@@ -186,11 +211,9 @@ class LoginActivity : AppCompatActivity() {
                 val outRect = Rect()
                 v.getGlobalVisibleRect(outRect)
 
-                // 터치 지점이 현재 포커스된 EditText 밖이라면?
                 if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
-                    v.clearFocus() // 포커스 해제
+                    v.clearFocus()
 
-                    // 키보드 숨기기
                     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(v.windowToken, 0)
                 }

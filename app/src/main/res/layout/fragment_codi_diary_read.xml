@@ -54,19 +54,20 @@
         android:layout_marginHorizontal="30dp"
         android:layout_marginVertical="10dp"
 
+        android:clickable="false"
+
 
         app:layout_constraintTop_toBottomOf="@id/diary_read_day_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/diary_read_btns_layout">
 
-        <ImageView
-            android:id="@+id/diary_read_clothes_iv"
+        <FrameLayout
+            android:id="@+id/diary_read_clothes_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            android:background="@color/box_gray" />
+            android:layout_height="match_parent" />
     </androidx.cardview.widget.CardView>
+
 
 
 
@@ -91,12 +92,12 @@
 
         <ImageView
             android:id="@+id/diary_read_weather_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
 
             android:layout_marginEnd="5dp"
 
-            android:src="@drawable/img_weather_snowy"
+            android:src="@drawable/ic_weather_snowy"
             android:scaleType="centerInside"/>
 
         <TextView
@@ -104,25 +105,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:text="0°/0°"
-            android:textSize="16sp"/>
+            android:text="0°/0°" />
 
     </LinearLayout>
 
 
     <FrameLayout
         android:id="@+id/diary_read_like_btn_toggle"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
 
         android:background="@drawable/bg_diary_info_box"
 
-        android:padding="3dp"
+        android:padding="5dp"
 
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
 
         android:translationZ="10dp"
+
+        android:clickable="true"
 
         app:layout_constraintTop_toTopOf="@id/diary_read_clothes_cv"
         app:layout_constraintEnd_toEndOf="@id/diary_read_clothes_cv">
@@ -132,14 +134,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
+            android:clickable="false"
+
+            android:src="@drawable/btn_like_unselected"
             android:background="@android:color/transparent"
-            android:scaleType="centerInside"
-            android:src="@drawable/btn_like_unselected" />
+            android:scaleType="centerInside" />
 
         <ImageButton
             android:id="@+id/diary_read_like_selected"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
+            android:clickable="false"
 
             android:src="@drawable/btn_like_selected"
             android:background="@android:color/transparent"
@@ -250,11 +256,13 @@
         <TextView
             android:id="@+id/diary_read_tv"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
 
             android:gravity="top"
             android:overScrollMode="always"
             android:scrollbars="vertical"
+
+            android:maxLines="6"
 
             android:text="여기에 저장된 일기 내용이 출력됩니다."
             android:textColor="@color/black"

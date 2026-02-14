@@ -20,6 +20,12 @@ require(baseUrlDev.endsWith("/")) {
     "BASE_URL must end with '/' (check local.properties)"
 }
 
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+
 android {
     namespace = "ddwu.com.mobile.wearly_frontend"
     compileSdk = 36
@@ -48,6 +54,9 @@ android {
             "TEST_TOKEN",
             "\"$testToken\""
         )
+
+        val apiToken = localProperties.getProperty("TEST_API_TOKEN") ?: ""
+        buildConfigField("String", "TEST_API_TOKEN", "\"$apiToken\"")
     }
 
     buildTypes {
@@ -60,6 +69,8 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -117,5 +128,8 @@ dependencies {
 
     // 통신 로그
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // Locale
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 
 }

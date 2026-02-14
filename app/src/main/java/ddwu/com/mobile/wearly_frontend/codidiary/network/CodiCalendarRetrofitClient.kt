@@ -1,6 +1,5 @@
-package ddwu.com.mobile.wearly_frontend.codiDiary.network
+package ddwu.com.mobile.wearly_frontend.codidiary.network
 
-import ddwu.com.mobile.wearly_frontend.codiDiary.data.CodiDiaryRecordRequest
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,8 +25,8 @@ object CodiCalendarRetrofitClient {
             .build()
     }
 
-    val weatherService: WeaklyWeatherService by lazy {
-        retrofit.create(WeaklyWeatherService::class.java)
+    val weatherService: WeatherService by lazy {
+        retrofit.create(WeatherService::class.java)
     }
 
     val codiDiaryService: CodiDiaryService by lazy {

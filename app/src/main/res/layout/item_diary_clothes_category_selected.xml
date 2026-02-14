@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+
+    android:layout_marginEnd="8dp"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageButton
+        android:id="@+id/diary_selected_clothes_close_btn"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+
+        android:src="@drawable/btn_close_bg_gray"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        android:translationZ="10dp"
+        android:outlineProvider="none" />
+
+    <ImageView
+        android:id="@+id/diary_selected_clothes_iv"
+        android:layout_width="73dp"
+        android:layout_height="73dp"
+
+        android:src="@drawable/cloth_01"
+        android:background="@drawable/bg_calendar_item_selector"
+
+        android:padding="5dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

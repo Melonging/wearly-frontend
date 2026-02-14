@@ -8,7 +8,7 @@
     android:background="@color/white">
 
     <ImageButton
-        android:id="@+id/diary_back_btn"
+        android:id="@+id/diary_edit_back_btn"
         android:layout_width="30dp"
         android:layout_height="30dp"
 
@@ -25,7 +25,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/diary_day_tv"
+        android:id="@+id/diary_edit_day_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -38,14 +38,14 @@
         android:paddingBottom="15dp"
 
 
-        app:layout_constraintTop_toTopOf="@id/diary_back_btn"
+        app:layout_constraintTop_toTopOf="@id/diary_edit_back_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/diary_back_btn"/>
+        app:layout_constraintBottom_toBottomOf="@id/diary_edit_back_btn"/>
 
 
     <ImageButton
-        android:id="@+id/diary_submit_btn"
+        android:id="@+id/diary_edit_submit_btn"
         android:layout_width="30dp"
         android:layout_height="30dp"
 
@@ -56,13 +56,13 @@
         android:layout_marginEnd="30dp"
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/diary_day_tv"
-        app:layout_constraintBottom_toBottomOf="@id/diary_day_tv" />
+        app:layout_constraintTop_toTopOf="@id/diary_edit_day_tv"
+        app:layout_constraintBottom_toBottomOf="@id/diary_edit_day_tv" />
 
 
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/diary_clothes_cv"
+        android:id="@+id/diary_edit_clothes_cv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
 
@@ -73,13 +73,13 @@
 
         android:clickable="false"
 
-        app:layout_constraintTop_toBottomOf="@id/diary_day_tv"
+        app:layout_constraintTop_toBottomOf="@id/diary_edit_day_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/diary_layout">
+        app:layout_constraintBottom_toTopOf="@id/diary_edit_layout">
 
         <FrameLayout
-            android:id="@+id/diary_clothes_frame"
+            android:id="@+id/diary_edit_clothes_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </androidx.cardview.widget.CardView>
@@ -102,11 +102,11 @@
 
         android:background="@drawable/bg_diary_info_box"
 
-        app:layout_constraintTop_toTopOf="@id/diary_clothes_cv"
-        app:layout_constraintStart_toStartOf="@id/diary_clothes_cv">
+        app:layout_constraintTop_toTopOf="@id/diary_edit_clothes_cv"
+        app:layout_constraintStart_toStartOf="@id/diary_edit_clothes_cv">
 
         <ImageView
-            android:id="@+id/diary_weather_icon"
+            android:id="@+id/diary_edit_weather_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
 
@@ -116,7 +116,7 @@
             android:scaleType="centerInside"/>
 
         <TextView
-            android:id="@+id/diary_temp_tv"
+            android:id="@+id/diary_edit_temp_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -126,7 +126,7 @@
 
 
     <FrameLayout
-        android:id="@+id/diary_like_btn_toggle"
+        android:id="@+id/diary_edit_like_btn_toggle"
         android:layout_width="30dp"
         android:layout_height="30dp"
 
@@ -141,11 +141,11 @@
 
         android:clickable="true"
 
-        app:layout_constraintTop_toTopOf="@id/diary_clothes_cv"
-        app:layout_constraintEnd_toEndOf="@id/diary_clothes_cv">
+        app:layout_constraintTop_toTopOf="@id/diary_edit_clothes_cv"
+        app:layout_constraintEnd_toEndOf="@id/diary_edit_clothes_cv">
 
         <ImageButton
-            android:id="@+id/diary_like_unselected"
+            android:id="@+id/diary_edit_like_unselected"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
@@ -156,7 +156,7 @@
             android:scaleType="centerInside" />
 
         <ImageButton
-            android:id="@+id/diary_like_selected"
+            android:id="@+id/diary_edit_like_selected"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
@@ -172,7 +172,7 @@
 
 
     <LinearLayout
-        android:id="@+id/diary_layout"
+        android:id="@+id/diary_edit_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
@@ -195,7 +195,7 @@
             android:layout_marginTop="20dp"/>
 
         <EditText
-            android:id="@+id/diary_title_et"
+            android:id="@+id/diary_edit_title_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
@@ -229,7 +229,7 @@
             android:layout_marginBottom="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/diary_et"
+                android:id="@+id/diary_edit_et"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
 
