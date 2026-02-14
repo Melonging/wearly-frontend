@@ -21,6 +21,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.snackbar.Snackbar
 import ddwu.com.mobile.wearly_frontend.MainActivity
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.TokenManager
@@ -113,7 +114,7 @@ class LoginActivity : AppCompatActivity() {
 
         sharedViewModel.errorMessage.observe(this) { message ->
             if (!message.isNullOrEmpty()){
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
 
                 sharedViewModel.errorMessage.value = null
             }

@@ -179,7 +179,7 @@ class AuthViewModel: ViewModel() {
                     val errorData = Gson().fromJson(errorBody, LoginResponse::class.java)
 
                     val msg = when (response.code()) {
-                        // toast 메시지
+                        // 스낵바 메시지
                         400 -> "형식 오류/누락"
                         401 -> "아이디 또는 비밀번호 불일치"
                         429 -> "시도 너무 많음"

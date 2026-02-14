@@ -1,4 +1,4 @@
-package ddwu.com.mobile.wearly_frontend.codidiary.data
+package ddwu.com.mobile.wearly_frontend.category.data
 
 data class ClothesResponse(
     val success: Boolean,
@@ -19,9 +19,9 @@ data class CategoryResponse(
     val data: CategoryData
 )
 
-data class CategoryData(
-    val categories: List<CategoryItem>
-)
+//data class CategoryData(
+//    val categories: List<CategoryItem>
+//)
 
 data class CategoryItem(
     val category_id: Int,

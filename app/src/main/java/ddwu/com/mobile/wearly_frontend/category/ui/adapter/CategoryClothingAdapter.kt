@@ -11,7 +11,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import ddwu.com.mobile.wearly_frontend.codidiary.data.ClothingItem
+import ddwu.com.mobile.wearly_frontend.category.data.ClothingItem
 import ddwu.com.mobile.wearly_frontend.databinding.ItemClothingRecordBinding
 
 class CategoryClothingAdapter(

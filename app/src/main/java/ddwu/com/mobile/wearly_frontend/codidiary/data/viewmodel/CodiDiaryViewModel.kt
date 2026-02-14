@@ -6,10 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ddwu.com.mobile.wearly_frontend.codidiary.data.CategoryItem
-import ddwu.com.mobile.wearly_frontend.codidiary.data.ClothItem
+import ddwu.com.mobile.wearly_frontend.category.data.CategoryItem
+import ddwu.com.mobile.wearly_frontend.codidiary.data.DiaryClothItem
 import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryEditRequest
 import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryRead
+import ddwu.com.mobile.wearly_frontend.codidiary.data.DiaryCategoryItem
 import ddwu.com.mobile.wearly_frontend.codidiary.network.CodiCalendarRetrofitClient.codiDiaryService
 import kotlinx.coroutines.launch
 
@@ -29,13 +30,13 @@ class CodiDiaryViewModel : ViewModel() {
     private val _deleteStatus = MutableLiveData<Boolean>()
     val deleteStatus: LiveData<Boolean> = _deleteStatus
 
-    private val _categoryList = MutableLiveData<List<CategoryItem>>()
-    val categoryList: LiveData<List<CategoryItem>> = _categoryList
+    private val _categoryList = MutableLiveData<List<DiaryCategoryItem>>()
+    val categoryList: LiveData<List<DiaryCategoryItem>> = _categoryList
 
-    private val _clothesList = MutableLiveData<List<ClothItem>>()
-    val clothesList: LiveData<List<ClothItem>> = _clothesList
+    private val _clothesList = MutableLiveData<List<DiaryClothItem>>()
+    val clothesList: LiveData<List<DiaryClothItem>> = _clothesList
 
-    private val clothesCache = mutableMapOf<Int, List<ClothItem>>()
+    private val clothesCache = mutableMapOf<Int, List<DiaryClothItem>>()
 
     /**
      * 달력에 일기가 기록된 날짜 리스트를 받아오는 API 호출
@@ -66,6 +67,8 @@ class CodiDiaryViewModel : ViewModel() {
      * @param request 저장된 형식
      */
     fun saveRecord(token: String, isWeatherLog: Boolean, request: CodiDiaryRecordRequest) {
+
+
         viewModelScope.launch {
             try {
                 val response = codiDiaryService.postWearRecord(

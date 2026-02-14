@@ -6,16 +6,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import ddwu.com.mobile.wearly_frontend.codidiary.data.ClothItem
+import ddwu.com.mobile.wearly_frontend.codidiary.data.DiaryClothItem
 import ddwu.com.mobile.wearly_frontend.databinding.ItemDiaryClothesCategorySelectedBinding
 
-class SelectedCodiClothesAdapter(private val onDeleteClick: (ClothItem) -> Unit) :
-    ListAdapter<ClothItem, SelectedCodiClothesAdapter.ViewHolder>(DiffCallback) {
+class SelectedCodiClothesAdapter(private val onDeleteClick: (DiaryClothItem) -> Unit) :
+    ListAdapter<DiaryClothItem, SelectedCodiClothesAdapter.ViewHolder>(DiffCallback) {
 
     inner class ViewHolder(private val binding: ItemDiaryClothesCategorySelectedBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: ClothItem) {
+        fun bind(item: DiaryClothItem) {
             Glide.with(binding.root.context)
                 .load(item.image)
                 .into(binding.diarySelectedClothesIv)
@@ -38,12 +38,12 @@ class SelectedCodiClothesAdapter(private val onDeleteClick: (ClothItem) -> Unit)
     }
 
     companion object {
-        val DiffCallback = object : DiffUtil.ItemCallback<ClothItem>() {
-            override fun areItemsTheSame(oldItem: ClothItem, newItem: ClothItem): Boolean {
+        val DiffCallback = object : DiffUtil.ItemCallback<DiaryClothItem>() {
+            override fun areItemsTheSame(oldItem: DiaryClothItem, newItem: DiaryClothItem): Boolean {
                 return oldItem.clothing_id == newItem.clothing_id
             }
 
-            override fun areContentsTheSame(oldItem: ClothItem, newItem: ClothItem): Boolean {
+            override fun areContentsTheSame(oldItem: DiaryClothItem, newItem: DiaryClothItem): Boolean {
                 return oldItem == newItem
             }
         }

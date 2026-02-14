@@ -6,10 +6,10 @@ class CodiClothesResponse (
 )
 
 data class ClothesListData(
-    val clothes: List<ClothItem>
+    val clothes: List<DiaryClothItem>
 )
 
-data class ClothItem(
+data class DiaryClothItem(
     val clothing_id: Int,
     val image: String,
 

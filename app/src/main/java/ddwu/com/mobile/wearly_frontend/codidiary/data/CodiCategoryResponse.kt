@@ -6,10 +6,10 @@ data class CodiCategoryResponse(
 )
 
 data class CategoryListData(
-    val categories: List<CategoryItem>
+    val categories: List<DiaryCategoryItem>
 )
 
-data class CategoryItem(
+data class DiaryCategoryItem(
     val category_id: Int,
-    val name: String
+    val name: String,
 )

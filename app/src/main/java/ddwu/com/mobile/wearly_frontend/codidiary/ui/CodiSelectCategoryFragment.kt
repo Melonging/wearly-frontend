@@ -15,7 +15,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.TokenManager
-import ddwu.com.mobile.wearly_frontend.codidiary.data.ClothItem
+import ddwu.com.mobile.wearly_frontend.codidiary.data.DiaryClothItem
 import ddwu.com.mobile.wearly_frontend.codidiary.data.viewmodel.CodiDiaryViewModel
 import ddwu.com.mobile.wearly_frontend.codidiary.data.viewmodel.WeatherViewModel
 import ddwu.com.mobile.wearly_frontend.codidiary.ui.adapter.CodiClothesAdapter
@@ -34,7 +34,7 @@ class CodiSelectCategoryFragment : Fragment() {
 
     private lateinit var codiClothesAdapter: CodiClothesAdapter
 
-    private val selectedItems = mutableListOf<ClothItem>()
+    private val selectedItems = mutableListOf<DiaryClothItem>()
     private lateinit var selectedAdapter: SelectedCodiClothesAdapter
 
     private var currentIconCode: Int = 0

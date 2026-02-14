@@ -7,35 +7,15 @@ data class CodiDiaryReadResponse(
 )
 
 data class CodiDiaryRead(
+    val idx: Int,
     val date_id: Int,
-    val wear_date: String,
-    val memo: String?,
-    val weather: CodiDiaryReadWeather?,
-    val outfit: CodiDiaryReadOutfit?
-)
-
-data class CodiDiaryReadWeather(
-    val temp_min: Double,
-    val temp_max: Double,
-    val weather_icon: String
-)
-
-data class CodiDiaryReadOutfit(
     val outfit_id: Int,
-    val outfit_name: String,
-    val is_heart: Boolean,
-    val clothes: List<CodiDiaryReadCloth>?
-)
-
-data class CodiDiaryReadCloth(
-    val clothing_id: Int,
-    val image: String,
-    val category_name: String,
-    val layout: CodiDiaryReadLayout
-)
-
-data class CodiDiaryReadLayout(
-    val x_ratio: Double,
-    val y_ratio: Double,
-    val z_index: Int
+    val wear_date: String,
+    val user_id: Int,
+    val memo: String?,
+    val temp_max: Double,
+    val temp_min: Double,
+    val weather_icon: String?,
+    val image_url: String?,
+    val is_heart: Boolean
 )
