@@ -3,6 +3,7 @@ package ddwu.com.mobile.wearly_frontend.upload.data.repository
 import android.util.Log
 import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.Category
 import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClosetDto
+import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClosetViewDataDto
 import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClothesDetailDto
 import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClothesDetailInnerDto
 import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClothingUpdateRequestDto
@@ -43,6 +44,16 @@ class ClosetRepository(
         return res.data
     }
 
+
+    suspend fun fetchClosetView(closetId: Int): ClosetViewDataDto {
+        val res = closetApi.getClosetView(closetId)
+
+        if (!res.success || res.data == null) {
+            throw IllegalStateException("옷장 뷰 조회 실패")
+        }
+
+        return res.data
+    }
 
 
 

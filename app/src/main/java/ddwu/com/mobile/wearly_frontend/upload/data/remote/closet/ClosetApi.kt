@@ -14,6 +14,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ClosetApi {
@@ -41,7 +42,7 @@ interface ClosetApi {
     suspend fun getClosets(): ClosetListResponseDto
 
     // 옷 정보 수정
-    @PATCH("api/upload/clothing/{clothingId}")
+    @PUT("api/upload/clothing/{clothingId}")
     suspend fun updateClothing(
         @Path("clothingId") clothingId: Long,
         @Body body: ClothingUpdateRequestDto

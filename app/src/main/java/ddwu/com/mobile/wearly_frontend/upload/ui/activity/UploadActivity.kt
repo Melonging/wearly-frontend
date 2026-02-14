@@ -119,10 +119,18 @@ class UploadActivity : AppCompatActivity() {
 
         // 섹션 전달 받기
         val name = intent.getStringExtra("containerName") ?: ""
+        binding.uploadTitleTv.text = name
+
         currentSectionId = intent.getIntExtra("sectionId", -1)
         val closet = intent.getStringExtra("closet") ?: ""
         Log.d("UPLOAD", "받은 containerName=$name closet=$closet sectionId=$currentSectionId")
 
+        val closetId = intent.getIntExtra("closetId", -1)
+        if (closetId == -1) {
+            Log.e("UPLOAD", "closetId 없음")
+            finish()
+            return
+        }
         if (currentSectionId == -1) { finish(); return }
 
         val layoutManager = GridLayoutManager(this, 3)
@@ -139,6 +147,7 @@ class UploadActivity : AppCompatActivity() {
                         putExtra("closet", closet)
                         putExtra("clothingId", clothingId)
                         putExtra("imageUrl", imageItem.imageUrl)
+                        putExtra("closetId", closetId)
                     }
                 )
             }
@@ -156,6 +165,7 @@ class UploadActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
+
 
 
     }
