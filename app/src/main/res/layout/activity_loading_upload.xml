@@ -5,7 +5,9 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:paddingHorizontal="4dp"
+    android:paddingVertical="8dp">
 
     <!-- 가운데 큰 원 아이콘 -->
     <ImageView
@@ -49,9 +51,12 @@
     <!-- 단계 표시 -->
     <LinearLayout
         android:id="@+id/stepRow"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="46dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="46dp"
+        android:baselineAligned="false"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,26 +65,24 @@
 
         <include
             android:id="@+id/step1"
-            layout="@layout/step_item"/>
-
-        <Space
-            android:layout_width="44dp"
-            android:layout_height="1dp"/>
+            layout="@layout/step_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <include
             android:id="@+id/step2"
-            layout="@layout/step_item"/>
-
-        <Space
-            android:layout_width="44dp"
-            android:layout_height="1dp"/>
+            layout="@layout/step_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <include
             android:id="@+id/step3"
-            layout="@layout/step_item"/>
-
+            layout="@layout/step_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
     </LinearLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

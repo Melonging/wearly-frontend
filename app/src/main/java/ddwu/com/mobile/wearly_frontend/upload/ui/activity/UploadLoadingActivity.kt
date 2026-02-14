@@ -24,20 +24,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.random.Random
-import java.util.concurrent.atomic.AtomicBoolean
 
 class UploadLoadingActivity : AppCompatActivity() {
 
+
+    // viewBinding
     private lateinit var binding: ActivityLoadingUploadBinding
+
+    // step
 
     private lateinit var s1: StepItemBinding
     private lateinit var s2: StepItemBinding
     private lateinit var s3: StepItemBinding
 
     private var pollingJob: Job? = null
-
-    private val didFinish = AtomicBoolean(false)
-    private var uiJob: Job? = null
 
     private companion object {
         private const val TOTAL_MS = 4500L
@@ -54,6 +54,7 @@ class UploadLoadingActivity : AppCompatActivity() {
         private const val JITTER_MS = 180L
     }
 
+    // 결과
     private val resultDeferred = CompletableDeferred<UploadResult>()
 
     data class UploadResult(
@@ -65,6 +66,8 @@ class UploadLoadingActivity : AppCompatActivity() {
     private fun <T> CompletableDeferred<T>.getCompletedOrNull(): T? =
         if (isCompleted && !isCancelled) runCatching { getCompleted() }.getOrNull() else null
 
+
+    // step_UI
 
     private val stepTitles = listOf("배경 제거 중", "이미지 분석 중", "카테고리 분류 중")
     private val stepSubs = listOf(
@@ -83,16 +86,17 @@ class UploadLoadingActivity : AppCompatActivity() {
     //  API 결과 저장
     @Volatile private var resultText: String? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityLoadingUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        s1 = binding.step1
-        s2 = binding.step2
-        s3 = binding.step3
+        // step 바인딩
+
+        s1 = StepItemBinding.bind(findViewById(R.id.step1))
+        s2 = StepItemBinding.bind(findViewById(R.id.step2))
+        s3 = StepItemBinding.bind(findViewById(R.id.step3))
 
         val photoUriStr = intent.getStringExtra("photoUri")
         val photoUri = photoUriStr?.let(Uri::parse)
@@ -108,10 +112,14 @@ class UploadLoadingActivity : AppCompatActivity() {
         }
 
         //  초기 UI
-        setStepState(s1, 1, stepLabels[0], isActive = true, isCompleted = false)
+        setStepState(s1, 1, stepLabels[0], isActive = true,  isCompleted = false)
         setStepState(s2, 2, stepLabels[1], isActive = false, isCompleted = false)
         setStepState(s3, 3, stepLabels[2], isActive = false, isCompleted = false)
-        animateStepFocus(active = s1, inactive1 = s2, inactive2 = s3)
+
+
+        scaleStep(s1, 1.18f, duration = 0)
+        scaleStep(s2, 1.0f, duration = 0)
+        scaleStep(s3, 1.0f, duration = 0)
 
         binding.ivSpinner.apply {
             scaleX = 1f
@@ -127,7 +135,7 @@ class UploadLoadingActivity : AppCompatActivity() {
         //  1) 업로드+폴링은 백그라운드로 시작
         startUploadAndPolling(photoUri, sectionId)
 
-        uiJob = lifecycleScope.launch {
+        lifecycleScope.launch {
             delay(STEP_MS)
             applyStep(2)
 
@@ -146,8 +154,6 @@ class UploadLoadingActivity : AppCompatActivity() {
     }
 
     private fun finishWithUploadResult(res: UploadResult) {
-        if (!didFinish.compareAndSet(false, true)) return
-
         pollingJob?.cancel()
 
         val data = Intent().apply {
@@ -259,23 +265,56 @@ class UploadLoadingActivity : AppCompatActivity() {
         return (smooth + jitter).coerceIn(POLL_MIN_MS, POLL_MAX_MS)
     }
 
-    private fun applyStep(step: Int) {
+    private suspend fun applyStep(step: Int) {
         when (step) {
             2 -> {
+                // 1) s1: 숫자→체크 디졸브 먼저
+                setStepState(s1, 1, stepLabels[0], isActive = true, isCompleted = false)
+                dissolveMarkToCheck(s1, 1)         // 숫자 -> ✓
+                delay(360)
+
+                // 2) s1: 완료 스타일 적용 (이때 tvMark는 이미 ✓)
                 setStepState(s1, 1, stepLabels[0], isActive = false, isCompleted = true)
+
+                // 3) s1: 기본 크기(1.0)로 복귀
+                scaleStep(s1, 1.0f, duration = 220)
+                delay(220)
+
+                // 4) s2: 커짐 + 활성
                 setStepState(s2, 2, stepLabels[1], isActive = true, isCompleted = false)
-                animateStepFocus(active = s2, inactive1 = s1, inactive2 = s3)
+                scaleStep(s2, 1.18f, duration = 240)
+
+                swapText(binding.tvTitle, stepTitles[1])
+                swapText(binding.tvSub, stepSubs[1])
+                playCenterSwap(stepIcons[1])
             }
+
             3 -> {
+                // s2: 숫자→체크 먼저
+                setStepState(s2, 2, stepLabels[1], isActive = true, isCompleted = false)
+                dissolveMarkToCheck(s2, 2)
+                delay(360)
+
+                // 완료 스타일
                 setStepState(s2, 2, stepLabels[1], isActive = false, isCompleted = true)
+
+                // 기본 크기 복귀
+                scaleStep(s2, 1.0f, duration = 220)
+                delay(220)
+
+                // s3 커짐 + 활성
                 setStepState(s3, 3, stepLabels[2], isActive = true, isCompleted = false)
-                animateStepFocus(active = s3, inactive1 = s1, inactive2 = s2)
+                scaleStep(s3, 1.18f, duration = 240)
+
+                // s1 완료 유지 + 기본 크기
+                setStepState(s1, 1, stepLabels[0], isActive = false, isCompleted = true)
+                scaleStep(s1, 1.0f, duration = 0)
+
+                swapText(binding.tvTitle, stepTitles[2])
+                swapText(binding.tvSub, stepSubs[2])
+                playCenterSwap(stepIcons[2])
             }
         }
-
-        crossFadeText(binding.tvTitle, stepTitles[step - 1])
-        crossFadeText(binding.tvSub, stepSubs[step - 1])
-        playCenterSwap(stepIcons[step - 1])
     }
 
     private fun crossFadeText(tv: TextView, newText: String, duration: Long = 220) {
@@ -285,38 +324,71 @@ class UploadLoadingActivity : AppCompatActivity() {
         }.start()
     }
 
+    private fun swapText(tv: TextView, newText: String, fadeInMs: Long = 180) {
+        if (tv.text == newText) return
+        tv.animate().cancel()
+
+        tv.alpha = 0.0f
+        tv.text = newText
+        tv.animate().alpha(1f).setDuration(fadeInMs).start()
+    }
+
+    private fun dissolveMarkToCheck(step: StepItemBinding, number: Int) {
+        val tv = step.tvMark
+        tv.animate().cancel()
+
+        // 숫자 상태 보장
+        tv.text = number.toString()
+        tv.alpha = 1f
+
+        // 1) 사라짐
+        tv.animate()
+            .alpha(0f)
+            .setDuration(160)
+            .withEndAction {
+                // 2) 체크로 교체 후 다시 나타남
+                tv.text = "✓"
+                tv.animate().alpha(1f).setDuration(180).start()
+            }
+            .start()
+    }
+
+    private fun scaleStep(
+        step: StepItemBinding,
+        target: Float,
+        duration: Long = 220,
+        end: (() -> Unit)? = null
+    ) {
+        step.stepCircle.animate().cancel()
+        step.stepCircle.animate()
+            .scaleX(target)
+            .scaleY(target)
+            .setDuration(duration)
+            .setInterpolator(DecelerateInterpolator())
+            .withEndAction { end?.invoke() }
+            .start()
+    }
+
     private fun playCenterSwap(newIconRes: Int) {
         val iv = binding.ivSpinner
         iv.animate().cancel()
         iv.animate()
             .setInterpolator(DecelerateInterpolator())
+            .rotationBy(-140f)
             .scaleX(0.05f).scaleY(0.05f)
             .alpha(0.2f)
-            .setDuration(180)
+            .setDuration(360)
             .withEndAction {
                 iv.setImageResource(newIconRes)
                 iv.animate()
                     .setInterpolator(DecelerateInterpolator())
+                    .rotationBy(140f)
                     .scaleX(1f).scaleY(1f)
                     .alpha(1f)
-                    .setDuration(220)
+                    .setDuration(360)
                     .start()
             }
             .start()
-    }
-
-    private fun animateStepFocus(active: StepItemBinding, inactive1: StepItemBinding, inactive2: StepItemBinding) {
-        fun scale(step: StepItemBinding, target: Float) {
-            step.stepCircle.animate()
-                .scaleX(target)
-                .scaleY(target)
-                .setDuration(220)
-                .setInterpolator(DecelerateInterpolator())
-                .start()
-        }
-        scale(active, 1.18f)
-        scale(inactive1, 0.92f)
-        scale(inactive2, 0.92f)
     }
 
     private fun setStepState(

@@ -45,11 +45,6 @@ class UploadActivity : AppCompatActivity() {
         ClosetRepository(ApiClient.closetApi())
     }
 
-    private val uploadRepository by lazy {
-        UploadRepository(ApiClient.uploadApi())
-    }
-
-
     // 카메라 실행용
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -103,6 +98,7 @@ class UploadActivity : AppCompatActivity() {
             if (isGranted) openCameraInternal()
         }
 
+
     private val detailLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -123,7 +119,8 @@ class UploadActivity : AppCompatActivity() {
 
         // 섹션 전달 받기
         val name = intent.getStringExtra("containerName")
-        currentSectionId = intent.getIntExtra("sectionId", -1)
+        //currentSectionId = intent.getIntExtra("sectionId", -1)
+        currentSectionId = 50
         val closet = intent.getStringExtra("closet")
         if (currentSectionId == -1) { finish(); return }
 
@@ -135,8 +132,7 @@ class UploadActivity : AppCompatActivity() {
             onAddClick = { openCamera() },
             onImageClick = { imageItem ->
                 val clothingId = imageItem.id ?: return@ClothingAdapter
-                Log.d("CLICK", "clicked id=${imageItem.id}, url=${imageItem.imageUrl}")
-                startActivity(
+                detailLauncher.launch(
                     Intent(this, ClothingDetailActivity::class.java).apply {
                         putExtra("section", name)
                         putExtra("closet", closet)
@@ -144,7 +140,6 @@ class UploadActivity : AppCompatActivity() {
                         putExtra("imageUrl", imageItem.imageUrl)
                     }
                 )
-
             }
         )
 
