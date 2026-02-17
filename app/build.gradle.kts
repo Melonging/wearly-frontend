@@ -11,7 +11,6 @@ val localProps = Properties().apply {
 }
 
 val baseUrlDev = (localProps.getProperty("BASE_URL") ?: "").trim()
-val testToken = (localProps.getProperty("TEST_TOKEN") ?: "").trim()
 
 require(baseUrlDev.startsWith("http://") || baseUrlDev.startsWith("https://")) {
     "BASE_URL must start with http:// or https:// (check local.properties)"
@@ -47,12 +46,6 @@ android {
             "String",
             "BASE_URL",
             "\"$baseUrlDev\""
-        )
-
-        buildConfigField(
-            "String",
-            "TEST_TOKEN",
-            "\"$testToken\""
         )
 
         val apiToken = localProperties.getProperty("TEST_API_TOKEN") ?: ""

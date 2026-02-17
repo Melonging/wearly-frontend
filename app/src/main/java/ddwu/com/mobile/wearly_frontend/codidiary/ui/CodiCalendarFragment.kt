@@ -68,7 +68,7 @@ class CodiCalendarFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 토큰 호출
-        val tokenManager = TokenManager(requireContext())
+        val tokenManager = TokenManager
         val token = tokenManager.getToken()
 
 
@@ -92,7 +92,7 @@ class CodiCalendarFragment : Fragment() {
             if (isWithinRange(selectedDate)) {
                 if (hasRecord) {
                     val serverDate = formatToServerDate(selectedFullDate)
-                    val token = TokenManager(requireContext()).getToken()
+                    val token = TokenManager.getToken()
 
                     if (token != null && serverDate != null) {
                         codiDiaryViewModel.diaryReadData.removeObservers(viewLifecycleOwner)
@@ -242,7 +242,7 @@ class CodiCalendarFragment : Fragment() {
 
         calendarAdapter.submitList(dayList)
 
-        val token = TokenManager(requireContext()).getToken()
+        val token = TokenManager.getToken()
         if (token != null) {
             codiDiaryViewModel.fetchDiaryDates(currentYear, currentMonth, token)
         }
@@ -341,7 +341,7 @@ class CodiCalendarFragment : Fragment() {
         super.onResume()
 
         // 토큰 호출
-        val token = TokenManager(requireContext()).getToken()
+        val token = TokenManager.getToken()
 
         if (token != null) {
             codiDiaryViewModel.fetchDiaryDates(currentYear, currentMonth, token)

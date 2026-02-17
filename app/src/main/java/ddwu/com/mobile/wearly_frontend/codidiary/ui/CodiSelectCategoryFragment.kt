@@ -59,7 +59,7 @@ class CodiSelectCategoryFragment : Fragment() {
         val selectedDateStr = arguments?.getString("selectedDate")
         binding.diarySelectCategoryDateTv.text = selectedDateStr
 
-        val token = TokenManager(requireContext()).getToken() ?: ""
+        val token = TokenManager.getToken() ?: ""
 
         // 어댑터 초기화 및 연결
         setupAdapters()
@@ -201,7 +201,7 @@ class CodiSelectCategoryFragment : Fragment() {
      * 현재 위치 좌표를 가져와서 ViewModel의 과거 날씨 API 호출
      */
     private fun fetchPastWeatherWithLocation(date: String) {
-        val token = TokenManager(requireContext()).getToken() ?: ""
+        val token = TokenManager.getToken() ?: ""
 
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {

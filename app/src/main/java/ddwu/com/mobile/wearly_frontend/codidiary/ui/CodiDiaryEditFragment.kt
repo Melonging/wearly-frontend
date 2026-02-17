@@ -119,7 +119,7 @@ class CodiDiaryEditFragment : Fragment() {
                 weather_icon = iconCode.toString()
             )
 
-            val token = TokenManager(requireContext()).getToken()
+            val token = TokenManager.getToken()
             if (token != null && dateId != -1) {
                 codiDiaryViewModel.updateRecord(token, dateId, updateRequest)
             }
@@ -127,7 +127,7 @@ class CodiDiaryEditFragment : Fragment() {
 
         codiDiaryViewModel.updateStatus.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
-                val token = TokenManager(requireContext()).getToken()
+                val token = TokenManager.getToken()
                 val wearDate = arguments?.getString("wearDate")
 
                 if (token != null && wearDate != null) {

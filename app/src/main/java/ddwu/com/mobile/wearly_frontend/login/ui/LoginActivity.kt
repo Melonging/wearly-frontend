@@ -97,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val tm = TokenManager(this)
+            val tm = TokenManager
             sharedViewModel.requestLogin(tm)
 
             Log.d("token", tm.toString())

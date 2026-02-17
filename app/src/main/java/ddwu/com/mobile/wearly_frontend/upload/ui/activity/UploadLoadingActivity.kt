@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.random.Random
 
 class UploadLoadingActivity : AppCompatActivity() {
@@ -148,7 +150,7 @@ class UploadLoadingActivity : AppCompatActivity() {
                 return@launch
             }
 
-            val late = withTimeoutOrNull(8000L) { resultDeferred.await() }
+            val late = withTimeoutOrNull(50_000L) { resultDeferred.await() }
             finishWithUploadResult(late ?: UploadResult("임시 분류 완료(테스트)", -1L, null))
         }
     }
@@ -216,7 +218,6 @@ class UploadLoadingActivity : AppCompatActivity() {
                             )
 
                             if (!resultDeferred.isCompleted) resultDeferred.complete(res)
-                            withContext(Dispatchers.Main) { finishWithUploadResult(res) }
                             return@launch
                         }
 
@@ -238,10 +239,12 @@ class UploadLoadingActivity : AppCompatActivity() {
                         }
                     }
                 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
+                Log.e("UPLOAD_ERROR", "폴링 예외", e)
                 val res = UploadResult("임시 분류 완료(테스트)", -1L, null)
                 if (!resultDeferred.isCompleted) resultDeferred.complete(res)
-                finishWithUploadResult(res)
             }
         }
     }
