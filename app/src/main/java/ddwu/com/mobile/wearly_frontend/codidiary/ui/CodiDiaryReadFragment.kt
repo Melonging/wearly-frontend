@@ -106,7 +106,7 @@ class CodiDiaryReadFragment : Fragment() {
         // 삭제
         binding.diaryReadDeleteBtn.setOnClickListener {
             val dateId = codiDiaryViewModel.diaryReadData.value?.date_id
-            val token = TokenManager(requireContext()).getToken()
+            val token = TokenManager.getToken()
             if (token != null && dateId != null) {
                 codiDiaryViewModel.deleteRecord(token, dateId)
             }
@@ -122,7 +122,7 @@ class CodiDiaryReadFragment : Fragment() {
         // 좋아요 토글
         binding.diaryReadLikeBtnToggle.setOnClickListener {
             val currentData = codiDiaryViewModel.diaryReadData.value ?: return@setOnClickListener
-            val token = TokenManager(requireContext()).getToken() ?: return@setOnClickListener
+            val token = TokenManager.getToken() ?: return@setOnClickListener
 
             isLikedLocal = !isLikedLocal
             updateLikeUI(isLikedLocal)

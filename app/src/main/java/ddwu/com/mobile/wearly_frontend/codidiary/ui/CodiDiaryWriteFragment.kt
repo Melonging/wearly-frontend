@@ -128,7 +128,7 @@ class CodiDiaryWriteFragment: Fragment() {
                 is_heart = isLiked
             )
 
-            val token = TokenManager(requireContext()).getToken()
+            val token = TokenManager.getToken()
 
             if (!token.isNullOrEmpty()){
                 codiDiaryWriteViewModel.saveRecord(token, isWeatherLog = true, request = request)

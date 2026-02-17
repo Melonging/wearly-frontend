@@ -15,7 +15,11 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
+
+
+
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -26,7 +30,8 @@
         android:theme="@style/Theme.Wearly_frontend"
         android:forceDarkAllowed="false"
         android:usesCleartextTraffic="true">
-        <activity
+
+    <activity
             android:name=".setting.ui.PinEnabledActivity"
             android:exported="false" />
         <activity
@@ -56,10 +61,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity
-            android:name=".codidiary.ui.CodiDiaryWritingActivity" />
-        <activity
-            android:name=".codidiary.ui.CodiDiaryEndActivity" />
         <activity
             android:name=".login.ui.ResetPwActivity"
             android:exported="false" />

@@ -3,6 +3,31 @@ package ddwu.com.mobile.wearly_frontend
 import android.content.Context
 import android.content.SharedPreferences
 
+object TokenManager {
+
+    private const val PREF = "auth_prefs"
+    private const val KEY = "access_token"
+    private lateinit var prefs: SharedPreferences
+
+    fun init(context: Context) {
+        prefs = context.getSharedPreferences(PREF, Context.MODE_PRIVATE)
+    }
+
+    fun saveToken(token: String) {
+        prefs.edit().putString(KEY, token).apply()
+    }
+
+    fun getToken(): String? {
+        return prefs.getString(KEY, null)
+    }
+
+    fun clearToken() {
+        prefs.edit().remove(KEY).apply()
+    }
+}
+
+
+/*
 class TokenManager(context: Context) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
@@ -22,3 +47,5 @@ class TokenManager(context: Context) {
         prefs.edit().remove("access_token").apply()
     }
 }
+
+ */
