@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ddwu.com.mobile.wearly_frontend.category.data.CategoryItem
 import ddwu.com.mobile.wearly_frontend.codidiary.data.DiaryClothItem
 import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryEditRequest
@@ -37,6 +38,35 @@ class CodiDiaryViewModel : ViewModel() {
     val clothesList: LiveData<List<DiaryClothItem>> = _clothesList
 
     private val clothesCache = mutableMapOf<Int, List<DiaryClothItem>>()
+
+    val monthRecords = MutableLiveData<List<CodiDiaryRead>>()
+
+    fun fetchMonthRecords(token: String, year: Int, month: Int) {
+        viewModelScope.launch {
+            try {
+                Log.d("MonthRecords", "request year=$year month=$month tokenHead=${token.take(10)}")
+
+                val res = codiDiaryService.getWearRecordsByMonth("Bearer $token", year, month)
+
+                Log.d("MonthRecords", "http=${res.code()} isSuccessful=${res.isSuccessful}")
+                Log.d("MonthRecords", "body=${res.body()}")
+                Log.d("MonthRecords", "errorBody=${res.errorBody()?.string()}")
+
+                val list = if (res.isSuccessful && res.body()?.success == true) {
+                    res.body()?.data ?: emptyList()
+                } else emptyList()
+
+                Log.d("MonthRecords", "list.size=${list.size}")
+                Log.d("MonthRecords", "wear_dates=${list.map { it.wear_date }.sorted()}")
+
+                monthRecords.value = list
+            } catch (e: Exception) {
+                Log.e("MonthRecords", "exception=${e.message}", e)
+                monthRecords.value = emptyList()
+            }
+        }
+    }
+
 
     /**
      * 달력에 일기가 기록된 날짜 리스트를 받아오는 API 호출

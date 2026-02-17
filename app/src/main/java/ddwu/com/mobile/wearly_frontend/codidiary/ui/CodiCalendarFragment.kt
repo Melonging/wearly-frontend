@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.LocationServices
@@ -24,6 +25,7 @@ import com.google.android.material.snackbar.Snackbar
 import ddwu.com.mobile.wearly_frontend.BuildConfig
 import ddwu.com.mobile.wearly_frontend.TokenManager
 import ddwu.com.mobile.wearly_frontend.codidiary.data.CalendarDateData
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryRead
 import ddwu.com.mobile.wearly_frontend.codidiary.data.viewmodel.CodiDiaryViewModel
 import ddwu.com.mobile.wearly_frontend.codidiary.data.viewmodel.WeatherViewModel
 import ddwu.com.mobile.wearly_frontend.codidiary.ui.adapter.CalendarAdapter
@@ -31,6 +33,7 @@ import ddwu.com.mobile.wearly_frontend.codidiary.ui.adapter.WeatherAdapter
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentCodiCalendarBinding
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import androidx.lifecycle.viewModelScope
 
 class CodiCalendarFragment : Fragment() {
     private lateinit var binding: FragmentCodiCalendarBinding
@@ -155,6 +158,13 @@ class CodiCalendarFragment : Fragment() {
             }
         }
 
+        codiDiaryViewModel.monthRecords.observe(viewLifecycleOwner) { records ->
+            val map = records.associateBy { it.wear_date.take(10) } // 날짜당 1개라고 가정
+            calendarAdapter.setRecordedDayRecordMap(map)
+            calendarAdapter.setRecordedDates(map.keys.toList())
+        }
+
+
     }
 
 
@@ -245,7 +255,9 @@ class CodiCalendarFragment : Fragment() {
         val token = TokenManager.getToken()
         if (token != null) {
             codiDiaryViewModel.fetchDiaryDates(currentYear, currentMonth, token)
+            codiDiaryViewModel.fetchMonthRecords(token, currentYear, currentMonth)
         }
+
     }
 
 
@@ -345,6 +357,7 @@ class CodiCalendarFragment : Fragment() {
 
         if (token != null) {
             codiDiaryViewModel.fetchDiaryDates(currentYear, currentMonth, token)
+            codiDiaryViewModel.fetchMonthRecords(token, currentYear, currentMonth)
         } else {
             Snackbar.make(binding.root, "토큰 없음.", Snackbar.LENGTH_SHORT).show()
         }
