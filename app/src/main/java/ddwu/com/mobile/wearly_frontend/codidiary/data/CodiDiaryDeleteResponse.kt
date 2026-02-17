@@ -1,10 +1,6 @@
 package ddwu.com.mobile.wearly_frontend.codidiary.data
 
-data class CodiDiaryDeleteResponse(
-    val success: Boolean,
-    val data: CodiDiaryDeleteResult?,
-    val error: String?
-)
+typealias CodiDiaryDeleteResponse = ApiResponse<CodiDiaryDeleteResult>
 
 data class CodiDiaryDeleteResult(
     val message: String

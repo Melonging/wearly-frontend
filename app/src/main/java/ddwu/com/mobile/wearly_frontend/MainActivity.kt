@@ -69,17 +69,24 @@ class MainActivity : AppCompatActivity() {
                 // 코디 일기 옷 선택 프레그먼트
                 R.id.codiSelectCategoryFrament -> {
                     binding.bottomNav.visibility = View.GONE
+                    binding.toolbar.visibility = View.GONE
                 }
 
                 // 코디 일기 작석 프레그먼트
                 R.id.diaryWriteFragment -> {
                     binding.bottomNav.visibility = View.GONE
+                    binding.toolbar.visibility = View.GONE
                 }
 
                 R.id.recordFragment -> {
                     binding.toolbar.visibility = View.GONE
+                    binding.bottomNav.visibility = View.VISIBLE
                 }
 
+                R.id.categoryFragment -> {
+                    binding.toolbar.visibility = View.GONE
+                    binding.bottomNav.visibility = View.VISIBLE
+                }
                 else -> {
                     binding.toolbar.visibility = View.VISIBLE
                     binding.bottomNav.visibility = View.VISIBLE

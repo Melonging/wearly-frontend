@@ -1,11 +1,6 @@
 package ddwu.com.mobile.wearly_frontend.codidiary.data
 
-data class WeaklyWeatherResponse(
-    val success: Boolean,
-    val data: List<ForecastItem>?,
-    val error: WeatherError?,
-    val timestamp: String
-)
+typealias WeaklyWeatherResponse = ApiResponse<List<ForecastItem>>
 
 data class ForecastItem(
     val date: String,
@@ -21,5 +16,5 @@ data class ForecastItem(
 data class WeatherError(
     val code: String,
     val message: String,
-    val details: Any?
+    val details: Any? = null
 )

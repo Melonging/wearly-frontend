@@ -179,14 +179,14 @@ class CodiSelectCategoryFragment : Fragment() {
             if (isAlreadySelected) {
                 selectedItems.removeAll { it.clothing_id == cloth.clothing_id }
             } else {
-                // 핵심: 옷을 추가할 때 현재 선택된 탭의 카테고리 이름을 주입함
-                cloth.category_name = currentCategoryName
-                selectedItems.add(cloth)
+                val selected = cloth.copy(category_name = currentCategoryName, isSelected = true)
+                selectedItems.add(selected)
             }
             syncSelectionState()
         }
         binding.diarySelectCategoryRv.adapter = codiClothesAdapter
     }
+
 
     // 선택된 옷과 카테고리 옷 목록 동기화
     private fun syncSelectionState() {
