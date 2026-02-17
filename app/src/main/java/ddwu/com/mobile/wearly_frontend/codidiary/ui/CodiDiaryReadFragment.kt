@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.TokenManager
 import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryEditRequest
+import ddwu.com.mobile.wearly_frontend.codidiary.data.DiaryClothItem
 import ddwu.com.mobile.wearly_frontend.codidiary.data.viewmodel.CodiDiaryViewModel
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentCodiDiaryReadBinding
 
@@ -76,11 +77,23 @@ class CodiDiaryReadFragment : Fragment() {
                 updateLikeUI(isLikedLocal)
 
                 // 6) 이미지 로드: 최상위 image_url 사용(갤러리/코디 공통)
-                if (!data.image_url.isNullOrEmpty()) {
-                    loadMainImage(data.image_url)
-                } else {
-                    val fallback = data.outfit?.clothes?.firstOrNull()?.image
-                    if (!fallback.isNullOrEmpty()) loadMainImage(fallback)
+                val clothes = data.outfit?.clothes
+                val hasLayout = clothes?.any { it.layout != null } == true
+
+                when {
+                    clothes != null && clothes.isNotEmpty() && hasLayout -> {
+                        displayClothesWithLayout(clothes)
+                    }
+
+                    !data.image_url.isNullOrEmpty() -> {
+                        loadMainImage(data.image_url)
+                    }
+
+                    else -> {
+                        val fallback = clothes?.firstOrNull()?.image
+                        if (!fallback.isNullOrEmpty()) loadMainImage(fallback)
+                        else binding.diaryReadClothesFrame.removeAllViews()
+                    }
                 }
 
             } else {
@@ -140,6 +153,39 @@ class CodiDiaryReadFragment : Fragment() {
 
             val editRequest = CodiDiaryEditRequest(is_heart = isLikedLocal)
             codiDiaryViewModel.updateRecord(token, currentData.date_id, editRequest)
+        }
+    }
+
+    private fun displayClothesWithLayout(clothes: List<DiaryClothItem>) {
+        val container = binding.diaryReadClothesFrame
+        container.removeAllViews()
+
+        container.post {
+            val parentWidth = container.width
+            val parentHeight = container.height
+            val viewSize = (parentWidth * 0.4f).toInt().coerceAtLeast(1)
+
+            clothes
+                .filter { it.layout != null }
+                .sortedBy { it.layout!!.z_index }
+                .forEach { cloth ->
+                    val layout = cloth.layout ?: return@forEach
+
+                    val imageView = ImageView(requireContext()).apply {
+                        layoutParams = FrameLayout.LayoutParams(viewSize, viewSize)
+                        scaleType = ImageView.ScaleType.CENTER_INSIDE
+                        z = layout.z_index.toFloat()
+                    }
+
+                    imageView.x = (parentWidth * layout.x_ratio.toFloat()) - (viewSize / 2f)
+                    imageView.y = (parentHeight * layout.y_ratio.toFloat()) - (viewSize / 2f)
+
+                    Glide.with(this)
+                        .load(cloth.image)
+                        .into(imageView)
+
+                    container.addView(imageView)
+                }
         }
     }
 
