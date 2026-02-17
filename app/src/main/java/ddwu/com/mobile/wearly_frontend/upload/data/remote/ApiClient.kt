@@ -2,6 +2,7 @@ package ddwu.com.mobile.wearly_frontend.upload.data.remote
 
 import ddwu.com.mobile.wearly_frontend.BuildConfig
 import ddwu.com.mobile.wearly_frontend.TokenManager
+import ddwu.com.mobile.wearly_frontend.category.data.remote.CategoryApi
 import ddwu.com.mobile.wearly_frontend.records.data.remote.RecordsApi
 import ddwu.com.mobile.wearly_frontend.upload.data.remote.closet.ClosetApi
 import ddwu.com.mobile.wearly_frontend.upload.data.remote.upload.UploadApi
@@ -51,4 +52,6 @@ object ApiClient {
     fun closetApi(): ClosetApi = retrofit.create(ClosetApi::class.java)
 
     fun recordsApi(): RecordsApi = retrofit.create(RecordsApi::class.java)
+
+    fun categoryApi(): CategoryApi = retrofit.create(CategoryApi::class.java)
 }

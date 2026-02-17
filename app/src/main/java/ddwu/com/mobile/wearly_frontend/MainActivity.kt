@@ -80,6 +80,9 @@ class MainActivity : AppCompatActivity() {
                     binding.toolbar.visibility = View.GONE
                 }
 
+                R.id.categoryFragment -> {
+                    binding.toolbar.visibility = View.GONE
+                }
                 else -> {
                     binding.toolbar.visibility = View.VISIBLE
                     binding.bottomNav.visibility = View.VISIBLE
