@@ -1,6 +1,6 @@
 package ddwu.com.mobile.wearly_frontend.codidiary.data
 
-data class CodiDiaryEditRequest (
+data class CodiDiaryEditRequest(
     val outfit_name: String? = null,
     val memo: String? = null,
     val is_heart: Boolean? = null,
@@ -10,13 +10,9 @@ data class CodiDiaryEditRequest (
     val weather_icon: String? = null
 )
 
-data class CodiDiaryEditResponse(
-    val success: Boolean,
-    val data: CodiDiaryUpdateResult?,
-    val error: String?
-)
+typealias CodiDiaryEditResponse = ApiResponse<CodiDiaryUpdateResult>
 
 data class CodiDiaryUpdateResult(
     val date_id: Int,
-    val outfit_id: Int,
+    val outfit_id: Int
 )

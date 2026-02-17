@@ -12,8 +12,15 @@ data class ClothesListData(
 data class DiaryClothItem(
     val clothing_id: Int,
     val image: String,
+    val category_name: String? = null,
+    val layout: DiaryLayout? = null,
+
+    var isSelected: Boolean = false
+)
 
 
-    var isSelected: Boolean = false,
-    var category_name: String? = ""
+data class DiaryLayout(
+    val x_ratio: Double,
+    val y_ratio: Double,
+    val z_index: Int
 )

@@ -1,21 +1,27 @@
+package ddwu.com.mobile.wearly_frontend.codidiary.data
+
+import ddwu.com.mobile.wearly_frontend.codidiary.data.ApiResponse
+
 data class CodiDiaryRecordRequest(
     val wear_date: String,
-    val clothes_ids: List<Int>,
+
+    val clothes_ids: List<Int>? = null,
+    val image_url: String? = null,
+
     val outfit_name: String,
-    val temp_min: Int,
-    val temp_max: Int,
-    val weather_icon: String,
-    val memo: String,
-    val is_heart: Boolean
+
+    val memo: String? = null,
+    val is_heart: Boolean = false,
+
+    val temp_min: Double? = null,
+    val temp_max: Double? = null,
+    val weather_icon: String? = null
 )
 
-data class CodiDiaryRecordResponse(
-    val success: Boolean,
-    val data: CodiDiaryResult?,
-    val error: String?
-)
+typealias CodiDiaryRecordResponse = ApiResponse<CodiDiaryRecordResult>
 
-data class CodiDiaryResult(
+data class CodiDiaryRecordResult(
     val date_id: Int,
-    val outfit_id: Int
+    val outfit_id: Int,
+    val image_url: String? = null
 )
