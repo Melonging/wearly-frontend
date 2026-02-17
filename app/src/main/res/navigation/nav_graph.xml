@@ -74,13 +74,13 @@
 
 
     <fragment
-        android:id="@+id/closetFragment"
-        android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
-        android:label="옷장"/>
+        android:id="@+id/recordFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.records.ui.fragment.RecordFragment"
+        android:label="기록"/>
 
     <fragment
         android:id="@+id/categoryFragment"
-        android:name="ddwu.com.mobile.wearly_frontend.closet.ui.fragment.ClosetCardFragment"
+        android:name="ddwu.com.mobile.wearly_frontend.category.ui.fragment.CategoryFragment"
         android:label="카테고리"/>
 
     <fragment
