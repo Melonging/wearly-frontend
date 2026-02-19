@@ -175,7 +175,7 @@ class AuthViewModel: ViewModel() {
                         Log.d("AuthVM", "토큰 저장 완료!")
                         val name = body?.user?.userName
                         if (!name.isNullOrEmpty()) {
-                            userName.value = name
+                            userName.value = name ?: "사용자"
                         }
 
                         isLoginSuccess.value = true
