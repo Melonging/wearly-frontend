@@ -362,13 +362,9 @@ class CodiCalendarFragment : Fragment() {
             Snackbar.make(binding.root, "토큰 없음.", Snackbar.LENGTH_SHORT).show()
         }
 
-        // 액션바 숨기기
-        (activity as AppCompatActivity).supportActionBar?.hide()
     }
 
     override fun onPause() {
         super.onPause()
-        // 다른 화면으로 나갈 때 다시 보이게 하기
-        (activity as AppCompatActivity).supportActionBar?.show()
     }
 }
