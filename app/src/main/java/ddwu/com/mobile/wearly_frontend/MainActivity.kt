@@ -69,14 +69,24 @@ class MainActivity : AppCompatActivity() {
                 // 코디 일기 옷 선택 프레그먼트
                 R.id.codiSelectCategoryFrament -> {
                     binding.bottomNav.visibility = View.GONE
+                    binding.toolbar.visibility = View.GONE
                 }
 
                 // 코디 일기 작석 프레그먼트
                 R.id.diaryWriteFragment -> {
                     binding.bottomNav.visibility = View.GONE
+                    binding.toolbar.visibility = View.GONE
                 }
 
+                R.id.recordFragment -> {
+                    binding.toolbar.visibility = View.GONE
+                    binding.bottomNav.visibility = View.VISIBLE
+                }
 
+                R.id.categoryFragment -> {
+                    binding.toolbar.visibility = View.GONE
+                    binding.bottomNav.visibility = View.VISIBLE
+                }
                 else -> {
                     binding.toolbar.visibility = View.VISIBLE
                     binding.bottomNav.visibility = View.VISIBLE
@@ -88,10 +98,6 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNav.setOnItemReselectedListener { item ->
             when (item.itemId) {
                 R.id.homeFragment -> {
-                }
-                R.id.closetFragment -> {
-                    //dispatchReselectToCurrentFragment { (it as? ProfileFragment)?.refresh() }
-
                 }
             }
         }
@@ -114,25 +120,4 @@ class MainActivity : AppCompatActivity() {
         locationPermissionLauncher.launch(permissions)
     }
 
-    // 임시 코드, 없애야 함.
-    /*
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.btn_profile -> {
-                /*val navController = findNavController(R.id.nav_host)
-                if (navController.currentDestination?.id != R.id.settingFragment) {
-                    navController.navigate(R.id.settingFragment)
-                }
-
-                 */
-                val intent = Intent(this, TestActivity::class.java)
-                startActivity(intent)
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-     */
 }

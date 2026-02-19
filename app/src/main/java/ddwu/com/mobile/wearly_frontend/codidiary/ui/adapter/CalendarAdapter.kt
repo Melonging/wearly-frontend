@@ -3,10 +3,15 @@ package ddwu.com.mobile.wearly_frontend.codidiary.ui.adapter
 import ddwu.com.mobile.wearly_frontend.R
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ddwu.com.mobile.wearly_frontend.codidiary.data.CalendarDateData
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryRead
 import ddwu.com.mobile.wearly_frontend.databinding.ItemCalendarBinding
 
 class CalendarAdapter(private val onClick: (String, Boolean) -> Unit) :
@@ -14,6 +19,13 @@ class CalendarAdapter(private val onClick: (String, Boolean) -> Unit) :
 
     private var items = listOf<CalendarDateData>()
     private var recordedDates = listOf<String>()
+    private var recordedDayRecordMap = mapOf<String, CodiDiaryRead>()
+
+    fun setRecordedDayRecordMap(map: Map<String, CodiDiaryRead>) {
+        recordedDayRecordMap = map
+        notifyDataSetChanged()
+    }
+
 
     fun submitList(list: List<CalendarDateData>) {
         items = list
@@ -66,6 +78,75 @@ class CalendarAdapter(private val onClick: (String, Boolean) -> Unit) :
         } else {
             holder.binding.itemCalendarDateLayout.isSelected = false
         }
+
+
+        val record = recordedDayRecordMap[item.fullDate]
+        val container = holder.binding.itemCalendarStackContainer
+        container.removeAllViews()
+
+        holder.binding.itemCalendarMoreBadge.visibility = View.GONE
+        holder.binding.itemCalendarMoreBadge.text = ""
+
+        if (item.isCurrentMonth && record != null) {
+
+            if (!record.image_url.isNullOrBlank()) {
+                val iv = ImageView(holder.binding.root.context).apply {
+                    layoutParams = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.MATCH_PARENT
+                    )
+                    scaleType = ImageView.ScaleType.CENTER_CROP
+                }
+                Glide.with(holder.binding.root).load(record.image_url).centerCrop().into(iv)
+                container.addView(iv)
+            } else {
+                val clothes = record.outfit?.clothes.orEmpty()
+                    .sortedBy { it.layout?.z_index ?: 999 }
+
+                val showList = clothes.take(3)
+                val more = (clothes.size - showList.size).coerceAtLeast(0)
+
+                container.post {
+                    val w = container.width
+                    val h = container.height
+                    if (w == 0 || h == 0) return@post
+
+                    val size = (minOf(w, h) * 0.72f).toInt().coerceAtLeast(18)
+
+                    val offsets = listOf(
+                        Pair(0.08f, 0.05f),
+                        Pair(0.22f, 0.16f),
+                        Pair(0.36f, 0.28f)
+                    )
+
+                    showList.forEachIndexed { idx, cloth ->
+                        val (xr, yr) = offsets.getOrElse(idx) { Pair(0.2f, 0.2f) }
+
+                        val iv = ImageView(holder.binding.root.context).apply {
+                            layoutParams = FrameLayout.LayoutParams(size, size)
+                            scaleType = ImageView.ScaleType.CENTER_CROP
+                            x = w * xr
+                            y = h * yr
+                            z = (idx + 1).toFloat()
+                        }
+
+                        Glide.with(holder.binding.root)
+                            .load(cloth.image)
+                            .centerCrop()
+                            .into(iv)
+
+                        container.addView(iv)
+                    }
+
+                    if (more > 0) {
+                        holder.binding.itemCalendarMoreBadge.visibility = View.VISIBLE
+                        holder.binding.itemCalendarMoreBadge.text = "+$more"
+                    }
+                }
+            }
+        }
+
+
 
         holder.binding.root.setOnClickListener {
             if (item.isCurrentMonth) {

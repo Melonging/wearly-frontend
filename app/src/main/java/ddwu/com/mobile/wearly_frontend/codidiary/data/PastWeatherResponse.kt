@@ -1,9 +1,6 @@
 package ddwu.com.mobile.wearly_frontend.codidiary.data
 
-data class PastWeatherResponse(
-    val success: Boolean,
-    val data: PastWeatherData?
-)
+typealias PastWeatherResponse = ApiResponse<PastWeatherData>
 
 data class PastWeatherData(
     val tempMin: Int,

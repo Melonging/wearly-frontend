@@ -10,7 +10,7 @@ class TokenInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
             .newBuilder()
-            .addHeader("Authorization", "Bearer ${BuildConfig.TEST_TOKEN}")
+            .addHeader("Authorization", "Bearer ")
             .build()
 
         return chain.proceed(request)

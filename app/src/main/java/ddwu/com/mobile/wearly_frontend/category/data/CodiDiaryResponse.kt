@@ -10,7 +10,7 @@ data class ClothesData(
 )
 
 data class ClothingItem(
-    val clothing_id: Int,
+    val clothing_id: Long,
     val image: String
 )
 

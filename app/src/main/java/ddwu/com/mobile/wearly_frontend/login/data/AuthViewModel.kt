@@ -81,6 +81,7 @@ class AuthViewModel: ViewModel() {
                 errorMessage.value = "서버 연결 실패"
 
                 Log.e("AuthVM", "서버 연결 실패: ${t.message}")
+                Log.e("AuthVM", "fail type=${t::class.java.simpleName} msg=${t.message}", t)
             }
         })
     }

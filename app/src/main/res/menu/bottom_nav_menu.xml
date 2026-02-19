@@ -12,9 +12,9 @@
         android:title="코디 달력"/>
 
     <item
-        android:id="@+id/closetFragment"
+        android:id="@+id/recordFragment"
         android:icon="@drawable/ic_diary_selector"
-        android:title="옷장"/>
+        android:title="기록"/>
 
     <item
         android:id="@+id/categoryFragment"

@@ -1,6 +1,5 @@
 package ddwu.com.mobile.wearly_frontend.codidiary.ui
 
-import CodiDiaryRecordRequest
 import ddwu.com.mobile.wearly_frontend.R
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import ddwu.com.mobile.wearly_frontend.TokenManager
+import ddwu.com.mobile.wearly_frontend.codidiary.data.CodiDiaryRecordRequest
 import ddwu.com.mobile.wearly_frontend.codidiary.data.viewmodel.CodiDiaryViewModel
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentCodiDiaryBinding
 
@@ -117,18 +117,30 @@ class CodiDiaryWriteFragment: Fragment() {
             }
 
 
+            val ids = selectedIds
+                .filter { it > 0 }
+                .toList()
+                .ifEmpty { null }
+
             val request = CodiDiaryRecordRequest(
                 wear_date = serverDate,
-                clothes_ids = selectedIds.toList(),
+                clothes_ids = ids,
+                image_url = null,
                 outfit_name = title,
-                temp_min = minTemp,
-                temp_max = maxTemp,
-                weather_icon = iconCode.toString(),
-                memo = diary,
+                temp_min = minTemp.toDouble(),
+                temp_max = maxTemp.toDouble(),
+                weather_icon = getServerWeatherIcon(iconCode),
+                memo = diary.ifBlank { null },
                 is_heart = isLiked
             )
 
-            val token = TokenManager(requireContext()).getToken()
+            if (ids == null /* && imageUrl == null */) {
+                Snackbar.make(binding.root, "옷을 선택하거나 사진을 추가해 주세요.", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+
+            val token = TokenManager.getToken()
 
             if (!token.isNullOrEmpty()){
                 codiDiaryWriteViewModel.saveRecord(token, isWeatherLog = true, request = request)
@@ -159,6 +171,17 @@ class CodiDiaryWriteFragment: Fragment() {
                 binding.diaryLikeUnselected.visibility = View.VISIBLE
                 binding.diaryLikeSelected.visibility = View.GONE
             }
+        }
+    }
+
+
+    private fun getServerWeatherIcon(iconCode: Int): String {
+        return when (iconCode) {
+            0 -> "01d" // 맑음
+            1 -> "03d" // 구름(대표값)
+            2 -> "10d" // 비(대표값)
+            3 -> "13d" // 눈
+            else -> "01d"
         }
     }
 

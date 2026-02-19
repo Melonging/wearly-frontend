@@ -59,7 +59,7 @@ class CodiSelectCategoryFragment : Fragment() {
         val selectedDateStr = arguments?.getString("selectedDate")
         binding.diarySelectCategoryDateTv.text = selectedDateStr
 
-        val token = TokenManager(requireContext()).getToken() ?: ""
+        val token = TokenManager.getToken() ?: ""
 
         // 어댑터 초기화 및 연결
         setupAdapters()
@@ -179,14 +179,14 @@ class CodiSelectCategoryFragment : Fragment() {
             if (isAlreadySelected) {
                 selectedItems.removeAll { it.clothing_id == cloth.clothing_id }
             } else {
-                // 핵심: 옷을 추가할 때 현재 선택된 탭의 카테고리 이름을 주입함
-                cloth.category_name = currentCategoryName
-                selectedItems.add(cloth)
+                val selected = cloth.copy(category_name = currentCategoryName, isSelected = true)
+                selectedItems.add(selected)
             }
             syncSelectionState()
         }
         binding.diarySelectCategoryRv.adapter = codiClothesAdapter
     }
+
 
     // 선택된 옷과 카테고리 옷 목록 동기화
     private fun syncSelectionState() {
@@ -201,7 +201,7 @@ class CodiSelectCategoryFragment : Fragment() {
      * 현재 위치 좌표를 가져와서 ViewModel의 과거 날씨 API 호출
      */
     private fun fetchPastWeatherWithLocation(date: String) {
-        val token = TokenManager(requireContext()).getToken() ?: ""
+        val token = TokenManager.getToken() ?: ""
 
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
