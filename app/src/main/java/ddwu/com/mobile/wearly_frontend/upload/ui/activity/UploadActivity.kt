@@ -21,8 +21,8 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
-import ddwu.com.mobile.wearly_frontend.BuildConfig
 import ddwu.com.mobile.wearly_frontend.R
+import ddwu.com.mobile.wearly_frontend.TokenManager
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityUploadBinding
 import ddwu.com.mobile.wearly_frontend.upload.data.slot.SlotItem
 import ddwu.com.mobile.wearly_frontend.upload.data.remote.ApiClient
@@ -42,7 +42,7 @@ class UploadActivity : AppCompatActivity() {
     private var currentSectionId: Int = -1
 
     private val closetRepository by lazy {
-        ClosetRepository(ApiClient.closetApi())
+        ClosetRepository(ApiClient.closetApi(context = this@UploadActivity))
     }
 
     // 카메라 실행용
@@ -83,12 +83,12 @@ class UploadActivity : AppCompatActivity() {
                 if (currentSectionId != -1) {
                     lifecycleScope.launch {
                         kotlinx.coroutines.delay(300L)
-                        fetchSectionClothes(currentSectionId)
+                        fetchSectionClothes()
                     }
                 }
             } else {
                 if (currentSectionId != -1) {
-                    fetchSectionClothes(currentSectionId)
+                    fetchSectionClothes()
                 }
             }
         }
@@ -102,7 +102,7 @@ class UploadActivity : AppCompatActivity() {
     private val detailLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                fetchSectionClothes(currentSectionId)
+                fetchSectionClothes()
             }
         }
 
@@ -114,8 +114,6 @@ class UploadActivity : AppCompatActivity() {
 
         binding = ActivityUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        Log.d("BASE_URL_CHECK", BuildConfig.BASE_URL)
 
         // 섹션 전달 받기
         val name = intent.getStringExtra("containerName") ?: ""
@@ -155,7 +153,7 @@ class UploadActivity : AppCompatActivity() {
 
         binding.itemRV.adapter = adapter
 
-        fetchSectionClothes(currentSectionId)
+        fetchSectionClothes()
 
         binding.btnAdd.setOnClickListener {
             if (!canClick()) return@setOnClickListener
@@ -238,8 +236,37 @@ class UploadActivity : AppCompatActivity() {
         }, 2500)
     }
 
+    private fun fetchSectionClothes() {
+        lifecycleScope.launch {
+            try {
+                // 2. 수정된 리포지터리 호출 (토큰과 sectionId 전달)
+                // 반환 타입: SectionClothesData (그 안에 clothes: List<ClothingItem> 이 있음)
+                val sectionData = closetRepository.fetchSectionClothes(currentSectionId)
 
-    private fun fetchSectionClothes(sectionId: Int) {
+                items.clear()
+
+                // 3. sectionData 내부의 clothes 리스트를 순회
+                sectionData.clothes.forEach { item ->
+                    items.add(SlotItem.Image(
+                        id = item.clothing_id,
+                        imageUrl = item.image
+                    ))
+                }
+
+                adapter.notifyDataSetChanged()
+
+            } catch (e: Exception) {
+                Log.e("SECTION", "섹션 조회 실패: ${e.message}")
+
+                if (isFinishing || isDestroyed) return@launch
+
+                // 401 에러 등이 발생했을 때 메시지 표시
+                Toast.makeText(applicationContext, "목록을 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    /**private fun fetchSectionClothes(sectionId: Int) {
         lifecycleScope.launch {
             try {
                 val clothesList = closetRepository.fetchSectionClothes(sectionId)
@@ -261,5 +288,5 @@ class UploadActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
             }
         }
-    }
+    }**/
 }

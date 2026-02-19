@@ -8,6 +8,6 @@ data class ClothingUpdateResponseDto(
 )
 
 data class ClothingUpdateDataDto(
-    val clothing_id: Long,
+    val clothing_id: Int,
     val message: String?
 )

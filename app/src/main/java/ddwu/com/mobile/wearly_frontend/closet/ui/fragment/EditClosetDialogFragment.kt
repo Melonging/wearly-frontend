@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ddwu.com.mobile.wearly_frontend.R
+import ddwu.com.mobile.wearly_frontend.closet.ui.fragment.PlusClosetDialogFragment.WardrobeType
 import ddwu.com.mobile.wearly_frontend.databinding.DialogEditClosetBinding
 
 
@@ -42,8 +43,23 @@ class EditClosetDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.closeIc.setOnClickListener {
-            dismiss()
+        binding.closeIc.setOnClickListener { dismiss() }
+
+        //전달받은 값 세팅
+        binding.nameEt.setText(currentName)
+        updateTypeSelection(currentType)
+
+        binding.typeClosetTv.setOnClickListener {
+            currentType = WardrobeType.CLOSET
+            updateTypeSelection(currentType)
+        }
+        binding.typeDrawerTv.setOnClickListener {
+            currentType = WardrobeType.DRAWER
+            updateTypeSelection(currentType)
+        }
+        binding.typeShoesTv.setOnClickListener {
+            currentType = WardrobeType.SHOES
+            updateTypeSelection(currentType)
         }
 
         binding.confirmBtn.setOnClickListener {
@@ -51,6 +67,23 @@ class EditClosetDialogFragment : BottomSheetDialogFragment() {
             if (name.isNotEmpty()) {
                 listener?.onWardrobeEdited(currentType, name)
                 dismiss()
+            }
+        }
+    }
+
+    private fun updateTypeSelection(type: WardrobeType) {
+        binding.typeClosetTv.isSelected = (type == WardrobeType.CLOSET)
+        binding.typeDrawerTv.isSelected = (type == WardrobeType.DRAWER)
+        binding.typeShoesTv.isSelected = (type == WardrobeType.SHOES)
+
+        val views = listOf(binding.typeClosetTv, binding.typeDrawerTv, binding.typeShoesTv)
+        val types = listOf(WardrobeType.CLOSET, WardrobeType.DRAWER, WardrobeType.SHOES)
+
+        views.forEachIndexed { index, textView ->
+            if (types[index] == type) {
+                textView.setTypeface(null, android.graphics.Typeface.BOLD)
+            } else {
+                textView.setTypeface(null, android.graphics.Typeface.NORMAL)
             }
         }
     }

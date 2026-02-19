@@ -10,9 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.ActivityClothingDetailBinding
-import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.Category
-import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClosetDto
-import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClosetViewSectionDto
 import ddwu.com.mobile.wearly_frontend.upload.data.model.closet.ClothingUpdateRequestDto
 import ddwu.com.mobile.wearly_frontend.upload.data.remote.ApiClient
 import ddwu.com.mobile.wearly_frontend.upload.data.repository.ClosetRepository
@@ -20,8 +17,217 @@ import ddwu.com.mobile.wearly_frontend.upload.data.repository.OutfitRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import android.widget.ArrayAdapter
+import ddwu.com.mobile.wearly_frontend.closet.data.CategoryItem
+import ddwu.com.mobile.wearly_frontend.closet.data.ClosetItem
+import ddwu.com.mobile.wearly_frontend.closet.data.SectionDetail
 
 class ClothingDetailActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityClothingDetailBinding
+    private val closetRepository by lazy { ClosetRepository(ApiClient.closetApi(context = this@ClothingDetailActivity)) }
+    private var changed = false
+    private var clothingId: Int = -1 // Int로 통일 (ClosetService 명세 기준)
+    private var closetId: Int = -1
+
+    private var closets: List<ClosetItem> = emptyList()
+    private var closetSections: List<SectionDetail> = emptyList()
+    private var categories: List<CategoryItem> = emptyList()
+
+    private var lastClosetId: Int = -1
+    private var lastSectionId: Int = -1
+    private var lastCategoryId: Int = -1
+
+    private var isBinding = true
+    private var loadSeq = 0
+    private var updateJob: Job? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+
+        binding = ActivityClothingDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        clothingId = intent.getIntExtra("clothingId", -1)
+        if (clothingId == -1) { finish(); return }
+
+        closetId = intent.getIntExtra("closetId", -1)
+
+        setupToolbar()
+        setupImage()
+        setupListeners()
+        loadAllAndBind()
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        binding.toolbar.setNavigationOnClickListener {
+            if (changed) setResult(RESULT_OK)
+            finish()
+        }
+    }
+
+    private fun setupImage() {
+        val previewUrl = intent.getStringExtra("imageUrl")
+        if (!previewUrl.isNullOrBlank()) {
+            Glide.with(this).load(previewUrl).into(binding.ivCloth)
+        } else {
+            binding.ivCloth.setImageResource(R.drawable.cloth_01)
+        }
+    }
+
+    private fun setupListeners() {
+        // 카테고리 변경
+        binding.spType.setOnItemClickListener { _, _, pos, _ ->
+            if (isBinding) return@setOnItemClickListener
+            val newId = categories.getOrNull(pos)?.categoryId ?: return@setOnItemClickListener
+            if (newId == lastCategoryId) return@setOnItemClickListener
+            // 주의: updateClothing은 아직 이전 DTO를 쓸 수 있으므로 필요시 리포지터리에 추가 수정 필요
+            runUpdate(ClothingUpdateRequestDto(categoryId = newId)) {
+                lastCategoryId = newId
+                changed = true
+            }
+        }
+
+        // 섹션 변경
+        binding.spSection.setOnItemClickListener { _, _, pos, _ ->
+            if (isBinding) return@setOnItemClickListener
+            val newId = closetSections.getOrNull(pos)?.sectionId ?: return@setOnItemClickListener
+            if (newId == lastSectionId) return@setOnItemClickListener
+            runUpdate(ClothingUpdateRequestDto(sectionId = newId)) {
+                lastSectionId = newId
+                changed = true
+            }
+        }
+
+        // 옷장 변경
+        binding.spCloset.setOnItemClickListener { _, _, pos, _ ->
+            if (isBinding) return@setOnItemClickListener
+            val newCloset = closets.getOrNull(pos) ?: return@setOnItemClickListener
+            if (newCloset.closetId == lastClosetId) return@setOnItemClickListener
+
+            updateJob?.cancel()
+            updateJob = lifecycleScope.launch {
+                try {
+                    isBinding = true
+                    //옷장 변경 API 호출
+                    runUpdateAsync(ClothingUpdateRequestDto(closetId = newCloset.closetId))
+                    lastClosetId = newCloset.closetId
+                    changed = true
+
+                    //새 옷장의 섹션 목록 다시 불러오기
+                    val viewData = closetRepository.fetchClosetView( newCloset.closetId)
+                    closetSections = viewData.sections
+                    binding.spSection.setAdapter(spinnerAdapter(closetSections.map { it.sectionName }))
+
+                    //첫 번째 섹션으로 자동 지정
+                    closetSections.firstOrNull()?.let { first ->
+                        binding.spSection.setText(first.sectionName, false)
+                        lastSectionId = first.sectionId
+                        runUpdateAsync(ClothingUpdateRequestDto(sectionId = first.sectionId))
+                    }
+                } catch (e: Exception) {
+                    Toast.makeText(this@ClothingDetailActivity, "옷장 변경", Toast.LENGTH_SHORT).show()
+                } finally {
+                    isBinding = false
+                }
+            }
+        }
+
+        // 삭제
+        binding.btnDelete.setOnClickListener {
+            showDeleteDialog()
+        }
+    }
+
+    private fun loadAllAndBind() {
+        val mySeq = ++loadSeq
+        lifecycleScope.launch {
+            try {
+                isBinding = true
+                //옷 상세 정보
+                val detail = closetRepository.fetchClothingDetail(clothingId)
+                if (mySeq != loadSeq) return@launch
+
+                lastSectionId = detail.sectionId
+                lastCategoryId = detail.categoryId
+                lastClosetId = closetId
+
+                //옷장 목록, 카테고리 목록 로드
+                closets = closetRepository.fetchHomeClosetList()
+                categories = closetRepository.fetchCategories()
+
+                //현재 옷장의 섹션 목록 로드
+                val viewData = closetRepository.fetchClosetView(lastClosetId)
+                closetSections = viewData.sections
+
+                //어댑터 세팅 및 초기값 설정
+                bindSpinners()
+
+            } catch (e: Exception) {
+                Log.e("DETAIL", "Load failed", e)
+                Toast.makeText(this@ClothingDetailActivity, "정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
+            } finally {
+                isBinding = false
+            }
+        }
+    }
+
+    private fun bindSpinners() {
+        binding.spCloset.setAdapter(spinnerAdapter(closets.map { it.closetName }))
+        binding.spType.setAdapter(spinnerAdapter(categories.map { it.name }))
+        binding.spSection.setAdapter(spinnerAdapter(closetSections.map { it.sectionName }))
+
+        // 현재 선택된 값 표시
+        closets.find { it.closetId == lastClosetId }?.let { binding.spCloset.setText(it.closetName, false) }
+        categories.find { it.categoryId == lastCategoryId }?.let { binding.spType.setText(it.name, false) }
+        closetSections.find { it.sectionId == lastSectionId }?.let { binding.spSection.setText(it.sectionName, false) }
+    }
+
+    private fun showDeleteDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("옷 삭제")
+            .setMessage("정말 이 옷을 삭제하시겠습니까?")
+            .setPositiveButton("삭제") { _, _ ->
+                lifecycleScope.launch {
+                    try {
+                        closetRepository.deleteClothing(clothingId)
+                        setResult(RESULT_OK)
+                        finish()
+                    } catch (e: Exception) {
+                        Toast.makeText(this@ClothingDetailActivity, "삭제 실패", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .setNegativeButton("취소", null)
+            .show()
+    }
+
+    // Helper for Async updates
+    private suspend fun runUpdateAsync(req: ClothingUpdateRequestDto) {
+        closetRepository.updateClothing(clothingId, req)
+    }
+
+    private fun runUpdate(req: ClothingUpdateRequestDto, onSuccess: () -> Unit) {
+        updateJob?.cancel()
+        updateJob = lifecycleScope.launch {
+            try {
+                closetRepository.updateClothing(clothingId, req)
+                onSuccess()
+                setResult(RESULT_OK)
+            } catch (e: Exception) {
+                Toast.makeText(this@ClothingDetailActivity, "변경 실패", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun spinnerAdapter(items: List<String>) =
+        ArrayAdapter(this, R.layout.item_spinner, items).apply {
+            setDropDownViewResource(R.layout.item_spinner_dropdown)
+        }
+}
+
+/**
 
     private lateinit var binding: ActivityClothingDetailBinding
 
@@ -49,6 +255,11 @@ class ClothingDetailActivity : AppCompatActivity() {
     private var updateJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
+    }
+
+
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, true)
 
@@ -240,4 +451,4 @@ class ClothingDetailActivity : AppCompatActivity() {
             setDropDownViewResource(R.layout.item_spinner_dropdown)
         }
     }
-}
+}**/

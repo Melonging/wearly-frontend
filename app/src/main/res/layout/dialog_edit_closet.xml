@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -75,8 +76,10 @@
                 android:gravity="center"
                 android:text="옷장"
                 android:textSize="14sp"
-                android:textColor="#111111"
-                android:background="#E5E5EC" />
+                android:clickable="true"
+                android:focusable="true"
+                android:textColor="@drawable/selector_wardrobe_text"
+                android:background="@drawable/selector_wardrobe_type" />
 
             <TextView
                 android:id="@+id/type_drawer_tv"
@@ -86,9 +89,11 @@
                 android:gravity="center"
                 android:text="서랍장"
                 android:textSize="14sp"
-                android:textColor="#999999"
-                android:background="#E5E5EC"
-                android:layout_marginStart="8dp" />
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginStart="8dp"
+                android:textColor="@drawable/selector_wardrobe_text"
+                android:background="@drawable/selector_wardrobe_type" />
 
             <TextView
                 android:id="@+id/type_shoes_tv"
@@ -98,9 +103,11 @@
                 android:gravity="center"
                 android:text="신발장"
                 android:textSize="14sp"
-                android:textColor="#999999"
-                android:background="#E5E5EC"
-                android:layout_marginStart="8dp" />
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginStart="8dp"
+                android:textColor="@drawable/selector_wardrobe_text"
+                android:background="@drawable/selector_wardrobe_type" />
         </LinearLayout>
 
         <!-- 간격 -->
@@ -129,28 +136,16 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
+                android:hint="옷장1"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:textSize="14sp"
                 android:textColor="#111111"
-                android:hint="옷장1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/name_count_tv"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <TextView
-                android:id="@+id/name_count_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="3 / 10"
-                android:textSize="12sp"
-                android:textColor="#999999"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- 완료 버튼 -->
@@ -162,6 +157,7 @@
             android:textSize="15sp"
             android:textColor="#FFFFFF"
             android:backgroundTint = "@color/logo_color" />
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

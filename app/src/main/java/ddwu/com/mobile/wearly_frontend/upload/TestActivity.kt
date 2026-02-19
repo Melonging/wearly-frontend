@@ -50,7 +50,7 @@ class TestActivity : AppCompatActivity() {
 
     private fun startUploadAndPoll(imageUri: Uri) {
         lifecycleScope.launch {
-            val api = ApiClient.uploadApi()
+            val api = ApiClient.uploadApi(context = this@TestActivity)
             val auth = "Bearer $ACCESS_TOKEN"
 
             binding.textView.text = "업로드 시작 요청 보내는 중..."

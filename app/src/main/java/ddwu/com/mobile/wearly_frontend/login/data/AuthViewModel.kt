@@ -79,6 +79,7 @@ class AuthViewModel: ViewModel() {
             override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
                 isEmailSent.value = false
                 errorMessage.value = "서버 연결 실패"
+
                 Log.e("AuthVM", "서버 연결 실패: ${t.message}")
             }
         })

@@ -1,6 +1,8 @@
 package ddwu.com.mobile.wearly_frontend.upload.data.remote
 
+import android.content.Context
 import ddwu.com.mobile.wearly_frontend.BuildConfig
+import ddwu.com.mobile.wearly_frontend.TokenManager
 import ddwu.com.mobile.wearly_frontend.upload.data.remote.closet.ClosetApi
 import ddwu.com.mobile.wearly_frontend.upload.data.remote.upload.UploadApi
 import okhttp3.Interceptor
@@ -11,37 +13,40 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object ApiClient {
-    private val BASE_URL: String = BuildConfig.BASE_URL
-    private val TEST_TOKEN: String = BuildConfig.TEST_TOKEN
+    private const val BASE_URL = BuildConfig.BASE_URL
+    private var retrofit: Retrofit? = null
 
-    private val retrofit: Retrofit by lazy {
-        val logger = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
+    fun getRetrofit(context: Context): Retrofit {
+        return retrofit ?: synchronized(this) {
+            val logger = HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
 
-        val authInterceptor = Interceptor { chain ->
-            val token = TEST_TOKEN.trim()
-            val req = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer $token")
+            val authInterceptor = Interceptor { chain ->
+                val tokenManager = TokenManager(context)
+                val token = tokenManager.getToken() ?: ""
+
+                val req = chain.request().newBuilder()
+                    .addHeader("Authorization", "Bearer ${token.trim()}")
+                    .build()
+                chain.proceed(req)
+            }
+
+            val client = OkHttpClient.Builder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .addInterceptor(authInterceptor)
+                .addInterceptor(logger)
                 .build()
-            chain.proceed(req)
+
+            Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .also { retrofit = it }
         }
-
-        val client = OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(15, TimeUnit.SECONDS)
-            .writeTimeout(15, TimeUnit.SECONDS)
-            .addInterceptor(authInterceptor)
-            .addInterceptor(logger)
-            .build()
-
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
     }
-
-    fun uploadApi(): UploadApi = retrofit.create(UploadApi::class.java)
-    fun closetApi(): ClosetApi = retrofit.create(ClosetApi::class.java)
+    fun uploadApi(context: Context): UploadApi = getRetrofit(context).create(UploadApi::class.java)
+    fun closetApi(context: Context): ClosetApi = getRetrofit(context).create(ClosetApi::class.java)
 }

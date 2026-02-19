@@ -65,14 +65,14 @@
                 android:layout_weight="1">
 
                 <View
-                    android:id="@+id/date_view_1"
+                    android:id="@+id/dateView1"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_closet_date_selected" />
 
                 <TextView
-                    android:id="@+id/tv_date_1"
+                    android:id="@+id/tvDate1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -88,18 +88,18 @@
                 android:layout_weight="1">
 
                 <View
-                    android:id="@+id/date_view_2"
+                    android:id="@+id/dateView2"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_closet_date_selected" />
 
                 <TextView
-                    android:id="@+id/tv_date_2"
+                    android:id="@+id/tvDate2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="1"
+                    android:text="2"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"/>
             </FrameLayout>
@@ -111,18 +111,18 @@
                 android:layout_weight="1">
 
                 <View
-                    android:id="@+id/date_view_3"
+                    android:id="@+id/dateView3"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_closet_date_selected" />
 
                 <TextView
-                    android:id="@+id/tv_date_3"
+                    android:id="@+id/tvDate3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="1"
+                    android:text="3"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"/>
             </FrameLayout>
@@ -134,18 +134,18 @@
                 android:layout_weight="1">
 
                 <View
-                    android:id="@+id/date_view_4"
+                    android:id="@+id/dateView4"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_closet_date_selected" />
 
                 <TextView
-                    android:id="@+id/tv_date_4"
+                    android:id="@+id/tvDate4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="1"
+                    android:text="4"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"/>
             </FrameLayout>
@@ -157,18 +157,18 @@
                 android:layout_weight="1">
 
                 <View
-                    android:id="@+id/date_view_5"
+                    android:id="@+id/dateView5"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_closet_date_selected" />
 
                 <TextView
-                    android:id="@+id/tv_date_5"
+                    android:id="@+id/tvDate5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="1"
+                    android:text="5"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"/>
             </FrameLayout>
@@ -180,18 +180,18 @@
                 android:layout_weight="1">
 
                 <View
-                    android:id="@+id/date_view_6"
+                    android:id="@+id/dateView6"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_closet_date_selected" />
 
                 <TextView
-                    android:id="@+id/tv_date_6"
+                    android:id="@+id/tvDate6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="1"
+                    android:text="6"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"/>
             </FrameLayout>
@@ -203,18 +203,18 @@
                 android:layout_weight="1">
 
                 <View
-                    android:id="@+id/date_view_7"
+                    android:id="@+id/dateView7"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_closet_date_selected" />
 
                 <TextView
-                    android:id="@+id/tv_date_7"
+                    android:id="@+id/tvDate7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="1"
+                    android:text="7"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"/>
             </FrameLayout>
@@ -226,57 +226,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingHorizontal="10dp"
-            android:paddingBottom="8dp">
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_closet_card" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="5dp"
-                android:background="@drawable/bg_closet_card" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="5dp"
-                android:background="@drawable/bg_closet_card" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="5dp"
-                android:background="@drawable/bg_closet_card" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="5dp"
-                android:background="@drawable/bg_closet_card" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="5dp"
-                android:background="@drawable/bg_closet_card" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="5dp"
-                android:background="@drawable/bg_closet_card" />
+            android:weightSum="7"
+            android:padding="8dp">
         </LinearLayout>
     </LinearLayout>
 
@@ -295,7 +246,7 @@
 
         <TextView
             android:id="@+id/my_closet_title_tv"
-            android:layout_width="308dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="내 옷장"
@@ -304,15 +255,16 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/add_icon_iv"
+            android:id="@+id/addIconIv"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_closet_plus"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="4dp"/>
+            android:padding="4dp"
+            android:layout_marginEnd="8dp"/>
 
         <ImageView
-            android:id="@+id/more_options_iv"
+            android:id="@+id/moreOptionsIv"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_closet_more"
@@ -322,205 +274,476 @@
 
     <!-- Tabs -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_closet_chips"
+        android:id="@+id/rvClosetChips"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:orientation="horizontal"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/wardrobe_header_layout"
         tools:listitem="@layout/item_closet_chip_list" />
 
     <!-- 전체 배경 카드 -->
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <ScrollView
+        android:id="@+id/scroll_closet_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:fillViewport="true"
         android:background="@drawable/bg_closet_card_back"
-        android:orientation="vertical"
-        android:padding="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rv_closet_chips">
+        app:layout_constraintTop_toBottomOf="@id/rvClosetChips">
 
-        <!-- 상단 행거 2개 -->
         <LinearLayout
-            android:id="@+id/hanger_row"
-            android:layout_width="280dp"
-            android:layout_height="220dp"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="25dp">
 
-            <!-- 행거 1 -->
+            <!-- ✅ 옷장 타입 (행거 + 서랍) -->
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_closet_card"
+                android:id="@+id/layoutHangerGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:visibility="visible">
 
-                <TextView
-                    android:id="@+id/tv_hanger1_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="행거 1"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                <!-- 행거 영역 -->
+                <LinearLayout
+                    android:layout_width="280dp"
+                    android:layout_height="220dp"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="아우터"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    <!-- 행거 1 -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_closet_card"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="8 items"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/tvHanger1Title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="행거 1"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
 
-                <ImageView
-                    android:id="@+id/btn_hanger1"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="end"
-                    android:src="@drawable/ic_closet_chevron_right" />
+                        <ImageView
+                            android:id="@+id/btnHanger1"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="end"
+                            android:src="@drawable/ic_closet_chevron_right" />
+                    </LinearLayout>
+
+                    <!-- 행거 2 -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_closet_card"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/tvHanger2Title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="행거 2"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <ImageView
+                            android:id="@+id/btnHanger2"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="end"
+                            android:src="@drawable/ic_closet_chevron_right" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- ✅ 서랍 영역 (행거 밖으로 이동) -->
+                <!-- 서랍 1 -->
+                <LinearLayout
+                    android:id="@+id/drawer1_1"
+                    android:layout_width="280dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_closet_card"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvDrawer11Title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="서랍 1"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/btnDrawer11"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_closet_chevron_right" />
+                </LinearLayout>
+
+                <!-- 서랍 2 -->
+                <LinearLayout
+                    android:id="@+id/drawer1_2"
+                    android:layout_width="280dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_closet_card"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvDrawer12Title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="서랍 2"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/btnDrawer12"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_closet_chevron_right" />
+                </LinearLayout>
             </LinearLayout>
 
-            <!-- 행거 2 -->
+            <!-- ✅ 서랍장 타입 (서랍 4개) -->
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_closet_card"
+                android:id="@+id/layoutDrawerGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/tv_hanger2_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="행거 2"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                <LinearLayout
+                    android:id="@+id/drawer1"
+                    android:layout_width="280dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_closet_card"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="아우터"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/tvDrawer1Title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="서랍 1"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="8 items"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    <ImageView
+                        android:id="@+id/btnDrawer1"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_closet_chevron_right" />
+                </LinearLayout>
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
+                <LinearLayout
+                    android:id="@+id/drawer2"
+                    android:layout_width="280dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_closet_card"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
 
-                <ImageView
-                    android:id="@+id/btn_hanger2"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="end"
-                    android:src="@drawable/ic_closet_chevron_right" />
+                    <TextView
+                        android:id="@+id/tvDrawer2Title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="서랍 2"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/btnDrawer2"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_closet_chevron_right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/drawer3"
+                    android:layout_width="280dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_closet_card"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvDrawer3Title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="서랍 3"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/btnDrawer3"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_closet_chevron_right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/drawer4"
+                    android:layout_width="280dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_closet_card"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvDrawer4Title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="서랍 4"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/btnDrawer4"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_closet_chevron_right" />
+                </LinearLayout>
             </LinearLayout>
+
+            <!-- ✅ 신발장 타입 (선반 6개) -->
+            <LinearLayout
+                android:id="@+id/layoutShoesGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/shoes1"
+                    android:layout_width="280dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_closet_card"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvShoes1Title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="선반 1"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/btnShoes1"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_closet_chevron_right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shoes2"
+                    android:layout_width="280dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_closet_card"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvShoes2Title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="선반 2"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/btnShoes2"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_closet_chevron_right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shoes3"
+                    android:layout_width="280dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_closet_card"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvShoes3Title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="선반 3"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/btnShoes3"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_closet_chevron_right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shoes4"
+                    android:layout_width="280dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_closet_card"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvShoes4Title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="선반 4"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/btnShoes4"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_closet_chevron_right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shoes5"
+                    android:layout_width="280dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_closet_card"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvShoes5Title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="선반 5"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/btnShoes5"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_closet_chevron_right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shoes6"
+                    android:layout_width="280dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_closet_card"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvShoes6Title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="선반 6"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/btnShoes6"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_closet_chevron_right" />
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
-
-
-        <!-- 서랍 1 -->
-        <LinearLayout
-            android:id="@+id/drawer1"
-            android:layout_width="280dp"
-            android:layout_height="90dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/bg_closet_card"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/tv_drawer1_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="서랍 1"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="아우터"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-            <ImageView
-                android:id="@+id/btn_drawer1"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_closet_chevron_right" />
-        </LinearLayout>
-
-
-        <!-- 서랍 2 -->
-        <LinearLayout
-            android:id="@+id/drawer2"
-            android:layout_width="280dp"
-            android:layout_height="90dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/bg_closet_card"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/tv_drawer2_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="서랍 2"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="아우터"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-            <ImageView
-                android:id="@+id/btn_drawer2"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_closet_chevron_right" />
-        </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

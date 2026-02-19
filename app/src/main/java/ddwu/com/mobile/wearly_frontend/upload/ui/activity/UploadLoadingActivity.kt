@@ -169,7 +169,7 @@ class UploadLoadingActivity : AppCompatActivity() {
         pollingJob?.cancel()
         pollingJob = lifecycleScope.launch {
             try {
-                val api = ApiClient.uploadApi()
+                val api = ApiClient.uploadApi(context = this@UploadLoadingActivity)
 
                 // 1) 업로드 시작
                 val startRes = api.startClothingUpload(

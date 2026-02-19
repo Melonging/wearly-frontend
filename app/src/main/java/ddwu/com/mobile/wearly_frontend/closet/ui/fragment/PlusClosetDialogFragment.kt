@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ddwu.com.mobile.wearly_frontend.R
 import ddwu.com.mobile.wearly_frontend.databinding.DialogPlusClosetBinding
@@ -42,15 +43,37 @@ class PlusClosetDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.closeIc.setOnClickListener {
-            dismiss()
-        }
+        //초기 상태 설정
+        updateTypeSelection(WardrobeType.CLOSET)
+
+        binding.typeClosetTv.setOnClickListener { updateTypeSelection(WardrobeType.CLOSET) }
+        binding.typeDrawerTv.setOnClickListener { updateTypeSelection(WardrobeType.DRAWER) }
+        binding.typeShoesTv.setOnClickListener { updateTypeSelection(WardrobeType.SHOES) }
 
         binding.confirmBtn.setOnClickListener {
             val name = binding.nameEt.text?.toString()?.trim().orEmpty()
             if (name.isNotEmpty()) {
                 listener?.onWardrobeEdited(currentType, name)
                 dismiss()
+            }
+        }
+
+        binding.closeIc.setOnClickListener { dismiss() }
+    }
+
+    private fun updateTypeSelection(type: WardrobeType) {
+        binding.typeClosetTv.isSelected = (type == WardrobeType.CLOSET)
+        binding.typeDrawerTv.isSelected = (type == WardrobeType.DRAWER)
+        binding.typeShoesTv.isSelected = (type == WardrobeType.SHOES)
+
+        val views = listOf(binding.typeClosetTv, binding.typeDrawerTv, binding.typeShoesTv)
+        val types = listOf(WardrobeType.CLOSET, WardrobeType.DRAWER, WardrobeType.SHOES)
+
+        views.forEachIndexed { index, textView ->
+            if (types[index] == type) {
+                textView.setTypeface(null, android.graphics.Typeface.BOLD)
+            } else {
+                textView.setTypeface(null, android.graphics.Typeface.NORMAL)
             }
         }
     }
