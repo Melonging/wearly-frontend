@@ -95,8 +95,7 @@ data class ClothingDetail(
 )
 
 data class UpdateClosetNameRequest(
-    val closetName: String,
-    val templateId: Int
+    val closetName: String
 )
 
 data class DeleteClosetData(

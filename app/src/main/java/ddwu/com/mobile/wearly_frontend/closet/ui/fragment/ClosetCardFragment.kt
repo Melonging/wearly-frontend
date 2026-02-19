@@ -201,7 +201,7 @@ class ClosetCardFragment : Fragment() {
                 // 2. 이름과 templateId를 함께 전송
                 val response = apiService.updateClosetName(
                     selectedClosetId,
-                    UpdateClosetNameRequest(name, templateId)
+                    UpdateClosetNameRequest(name)
                 )
 
                 if (response.success) { // 👈 if문 괄호와 조건 확인
@@ -614,7 +614,7 @@ class ClosetCardFragment : Fragment() {
     }
 
     private fun getTodayWeatherFromWeekly() {
-        val token = TokenManager(requireContext()).getToken() ?: ""
+        val token = TokenManager.getToken() ?: ""
         val todayFormatted = getTodayFormattedAsMonthDay()
 
         weatherViewModel.fetchWeeklyWeather(37.5665, 126.9780, token)
@@ -764,7 +764,7 @@ class ClosetCardFragment : Fragment() {
 
             val tvDate = slotView.findViewById<TextView>(R.id.tv_slot_date)
             val ivImage = slotView.findViewById<ImageView>(R.id.iv_slot_image)
-            val slotContainer = slotView.findViewById<View>(R.id.rvClosetChips) // 슬롯 전체 배경
+            val slotContainer = slotView.findViewById<View>(R.id.day_slots_layout) // 슬롯 전체 배경
 
             // 날짜 텍스트 설정
             tvDate.text = dayOnly

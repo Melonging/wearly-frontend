@@ -1,7 +1,6 @@
 package ddwu.com.mobile.wearly_frontend.upload.data.remote
 
 import android.content.Context
-import ddwu.com.mobile.wearly_frontend.BuildConfig
 import ddwu.com.mobile.wearly_frontend.TokenManager
 import ddwu.com.mobile.wearly_frontend.upload.data.remote.closet.ClosetApi
 import ddwu.com.mobile.wearly_frontend.upload.data.remote.upload.UploadApi
@@ -11,6 +10,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import ddwu.com.mobile.wearly_frontend.BuildConfig
+import ddwu.com.mobile.wearly_frontend.category.data.remote.CategoryApi
+import ddwu.com.mobile.wearly_frontend.records.data.remote.RecordsApi
 
 object ApiClient {
     private const val BASE_URL = BuildConfig.BASE_URL
@@ -23,8 +25,7 @@ object ApiClient {
             }
 
             val authInterceptor = Interceptor { chain ->
-                val tokenManager = TokenManager(context)
-                val token = tokenManager.getToken() ?: ""
+                val token = TokenManager.getToken() ?: ""
 
                 val req = chain.request().newBuilder()
                     .addHeader("Authorization", "Bearer ${token.trim()}")
@@ -49,4 +50,6 @@ object ApiClient {
     }
     fun uploadApi(context: Context): UploadApi = getRetrofit(context).create(UploadApi::class.java)
     fun closetApi(context: Context): ClosetApi = getRetrofit(context).create(ClosetApi::class.java)
+    fun recordsApi(context: Context): RecordsApi = getRetrofit(context).create(RecordsApi::class.java)
+    fun categoryApi(context: Context): CategoryApi = getRetrofit(context).create(CategoryApi::class.java)
 }

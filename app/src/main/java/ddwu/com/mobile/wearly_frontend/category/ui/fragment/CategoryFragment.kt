@@ -132,7 +132,7 @@ class CategoryFragment : Fragment() {
     private fun fetchCategoriesAndInit() {
         viewLifecycleOwner.lifecycleScope.launch {
             runCatching {
-                val res = ApiClient.categoryApi().getCategories()
+                val res = ApiClient.categoryApi(requireContext()).getCategories()
                 if (!res.success) error(res.error?.message ?: "카테고리 조회 실패")
 
                 categories = res.data?.categories.orEmpty()
@@ -157,10 +157,11 @@ class CategoryFragment : Fragment() {
     private fun fetchClothes(categoryId: Long?) {
         viewLifecycleOwner.lifecycleScope.launch {
             runCatching {
+                val api = ApiClient.categoryApi(requireContext())
                 val res = if (categoryId == null) {
-                    ApiClient.categoryApi().getAllClothes()
+                    api.getAllClothes()
                 } else {
-                    ApiClient.categoryApi().getClothesByCategory(categoryId)
+                    api.getClothesByCategory(categoryId)
                 }
 
                 if (!res.success) error(res.error?.message ?: "옷 조회 실패")

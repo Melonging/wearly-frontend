@@ -20,7 +20,7 @@ class RecordFragment : Fragment() {
     private lateinit var adapter: RecordsAdapter
 
     private val repository by lazy {
-        WearRecordRepository(ApiClient.recordsApi())
+        WearRecordRepository(ApiClient.recordsApi(requireContext()))
     }
 
     private val pending = mutableSetOf<Long>()
