@@ -105,9 +105,14 @@ class LoginActivity : AppCompatActivity() {
 
         sharedViewModel.isLoginSuccess.observe(this) { isSuccess ->
             if (isSuccess) {
+
+                val userName = sharedViewModel.userName.value
+                if (!userName.isNullOrEmpty()) {
+                    TokenManager.saveUserName(this, userName)
+                }
+
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-
                 finish()
             }
         }

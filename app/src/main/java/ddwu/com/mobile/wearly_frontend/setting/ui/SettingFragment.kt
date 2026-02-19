@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import ddwu.com.mobile.wearly_frontend.R
+import ddwu.com.mobile.wearly_frontend.TokenManager
 import ddwu.com.mobile.wearly_frontend.databinding.FragmentSettingBinding
 
 
@@ -58,6 +59,9 @@ class SettingFragment : Fragment() {
 
 
         }
+
+        val name = TokenManager.getUserName(requireContext()) ?: "사용자"
+        binding.tvName.text = name
 
         binding.rowAppLock.setOnClickListener {
             val intent = Intent(requireContext(), PinActivity::class.java)
