@@ -82,7 +82,8 @@ class CodiDiaryReadFragment : Fragment() {
 
                 when {
                     clothes != null && clothes.isNotEmpty() && hasLayout -> {
-                        displayClothesWithLayout(clothes)
+                        displayClothesWithLayout( binding.diaryReadClothesFrame,
+                            clothes)
                     }
 
                     !data.image_url.isNullOrEmpty() -> {
@@ -156,38 +157,194 @@ class CodiDiaryReadFragment : Fragment() {
         }
     }
 
+
+    /*
+
+    data class Pos(val x: Float, val y: Float, val scale: Float, val z: Float)
+
+    private fun basePos(category: String?, hasOuter: Boolean): Pos {
+        return if (hasOuter) {
+            //  아우터 있는 날
+            when (category) {
+                "아우터" -> Pos(0.35f, 0.35f, 1.15f, 6f)
+                "상의"   -> Pos(0.62f, 0.35f, 1.65f, 5f)
+                "바지"   -> Pos(0.70f, 0.60f, 1.65f, 4f)
+                "스커트/원피스" -> Pos(0.70f, 0.60f, 1.65f, 4f)
+                "신발"   -> Pos(0.35f, 0.69f, 1.25f, 7f)
+                "가방"   -> Pos(0.78f, 0.55f, 1.00f, 7f)
+                else     -> Pos(0.50f, 0.50f, 1.25f, 1f)
+            }
+        } else {
+            //  아우터 없는 날
+            when (category) {
+                "상의"   -> Pos(0.40f, 0.35f, 1.45f, 4f)
+                "바지"   -> Pos(0.70f, 0.60f, 1.75f, 5f)
+                "스커트/원피스" -> Pos(0.70f, 0.60f, 1.65f, 4f)
+                "신발"   -> Pos(0.40f, 0.72f, 1.25f, 7f)
+                "가방"   -> Pos(0.78f, 0.55f, 1.00f, 6f)
+                else     -> Pos(0.50f, 0.50f, 1.25f, 1f)
+            }
+        }
+    }
+
+
     private fun displayClothesWithLayout(clothes: List<DiaryClothItem>) {
+
         val container = binding.diaryReadClothesFrame
         container.removeAllViews()
 
         container.post {
-            val parentWidth = container.width
-            val parentHeight = container.height
-            val viewSize = (parentWidth * 0.4f).toInt().coerceAtLeast(1)
+
+            val pw = container.width.toFloat()
+            val ph = container.height.toFloat()
+            if (pw == 0f || ph == 0f) return@post
+
+            val stage = minOf(pw, ph)
+            val left = (pw - stage) / 2f
+            val top  = (ph - stage) / 2f
+
+            val hasOuter = clothes.any { it.category_name == "아우터" }
+
+            clothes.forEach { cloth ->
+
+                val pos = basePos(cloth.category_name, hasOuter)
+
+                val size = (stage * 0.45f * pos.scale).toInt()
+
+                val iv = ImageView(requireContext()).apply {
+                    layoutParams = FrameLayout.LayoutParams(size, size)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+
+                    z = pos.z
+                }
+
+                val x = left + stage * pos.x - size / 2f
+                val y = top  + stage * pos.y - size / 2f
+
+                iv.x = x
+                iv.y = y
+
+                Glide.with(this)
+                    .load(cloth.image)
+                    .into(iv)
+
+                container.addView(iv)
+            }
+        }
+    }
+
+     */
+
+
+    private fun scaleFor(cat: String): Float = when (cat) {
+        "아우터" -> 0.65f
+        "상의" -> 0.65f
+        "바지", "원피스", "스커트" -> 0.65f
+        "신발" -> 0.50f
+        "가방" -> 0.40f
+        else -> 0.5f
+    }
+
+
+
+
+    private fun displayClothesWithLayout(
+        container: FrameLayout,
+        items: List<DiaryClothItem>
+    ) {
+        container.removeAllViews()
+
+        container.post {
+            val pw = container.width.toFloat()
+            val ph = container.height.toFloat()
+            if (pw <= 0f || ph <= 0f) return@post
+
+            val stage = minOf(pw, ph)
+            val left = (pw - stage) / 2f
+            val top = (ph - stage) / 2f
+
+            val sorted = items
+                .mapNotNull { c -> c.layout?.let { l -> c to l } }
+                .sortedBy { it.second.z_index }
+
+            sorted.forEach { (cloth, l) ->
+
+                val scale = scaleFor(cloth.category_name ?: "")
+                val size = (stage * scale).toInt()
+
+                val iv = ImageView(container.context).apply {
+                    layoutParams = FrameLayout.LayoutParams(size, size)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+                    z = l.z_index.toFloat()
+                }
+
+                val cx = left + stage * l.x_ratio.toFloat()
+                val cy = top + stage * l.y_ratio.toFloat()
+
+                iv.x = cx - size / 2f
+                iv.y = cy - size / 2f
+
+                Glide.with(container).load(cloth.image).into(iv)
+                container.addView(iv)
+            }
+        }
+    }
+
+
+
+    /*
+
+    private fun displayClothesWithLayout(clothes: List<DiaryClothItem>) {
+
+        val container = binding.diaryReadClothesFrame
+        container.removeAllViews()
+
+        container.post {
+
+            val pw = container.width.toFloat()
+            val ph = container.height.toFloat()
+
+            if (pw == 0f || ph == 0f) return@post
 
             clothes
                 .filter { it.layout != null }
                 .sortedBy { it.layout!!.z_index }
                 .forEach { cloth ->
-                    val layout = cloth.layout ?: return@forEach
 
-                    val imageView = ImageView(requireContext()).apply {
-                        layoutParams = FrameLayout.LayoutParams(viewSize, viewSize)
-                        scaleType = ImageView.ScaleType.CENTER_INSIDE
+                    val layout = cloth.layout!!
+
+                    val size = (pw * 0.4f).toInt() // 일단 고정
+
+                    val iv = ImageView(requireContext()).apply {
+                        layoutParams = FrameLayout.LayoutParams(size, size)
+                        scaleType = ImageView.ScaleType.FIT_CENTER
                         z = layout.z_index.toFloat()
                     }
 
-                    imageView.x = (parentWidth * layout.x_ratio.toFloat()) - (viewSize / 2f)
-                    imageView.y = (parentHeight * layout.y_ratio.toFloat()) - (viewSize / 2f)
+                    val cx = pw * layout.x_ratio.toFloat()
+                    val cy = ph * layout.y_ratio.toFloat()
+
+                    iv.x = cx - size / 2f
+                    iv.y = cy - size / 2f
 
                     Glide.with(this)
                         .load(cloth.image)
-                        .into(imageView)
+                        .into(iv)
 
-                    container.addView(imageView)
+                    container.addView(iv)
                 }
         }
     }
+
+     */
+
+
+
+
+
+
+
+
 
     // 날씨 아이콘 4개 카테고리 매핑 함수
     private fun getWeatherIcon(iconCode: String): Int {

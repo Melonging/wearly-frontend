@@ -46,6 +46,14 @@ interface CodiDiaryService {
         @Query("date") date: String
     ): Response<CodiDiaryReadResponse>
 
+    @GET("api/v1/wear-records")
+    suspend fun getWearRecordsByMonth(
+        @Header("Authorization") token: String,
+        @Query("year") year: Int,
+        @Query("month") month: Int
+    ): Response<CodiDiaryReadResponse>
+
+
 
     // 일기 수정
     @PATCH("api/v1/wear-records/{dateId}")
