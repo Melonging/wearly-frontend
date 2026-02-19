@@ -9,6 +9,8 @@ object TokenManager {
     private const val KEY = "access_token"
     private lateinit var prefs: SharedPreferences
 
+    private const val KEY_NAME = "user_name"
+
     fun init(context: Context) {
         prefs = context.getSharedPreferences(PREF, Context.MODE_PRIVATE)
     }
@@ -23,6 +25,22 @@ object TokenManager {
 
     fun clearToken() {
         prefs.edit().remove(KEY).apply()
+    }
+
+    fun saveUserName(context: Context, name: String) {
+        context.getSharedPreferences(PREF, Context.MODE_PRIVATE)
+            .edit()
+            .putString(KEY_NAME, name)
+            .apply()
+    }
+
+    fun getUserName(context: Context): String? {
+        return context.getSharedPreferences(PREF, Context.MODE_PRIVATE)
+            .getString(KEY_NAME, null)
+    }
+
+    fun clear(context: Context) {
+        context.getSharedPreferences(PREF, Context.MODE_PRIVATE).edit().clear().apply()
     }
 }
 

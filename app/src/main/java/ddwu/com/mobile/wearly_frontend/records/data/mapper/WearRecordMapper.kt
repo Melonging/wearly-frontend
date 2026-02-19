@@ -4,23 +4,18 @@ import ddwu.com.mobile.wearly_frontend.records.data.dto.WearRecordDto
 import ddwu.com.mobile.wearly_frontend.records.data.model.WearRecordItemUi
 
 fun WearRecordDto.toUi(): WearRecordItemUi {
-
-    val title = outfit?.outfit_name?.takeIf { it.isNotBlank() }
-        ?: if (outfit != null) "코디" else "갤러리 기록"
-
-    val tempText = if (weather?.temp_min != null && weather.temp_max != null) {
-        "${stripZero(weather.temp_min)}°/${stripZero(weather.temp_max)}°"
-    } else null
+    val min = this.weather?.temp_min
+    val max = this.weather?.temp_max
 
     return WearRecordItemUi(
-        id = date_id,
-        title = title,
-        dateText = wear_date,
-        tempText = tempText,
-        iconCode = weather?.weather_icon,
-        thumbUrl = image_url,
-        isHeart = is_heart,
-        isOutfit = outfit != null
+        id = this.date_id.toLong(),
+        title = this.outfit?.outfit_name ?: "기록",
+        dateText = this.wear_date,
+        tempText = if (min != null && max != null) "${min.toInt()}°/${max.toInt()}°" else null,
+        iconCode = this.weather?.weather_icon,
+        thumbUrl = this.image_url ?: this.outfit?.clothes?.firstOrNull()?.image, // ✅ 핵심
+        isHeart = this.is_heart,
+        isOutfit = this.outfit != null
     )
 }
 
