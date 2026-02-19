@@ -63,7 +63,7 @@ class ClosetCardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getWeekFullDates() //날짜
         getTodayWeatherFromWeekly()   //날씨
-        //renderWeeklySlots(records)
+        renderWeeklySlots()
         setupClosetListeners()
     }
 
@@ -415,56 +415,41 @@ class ClosetCardFragment : Fragment() {
         closetId: Int,
         closetName: String
     ) {
-        // 행거 뷰들
-        val hangerPairs = listOf(
-            Pair(binding.tvHanger1Title, binding.btnHanger1),
-            Pair(binding.tvHanger2Title, binding.btnHanger2)
-        )
-
-        // 서랍 뷰들
-        val drawerPairs = listOf(
-            Pair(binding.tvDrawer11Title, binding.btnDrawer11),
-            Pair(binding.tvDrawer12Title, binding.btnDrawer12)
-        )
-
-        hangerPairs.forEach { (titleView, buttonView) ->
-            titleView.text = "비어 있음"
-            buttonView.isEnabled = false
-            buttonView.setOnClickListener(null)
+        sections.forEach {
+            Log.d("CHECK_ID", "이름: ${it.sectionName}, ID: ${it.sectionId}, 타입: ${it.sectionType}")
         }
 
-        drawerPairs.forEach { (titleView, buttonView) ->
-            titleView.text = "비어 있음"
-            buttonView.isEnabled = false
-            buttonView.setOnClickListener(null)
+        if (sections.size >= 1) {
+            val s1 = sections[0]
+
+            // 행거 1
+            binding.tvHanger1Title.text = s1.sectionName
+            binding.btnHanger1.isEnabled = true
+            binding.btnHanger1.setOnClickListener { openContainer(closetId, s1.sectionId, s1.sectionName, closetName) }
+
+            // 서랍 1 (임시로 s1의 ID 사용)
+            binding.tvDrawer11Title.text = "서랍 1"
+            binding.btnDrawer11.isEnabled = true
+            binding.btnDrawer11.setOnClickListener { openContainer(closetId, s1.sectionId, "서랍 1", closetName) }
         }
 
-        val hangers = sections.filter { it.sectionType == "행거" }
-        val drawers = sections.filter { it.sectionType == "서랍" }
+        if (sections.size >= 2) {
+            val s2 = sections[1]
 
-        Log.d("API_TEST", "행거: ${hangers.size}개, 서랍: ${drawers.size}개")
+            // 행거 2
+            binding.tvHanger2Title.text = s2.sectionName
+            binding.btnHanger2.isEnabled = true
+            binding.btnHanger2.setOnClickListener { openContainer(closetId, s2.sectionId, s2.sectionName, closetName) }
 
-        hangers.forEachIndexed { index, section ->
-            if (index < hangerPairs.size) {
-                val (titleView, buttonView) = hangerPairs[index]
-                titleView.text = section.sectionName
-                buttonView.isEnabled = true
-                buttonView.setOnClickListener {
-                    openContainer(closetId, section.sectionId, section.sectionName, closetName)
-                }
-            }
+            // 서랍 2 (임시로 s2의 ID 사용)
+            binding.tvDrawer12Title.text = "서랍 2"
+            binding.btnDrawer12.isEnabled = true
+            binding.btnDrawer12.setOnClickListener { openContainer(closetId, s2.sectionId, "서랍 2", closetName) }
+        } else {
+            binding.tvDrawer12Title.text = "서랍 2 (데이터 없음)"
+            binding.btnDrawer12.isEnabled = false
         }
 
-        drawers.forEachIndexed { index, section ->
-            if (index < drawerPairs.size) {
-                val (titleView, buttonView) = drawerPairs[index]
-                titleView.text = section.sectionName
-                buttonView.isEnabled = true
-                buttonView.setOnClickListener {
-                    openContainer(closetId, section.sectionId, section.sectionName, closetName)
-                }
-            }
-        }
     }
 
     private fun setupDrawerUI(
@@ -657,154 +642,17 @@ class ClosetCardFragment : Fragment() {
         }
     }
 
-//
-//    /**
-//     * 1. 데이터 로직: 이번 주 7일치 Date 리스트 생성
-//     */
-    private fun getCurrentWeekDates(): List<Date> {
-        val calendar = Calendar.getInstance()
-        val dates = mutableListOf<Date>()
+    private fun renderWeeklySlots() {
+        Glide.with(this)
+            .load(R.drawable.ic_day_6)
+            .into(binding.day6)
 
-        // 이번 주의 시작일(일요일)로 이동
-        val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-        calendar.add(Calendar.DAY_OF_MONTH, -(currentDayOfWeek - 1))
-
-        // 일요일부터 7일치 추가
-        for (i in 0 until 7) {
-            dates.add(calendar.time)
-            calendar.add(Calendar.DAY_OF_MONTH, 1)
-        }
-        return dates
+        Glide.with(this)
+            .load(R.drawable.ic_day_7)
+            .into(binding.day7)
     }
-//
-//    /**
-//     * 2. UI 로직: 생성된 날짜와 서버 기록(records)을 매칭하여 렌더링
-//     */
-//    private fun renderWeeklySlots(records: List<CodiRecord>) {
-//        val container = binding.daySlotsLayout
-//        container.removeAllViews() // 기존 슬롯 초기화
-//
-//        val weekDates = getCurrentWeekDates()
-//        val inflater = LayoutInflater.from(requireContext())
-//
-//        // 날짜 포맷 정의
-//        val fullDateSdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-//        val dayOnlySdf = SimpleDateFormat("d", Locale.getDefault())
-//
-//        // 오늘 날짜 확인 (하이라이트용 선택사항)
-//        val todayStr = fullDateSdf.format(Date())
-//
-//        weekDates.forEach { date ->
-//            // 슬롯 뷰 인플레이트
-//            val slotView = inflater.inflate(R.layout.item_day_slot, container, false)
-//
-//            val tvDate = slotView.findViewById<TextView>(R.id.tv_slot_date)
-//            val ivImage = slotView.findViewById<ImageView>(R.id.iv_slot_image)
-//            val viewDot = slotView.findViewById<View>(R.id.view_today_dot)
-//
-//            val dateStr = fullDateSdf.format(date)
-//            val dayOnly = dayOnlySdf.format(date)
-//
-//            // 날짜 텍스트 세팅
-//            tvDate.text = dayOnly
-//
-//            // 오늘 날짜인 경우 텍스트 색상 변경 등 처리 (옵션)
-//            if (dateStr == todayStr) {
-//                tvDate.setTextColor(resources.getColor(R.color.main_color, null))
-//            }
-//
-//            // 💡 서버 데이터와 날짜 매칭
-//            val recordForDay = records.find { it.date == dateStr }
-//
-//            if (recordForDay != null) {
-//                ivImage.visibility = View.VISIBLE
-//                // Glide 사용하여 코디 이미지 로드
-//                Glide.with(this)
-//                    .load(recordForDay.imageUrl)
-//                    .circleCrop() // 원형으로 보여줄 경우
-//                    .into(ivImage)
-//            } else {
-//                ivImage.visibility = View.GONE
-//                // 기록이 없을 때 보여줄 기본 아이콘이나 배경 설정 가능
-//            }
-//
-//            // 슬롯 클릭 이벤트
-//            slotView.setOnClickListener {
-//                // 상세 페이지로 이동하거나 해당 날짜 기록 보여주기
-//                navigateToDateDetail(dateStr)
-//            }
-//
-//            container.addView(slotView)
-//        }
-//    }
 
-    private fun renderWeeklySlots(records: List<CodiRecord>) {
-        val container = binding.daySlotsLayout
-        container.removeAllViews() // 기존 슬롯(또는 FrameLayout 내부) 초기화
 
-        // 1. 공통 데이터 준비
-        val weekDates = getCurrentWeekDates() // 아까 만든 7일치 리스트 생성 함수
-        val inflater = LayoutInflater.from(requireContext())
-
-        val fullDateSdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()) // 서버 비교용
-        val dayOnlySdf = SimpleDateFormat("d", Locale.getDefault())         // 화면 표시용 (1, 2, 3...)
-        val titleFormat = SimpleDateFormat("yyyy년 M월 d일", Locale.getDefault()) // 상단 타이틀용
-
-        // 2. 상단 캘린더 타이틀 업데이트 (오늘 날짜 기준)
-        binding.tvCalendarTitle.text = titleFormat.format(Date())
-        val todayStr = fullDateSdf.format(Date())
-
-        // 3. 7일치 슬롯 생성 시작
-        weekDates.forEach { date ->
-            val dateStr = fullDateSdf.format(date)
-            val dayOnly = dayOnlySdf.format(date)
-
-            // 슬롯 뷰(item_day_slot.xml) 인플레이트
-            val slotView = inflater.inflate(R.layout.item_day_slot, container, false)
-
-            val tvDate = slotView.findViewById<TextView>(R.id.tv_slot_date)
-            val ivImage = slotView.findViewById<ImageView>(R.id.iv_slot_image)
-            val slotContainer = slotView.findViewById<View>(R.id.day_slots_layout) // 슬롯 전체 배경
-
-            // 날짜 텍스트 설정
-            tvDate.text = dayOnly
-
-            // 오늘 날짜 하이라이트 (기존 getWeekFullDates의 배경 변경 로직 통합)
-            if (dateStr == todayStr) {
-                slotContainer?.setBackgroundResource(R.drawable.bg_closet_date_selected)
-                tvDate.setTextColor(Color.WHITE)
-            } else {
-                slotContainer?.setBackgroundResource(R.drawable.bg_closet_date_unselected)
-                tvDate.setTextColor(Color.parseColor("#666666"))
-            }
-
-            // 4. 💡 서버 데이터(records) 매칭
-            val recordForDay = records.find { it.date == dateStr }
-
-            if (recordForDay != null) {
-                ivImage.visibility = View.VISIBLE
-                Glide.with(this)
-                    .load(recordForDay.imageUrl)
-                    .circleCrop()
-                    .into(ivImage)
-            } else {
-                ivImage.visibility = View.GONE
-            }
-
-            // 5. 클릭 이벤트 (Navigation 로직 통합)
-            slotView.setOnClickListener {
-                val bundle = Bundle().apply {
-                    putString("selectedDate", dateStr)
-                }
-                findNavController().navigate(
-                    R.id.action_homeFragment_to_codiDiaryFragment,
-                    bundle
-                )
-            }
-
-            container.addView(slotView)
-        }
-    }
     companion object {
         /**
          * Use this factory method to create a new instance of

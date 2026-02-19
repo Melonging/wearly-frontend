@@ -226,8 +226,64 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="7"
-            android:padding="8dp">
+            android:paddingHorizontal="10dp"
+            android:paddingBottom="8dp">
+
+            <ImageView
+                android:id="@+id/day1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_closet_card" />
+
+            <ImageView
+                android:id="@+id/day2"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/bg_closet_card" />
+
+            <ImageView
+                android:id="@+id/day3"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/bg_closet_card" />
+
+            <ImageView
+                android:id="@+id/day4"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/bg_closet_card" />
+
+            <ImageView
+                android:id="@+id/day5"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/bg_closet_card" />
+
+            <ImageView
+                android:id="@+id/day6"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/bg_closet_card" />
+
+            <ImageView
+                android:id="@+id/day7"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/bg_closet_card" />
         </LinearLayout>
     </LinearLayout>
 

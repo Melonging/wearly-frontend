@@ -143,7 +143,7 @@ class UploadActivity : AppCompatActivity() {
                     Intent(this, ClothingDetailActivity::class.java).apply {
                         putExtra("section", name)
                         putExtra("closet", closet)
-                        putExtra("clothingId", clothingId)
+                        putExtra("clothingId", clothingId.toInt())
                         putExtra("imageUrl", imageItem.imageUrl)
                         putExtra("closetId", closetId)
                     }
@@ -163,8 +163,6 @@ class UploadActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
-
-
 
     }
 
